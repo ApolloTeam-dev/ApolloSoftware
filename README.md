@@ -33,7 +33,7 @@ separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloMon | **1.0e** |  | ✓ | ✓ |
-| Tools | ApolloUpdate | **0.4** | 0.3, 0.2 | ✓ | ✓ |
+| Tools | ApolloUpdate | **0.5** | 0.4, 0.3, 0.2 | ✓ | ✓ |
 | Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ |
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ |
 | Tools | i2clock | **0.7** |  | ✓ | ✓ |
