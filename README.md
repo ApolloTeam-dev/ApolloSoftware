@@ -5,6 +5,30 @@ Install and update with **ApolloUpdate** (`Tools/ApolloUpdate`). Software for
 members of [Apollo-Vampire-Lair](https://ko-fi.com/apollovampirelair) is in the
 separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
 
+## Folder Convention
+
+Level-1 = Category (Drivers, Libraries, Tools, Icons, Keymaps, ...)
+Level-2 = Name (Official name of the Apollo Software title)
+Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1) 
+Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
+
+Within Level-2 there are tags used to classify:
+- ApolloOS (title is suitable for ApolloOS)
+- AmigaOS (title is suitable for AmigaOS)
+
+Example (single file):
+- Drivers/ApolloMap/AmigaOS
+- Drivers/ApolloMap/ApolloOS
+- Drivers/ApolloMap/2.30/C/ApolloMap
+
+Example (multiple files):
+- Tools/ApolloExplorer/AmigaOS
+- Tools/ApolloExplorer/ApolloOS
+- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerSrv
+- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerTool
+- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
+- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
+
 ## Releases
 
 <!-- releases:start -->
