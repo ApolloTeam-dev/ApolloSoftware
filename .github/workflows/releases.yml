@@ -1,0 +1,44 @@
+# Checks the ApolloSoftware layout on every push and keeps the releases table
+# in README.md up to date. The script: .github/scripts/releases.py
+#
+# A push that only changes README.md does not start it, and its own commit
+# (made with GITHUB_TOKEN) never starts another run.
+
+name: Releases table
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: [README.md]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: releases-table
+  cancel-in-progress: false
+
+jobs:
+  table:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Release order matches ApolloUpdate
+        run: python3 .github/scripts/releases.py --selftest
+
+      - name: Check the layout, update the table
+        run: python3 .github/scripts/releases.py --check --readme README.md
+
+      - name: Commit the table
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "Releases table unchanged"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "README: update the releases table" -- README.md
+          git pull --rebase
+          git push

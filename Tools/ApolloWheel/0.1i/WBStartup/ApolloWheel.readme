@@ -1,0 +1,33 @@
+
+Vampire V4 ApolloWheel - (c) ApolloTeam 2023
+Based on WheelBusMouse and ps2m released under GPL:
+- https://aminet.net/package/docs/hard/ps2m
+- https://aminet.net/package/util/mouse/WheelBusMouse
+Adapted for Vampire V4 by RedBug.
+    
+    
+How to use ApolloWheel?
+Open a shell, change to the corresponding drawer and type:
+
+ApolloWheel <RETURN>
+
+
+Different options are available:
+
+ApolloWheel REVERSE            Reverse the (vertical) scrolling direction.
+ApolloWheel DELAY=x            Waiting time before reading scrolling register again.
+ApolloWheel MULTIPLY=x         Faster scrolling (vertical delta is multiplied by x).
+ApolloWheel PRIORITY=x         Run ApolloWheel with this priority.
+ApolloWheel QUIET              No output (ApolloWheel notifies you if it is already running).
+ApolloWheel LIMIT=x            If vertical scrolling exceeds this value, the counter is 
+                               set to 0 (prevent excessive scrolling when mouse is plugged in).
+
+All options can be written in UPPER or lower case (no difference).
+The options can be given in any order.
+
+
+To stop ApolloWheel:
+
+Open SCOUT, search for ApolloWheelUSB and send a BREAK signal.
+
+

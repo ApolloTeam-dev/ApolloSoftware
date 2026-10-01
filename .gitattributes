@@ -1,0 +1,2 @@
+# Preserve all files byte-for-byte: no line-ending or encoding conversion
+* -text
