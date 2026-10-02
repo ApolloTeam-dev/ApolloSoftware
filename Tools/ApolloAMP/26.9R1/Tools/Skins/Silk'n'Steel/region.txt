@@ -1,0 +1,29 @@
+;Ok, here's how this works:
+;Valid section names are 
+;[Normal] (for main winamp window, non-windowshade) x goes from 0-275, y 0-116
+;[WindowShade] (for winamp window, windowshade mode) x 0-275, y 0-14
+;[Equalizer] (EQ window) x 0-275, y 0-116
+;NumPoints is the number of points in each polygon
+;PointList is the list of points in each polygon
+;as far as all this Inside/Outside/Transparant space mumbo is concerned, just
+;remeber it this way:
+;the Point is the upper-left corner of the Pixel, allways.
+;(if you don't understand, just use Paint Shop Pro's "Freehand" selctor with
+;selection type "Point-to-Point", and pay attention to what it calls each point
+;as you select an area.  It's exactly the same as what winamp uses.
+
+
+;Now some really crappy examples, just so you get the idea.
+
+;[Normal]
+;NumPoints=4,4,
+;PointList=0,0, 275,0, 275,14, 0,14,   252,90, 267,90, 267,107, 252,107,
+
+;[WindowShade]
+;NumPoints=4
+;PointList=20,3,59,3,59,10,20,10
+
+;[Equalizer]
+;NumPoints=4
+;PointList=20,3,59,3,59,10,20,10
+

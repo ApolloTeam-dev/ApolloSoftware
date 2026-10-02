@@ -1,0 +1,87 @@
+
+RELEASE NOTES IN CHRONOLOGICAL ORDER
+
+RiVA 0.63 R3 + window-free fullscreen (20260917)
+- New option NOWINDOW (command line and tooltype): fullscreen without a
+  backing window / PIP. Selected automatically when FULLSCREEN is given
+  and no screen is open at all (e.g. started from a startup-sequence),
+  or when the PIP window cannot be opened on the current screen.
+- In window-free fullscreen the fire button on port 1 or 2 (CD32 joypad
+  red button) or the left mouse button ends playback; the previous
+  display (native chipset or RTG) is restored on every exit path.
+- Window-free fullscreen quits with a message when the video has no
+  native SAGA screenmode (there is no window to fall back to).
+- OpenWindow() result is checked (was dereferenced when NULL).
+- Init failures in the PiP/display setup now exit cleanly (unbalanced
+  stack on the error path, close-down waited forever for the VBL handler).
+- Pending CTRL-C/D break signals are cleared before RiVA returns to DOS
+  (the audio task's exit signal could stay pending and make the Shell
+  print "***Break" and abort a running startup-sequence).
+- Built with vasm from the ApolloCrossDev toolchain (build.sh).
+
+RiVA 0.63 R3 (20260517)
+- Replaced VBL handler by AddIntServer/RemIntServer (better parallel playback)
+- Memory alignment 64/256 bytes (better performance on cores >12055)
+- Boundary check for PREBUFFER option
+- Added hint for MEM=x option when frameskip occurs
+- Fixed a freeze that could occur when aborting the program
+
+RiVA 0.63 R2 (20250809)
+
+- Optimized YUV copy routine (eliminates potential flickering 
+on some monitors and makes RiVA faster).
+- Setting task priorities fixed (should now work both from shell
+and via Tooltypes).
+- Debug messages for seek function eliminated (were erroneously
+left over in R1).
+- Added RELEASE NOTES to keep track of new features.
+
+RiVA 0.63 R1 (20250701)
+
+Initial release based on RiVA version 0.60 with the following additions / 
+improvements:
+
+- Bug fixes: Bugs that have been reported (like switching back and forth from
+PIP to fullscreen, which didn't work reliably in all cases) have been fixed.
+- Screen resolutions: RiVA now supports all SAGA resolutions (including the
+new 720x405 screen mode in cores >11000).
+- Native PIP: Windowed video playback is now fully done in hardware (via the
+Vampire PIP functionality).
+- Buffering: The video decoder has been completely decoupled from the
+displaying via additional buffers.
+- Memory: Possibility to set a custom amount of buffers (up to 1024) to
+use up to 1 GB (or more:) for prebuffering.
+- Framerates: Thanks to different measures (buffering, audio via DMA/AMMX,
+faster core) the framerates have been highly improved.
+- Timings: RiVA now uses the Vampire clock-cycle-count (CCC) register to do
+very precise timing / syncing between video and audio.
+- Better audio: Native audio via ARNE / direct DMA. This eliminates any sound
+hiccups that could in earlier versions.
+- Seek: Possibility to jump to any position in the video (via arrow / F1-F10
+keys or command line / tooltypes).
+- Subtitles: Support for SRT subtitle files (widely available in the internet
+on free download sites).
+- Loading screen: A loading screen (with Vampire logo and loading bar) has
+been added (useful when prebuffering 1GB:).
+- Source code: General cleanup and elimination of unused, unneeded or broken
+features and functions (including command line options and tooltypes).
+- Documentation: An AmigaGuide file with detailed explanations for all new
+features has been included.
+
+REQUIREMENTS
+
+RiVA works on V4 cards (V2 is not supported).
+
+VERSIONS
+
+RiVA 0.63 comes in two version:
+
+- DEMO: Free playing during 5 mins.
+- FULL: Full version with no time limit.
+
+The DEMO version is included in ApolloOS or can be downloaded from the Apollo
+website. The FULL version is available via a membership on:
+
+www.apollo-vampire-lair.com
+
+Thank you in advance for supporting our work via a membership!

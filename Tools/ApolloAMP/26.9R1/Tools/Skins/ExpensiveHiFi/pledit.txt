@@ -1,0 +1,8 @@
+[Text]
+Normal=#BBB6C6
+Current=#FFFFFF
+NormalBG=#000000
+SelectedBG=#302A37
+font=Osaka
+MBBG=#000000
+MBFG=#FFF8FF

@@ -19,12 +19,19 @@ Icons/def_SDROM/1.0
 Libraries/i2c.library/40.0
 Libraries/maggie.library/1.30
 
+Tools/AmiPlexAMP/
+Tools/ApolloAMP/
 Tools/ApolloControl/2.05
+Tools/ApolloExplorer/1.3.0
 Tools/ApolloFlash/2.18
+Tools/ApolloFlashWeb/
 Tools/ApolloFloppy/1.0
 Tools/ApolloMap/2.18
 Tools/ApolloMon/1.0
+Tools/ApolloSnap/
 Tools/ApolloUpdate/0.0
+Tools/ApolloVNC/
 Tools/ApolloWHDSet/0.3
 Tools/ApolloWheel/0.1i
 Tools/i2clock/0.7
+Tools/RiVA/0.63R1

@@ -1,0 +1,23 @@
+7,9,8           	// Background
+7,9,8      		// Analyzer Raster
+120,150,190  		// Analyzer 01 (Top)
+120,150,190   		// Analyzer 02
+0,0,0   		// Analyzer 03
+120,150,190            	// Analyzer 04
+0,0,0   		// Analyzer 05
+172,199,230    		// Analyzer 06
+0,0,0   		// Analyzer 07
+172,199,230    		// Analyzer 08
+0,0,0   		// Analyzer 09
+172,199,230    		// Analyzer 10
+0,0,0    		// Analyzer 11
+172,199,230    		// Analyzer 12
+0,0,0   		// Analyzer 13
+172,199,230    		// Analyzer 14
+0,0,0   		// Analyzer 15
+172,199,230    		// Analyzer 16 (Bottom)
+172,199,230		// Shademode Oszy 01
+172,199,230		// Shademode Oszy 02
+172,199,230		// Shademode Oszy 03
+86,100,115		// Shademode Oszy 04
+86,100,115		// Shademode Oszy 05

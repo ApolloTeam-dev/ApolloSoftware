@@ -1,0 +1,20 @@
+[FyrewurX]
+Blur=1
+Fade=27
+DropOff=2000
+FadeRate=6
+GravityRate=53
+Jitter=1
+Stationary=1
+AirResistance=1
+StereoMode=0
+Type=0
+NumParticles=1
+Name_1=Purple Haze
+Sensitivity_1=0
+ParticleSize_1=2
+PPE_1=400
+Speed_1=18
+MinFreq_1=307
+MaxFreq_1=456
+Color_1=9974271

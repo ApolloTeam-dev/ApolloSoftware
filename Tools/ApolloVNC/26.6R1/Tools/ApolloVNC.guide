@@ -1,0 +1,1484 @@
+@database ApolloVNC
+@autor "RedBug"
+@(c) "Copyright (c) 2025 RedBug"
+@$VER: ApolloVNC 20260510
+@font courier.font 13
+@wordwrap
+@toc "main"
+@index "main"
+@help "main"
+
+
+@node main "ApolloVNC Guide"
+                                                  
+@{b}TABLE OF CONTENTS@{ub}
+
+@{" Introduction     " link "introduction"} What is ApolloVNC anyway ... ?
+@{" Requirements     " link "requirements"} What you need to run ApolloVNC
+@{" Glossary         " link "glossary"} Important terms and abbreviations
+@{" Versions         " link "versions"} Versions and release notes
+@{" Installing       " link "installation"} Installation & configuration
+@{" Running          " link "running"} Running the programs
+@{" Options          " link "options"} Command line / tooltype options
+@{" Caveats ...      " link "caveats" } Security - READ THIS!
+@{" License          " link "license" } License disclaimer for ApolloVNC
+@{" Alia             " link "more" } More Magic through the wormhole!
+@{" FAQ              " link "FAQ" } Frequently asked questions
+@{" Checklist        " link "Checklist" } Troubleshooting via CL
+
+Vampire(z) rule(z)! (Keep the momentum going ... :)
+
+@endnode
+
+@node introduction "Introduction"
+
+@{b}INTRODUCTION@{ub}
+
+@{b}What is ApolloVNC (anyway:)?@{ub}
+
+ApolloVNC is a fast VNC client specifically tailored to the Vampire. This means that it uses specific features of the Vampire cards (PIP, AMMX, YUV) to make it the fastest VNC solution available at the time of writing. In addition it supports some really cool features like bidirectional clipboard and the possibility to download, convert and play videos or audio files directly via RiVA or an audio player.
+
+@{b}How does ApolloVNC compare to "classic" VNC?@{ub}
+ApolloVNC is not a full VNC suite, it relies on other programs to create a server-client environment that guarantees connecting a Linux server to a Vampire client. The most important are:
+
+@{b}Linux:@{ub}
+- x11vnc: a "classic" Linux VNC server that will handle mouse and keyboards events only ("headless setup")
+- avs: ApolloVNCServer program that converts, compresses and transmits framebuffer data to the Vampire client (avc)
+
+@{b}Vampire:@{ub}
+- zvnc4avnc: Zero VNC for ApolloVNC is an adapted version of ZVNC that collects and transmits mouse and keyboard events from the Vampire to the x11vnc server on Linux ("headless setup")
+- avc: ApolloVNCClient program that receives, decompresses and shows screenbuffer data on the Vampire.
+
+@{b}How do the clipboard and video features work?@{ub}
+When used with clipboard and video download features, ApolloVNC relies on additional tools to work correctly. To name just the most important: smbd (SAMBA for data exchange), xclip (clipboard functionalities), yt-dlp (video download), ffmpeg (video conversion).
+
+@{b}On what systems does ApolloVNC run?@{ub}
+ApolloVNC runs both on classic AmigaOS and ApolloOS. A V4 card with a recent core (>11403) is strongly recommended, but V2 is also supported (core 2.18 required, PIP and YUV are replaced by SoftPIP and RGB color modes, also V2 has to use an older version of RiVA which cannot perform at the same level as later versions on V4). Rudimentary support (= mainly for debugging purposes and not officiallz maintained at the moment) is provided for UAE (RGB8 Softpip color mode).
+
+Another short description of ApolloVNC on the Apollo Vampire Lair:
+
+@{" Apollo Vampire Lair " link "apollovampirelair"}  
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node apollovampirelair "Apollo Vampire Lair"
+
+@{b}ApolloVNC on Apollo Vampire Lair@{ub}
+
+Did you ever want to use a @{b}modern Webbrowser@{ub} (Firefox, Chromium (..)), a @{ub}fully featured office suite@{ub} (LibreOffice, Calc, Impress) or a @{b}Photoshop@{ub} tool like GIMP directly from your Vampire - and in addition @{b}easily exchange@{ub} data between the two via @{b}SAMBA@{ub} and @{b}clipboard@{ub}? Have you ever dreamed of watching any @{b}Youtube@{ub} (or other) video natively on your Vampire at @{b}full framerate@{ub} and up to 848x480 resolution? Or listen to a Youtube @{b}soundtrack@{ub}? Would you like to get an easily configurable @{b}WiFi connection@{ub} for your Vampire?
+
+Then ApolloVNC is the tool you should use!
+
+ApolloVNC is a fast (the @{b}fastest@{ub}) @{b}VNC@{ub} server-client solution available for your Vampire! It requires a @{b}Linux@{ub} box (@{b}Debian/Ubuntu MATE@{ub} recommended and officially supported) running on a fast (ideally > 2 Ghz, the faster the better) @{b}x86-64@{ub} processor. ApolloVNC uses Vampire hardware accelerations (AMMX, PIP, YUV) to get transfer rates up to 25 FPS (>40 fps peek performance in YUV2N mode). Thanks to @{b}automated installers@{ub} both on Linux and Vampire, ApolloVNC is @{b}easy@{ub} to install and works out-of-the-box. Thanks to PIP (= windowed mode) ApolloVNC integrates nicely into your AmigaOS / ApolloOS Workbench. Alternatively, it can be run in fullscreen or dual mode (which allows you use classic screen switching to go forth and back between windowed and fullscreen mode).
+
+Thanks to its @{b}bidirectional clipboard@{ub}, ApolloVNC makes it easy to copy text from and to programs running on Linux and AmigaOS/ApolloOS. The same is true for video playback: ApolloVNC contains the latest version of @{b}RiVA@{ub} which is automatically installed and configured. Youtube (and other) videos can then be played (and also stored and replayed) by @{b}a simple mouse click@{ub}!
+
+Using @{b}ApolloWoE@{ub} (= WiFi-over-Ethernet) you will not only get an even faster connection to your VNC server, but can also connect your Vampire to the internet via the Linux-WiFi.
+
+Try it out! We truly believe that ApolloVNC is a game changer that gives the ultimate possibility to use your Vampire for anything you want - even as a daily driver with access to any modern service you can think of!
+
+Link: @{" The Vampire Lair " system "OpenURL https://www.apollo-vampire-lair.com"} 
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node requirements "Requirements"
+
+@{b}Requirements@{ub}
+
+@{b}LINUX@{ub} 
+- Ubuntu Mate [24.04.3 or 24.04.4 LTS] / Debian Mate [13.4 Trixie] are the officially supported distributions and desktops (i.e. automatic installers are tested and proven to work) (*) (**)
+- These distributions contain all additional packages needed (x11vnc, xclip, ffmpeg, yt-dlp).
+- ApolloVNC must be run on a x86-64 little-endian machine in 32bit color mode (anything else is NOT supported).
+- The Linux desktop must be set to a SAGA resolution or a resolution lower than the actual WB resolution for windowed mode (PIP).
+
+(*) ApolloVNC has been successfully tested on other Linux distribution. Please make sure that if you use a different distribution X11 is used as display server (Wayland is NOT supported).
+(**) @{b}IMPORTANT:@{ub} If you intend to use @{b}ApolloCrossDev@{ub} in conjunction with ApolloVNC you must use @{b}Ubuntu Mate 24.04.3 LTS@{ub}!
+[ApolloCrossDev will NOT work on Ubuntu 25.10 and Debian 13.2. ApolloVNC, on the other hand, has been tested to work well on these versions.]
+[@{b}UPDATE 202601:@{ub} ApolloCrossDev may now work on Debian (and maybe other distributions) - but this has not yet been fully tested, so Ubuntu remains the official recommendation.]
+
+
+@{b}VAMPIRE@{ub}
+
+@{b}V4@{ub}
+- Core >11403 required (faster, support for native YUV4 and 720x405 videos)
+- RiVA 0.63 or later for video playback
+
+@{b}V2@{ub}
+- Core 2.18 required
+- PIP replaced by SoftPIP (slower)
+- YUV replaced by RGB (slower and less accurate)
+- RiVA 0.63 replaced by RiVA 0.54 (slower)
+
+IMPORTANT
+
+ApolloVNC may FREEZE on older cores (especially V2) because it requires features / instructions that are NOT present on earlier cores. This version should work on the latest release cores (11350, 12xxx) and probably also older V4 cores (preferably >10000, not tested extensively). In any case, we STRONGLY recommend to update to the latest core!
+
+@{b}OPERATING SYSTEMS@{ub}
+
+ApolloVNC has been tested on ApolloOS (1), AmigaOS 3.1, AmigaOS 3.9 (Coffin), AmigaOS 3.2, Amikit XE.
+
+@{b}NETWORK STACKS@{ub}
+
+ApolloVNC has been tested with AROSTCP, AmiTCP, MiamiDX and Roadshow. (The fastest and redommended network stacks are AROSTCP and Roadshow, but the others work too.)
+
+(1) Due to still unresolved incompatibilities with ApolloOS HIDD screens, FULLSCREEN option will not work correctly on ApolloOS 9.5 (use PIP instead).
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node glossary "Glossary"
+
+@{b}Glossary@{ub}
+
+@{b}avc@{ub}
+ApolloVNCClient is the Amiga program that receives, decompresses and shows screendata from avs.
+
+@{b}avs@{ub} 
+ApolloVNCServer is the Linux program that reads, compresses and sends screendata to avc. 
+
+@{b}AVNC@{ub}
+Short for ApolloVNC (refers to the entire ApolloVNC project, client and server). The volume name AVNC: is used for the SAMBA share that allows exchanging data between Linux (server) and AmigaOS (client).
+
+@{b}e4v@{ub}
+Extract for Vampire is a bash script (Linux) which downloads and converts videos calling yt-dlp.
+
+@{b}WoE@{ub}
+Wifi-over-Ethernet allows you to connect your Vampire to your Linux box via an Ethernet cable and share the WiFi connection.
+
+@{b}x11vnc@{ub}
+This is the Linux program that handles keyboard and mouse inputs coming from zvnc4avnc and sends it to X11 display server.
+
+@{b}yt-dlp@{ub}
+YouTube DownLoad Program is a Linux program originally developped to download Youtube videos from the command line. In the meantime it can download videos from many other sites.
+
+@{b}zvnc4avnc@{ub}
+ZVNC for AVNC. Reads keyboard and mouse events on AmigaOS and sends them to x11vnc (Linux).
+
+@{b}ZVNC@{ub}
+ZeroVNC is a "headless VNC" program (= no screen data is transferred) originally developpend by David Gerber for MorphOS. ZVNC only transmits keyboard and mouse events to the X11 server (x11vnc). ZVNC has been adapted (and named zvnc4avnc) to work with ApolloVNC screens (SAGA) and windows (PIP).
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node versions "Versions"
+
+@{b}Versions@{ub}
+
+@{b}DEMO / FULL VERSION@{ub}
+ApolloVNC comes either as DEMO or FULL VERSION:
+- LE = Limited Edition = DEMO: The use of this version is limited to 5 minutes (available via purelab-tefc.ch/vampire).
+- FE = Full Edition: This version has no time limit (available via membership at apollo-vampire-lair.com).
+
+Executable:
+- XE = Hybrid Edition: The same exe is used for FE/LE (FE without license defaults to LE).
+
+Each version is tagged in the following way:
+- A = Alpha version (FE, not for public testing, license expires after 1 month)
+- B = Beta version (FE, public testing, license expires after 1 month)
+- R = Release version (FE/LE, tested official version)
+- F = Final version (legacy compile with SASC, no further development, eliminated)
+
+Each version can be clearly identified by a version string which also contains the year, month and release number of the version.
+
+@{b}26.05 BETA@{ub}
+
+Update with the following features:
+- New SAGA Pointer handling (smarthide, core >12000)
+- Dual-PIP support / parallel video playback (core >11900)
+- New YUV2N/YUV3N PIP color encodings (very fast, core >11403)
+- Optional luma/chroma correction (better contrasts YUV2N/YUV3N)
+- Hacky VBL handlers replaced by AddIntServer (ApolloVNC & RiVA)
+- Updated release version for RiVA (0.63 R3)
+- New tooltypes (task priority, parallel video)
+- Added TCP_QUICKACK for lower latency (ApolloVNCServer)
+- ApolloWoE config & launcher (Wifi for Vampire)
+- License key and validation (same exe for LE/FE)
+- Rudimentary support for m68k/UAE (RGB8/BGRA32/SOFTPIP)
+- Added around a dozen options for ApolloVNCConnect MUI GUI 
+- Added ApolloVNCConnect configuration to installer
+- Bugfixes (clipboard size, YUV4N, CKEY, VIDEOPATH, FSDEPTHGADGET, 
+  audiooptions, pointer smart/hide, memory leak AVS, yt-dlp etc.)
+- Improved overall stability (no more DEADENDS - touch wood;)
+- Included ApolloWheel installation (USB mouse wheel support)
+- Optional installation of ApolloCrossDevGeany included
+- Eliminated all legacy builds / versions
+
+@{b}26.3 R1@{ub}
+
+Update with the following features:
+- Native YUV4 (cores >11403)
+- RGB color encodings (16/12/9/8 bits)
+- V2 support (FS/SoftPIP/Scaled, installer)
+- Rewritten compression algorithm (C/ASM)
+- Seamless remote mouse pointer handling
+- Hiding / Smart hiding for AmigaOS pointer
+- Automatic extraction / playback for MP3
+- Parallel (asynchronous) video/audio playback(*)
+- Optimizations (e.g. speed-up data transmission)
+- New tooltypes / options (e.g. avg/max bitrates)
+- Shared Memory (XShm) option for ApolloVNCServer
+- Custom volume names (multiple SAMBA shares)
+- New 68080 build system (SASC => ApolloCrossDev)
+- Bugfixes (e.g. PIP, header size, video reencoding)
+- ApolloVNCConnect by TuKo (GUI for quick connections)
+- Desktop launcher for ApolloVNCServer (start / stop)
+[- WIP ApolloVNCServer for AmigaOS / ApolloOS]
+(*) when technically possible (e.g. with SoftPIP)
+
+@{b}26.2 F1@{ub}
+
+This is a legacy version (= the last one compiled with SASC) included in the 26.3 release (inside SASC folder) to guarantee some backwards compatibility on V4. It runs on the last release V4 release cores (11350) and maybe even earlier cores (not tested). This version will NOT work on V2 cores <=2.17 (core 2.18 is mandatory for V2).
+
+@{b}25.12 R1@{ub}
+
+Update with the following features:
+- Bidrectional clipboard support (text)
+- Video download (yt-dld) and conversion (ffmpeg)
+- Native video playback via RiVA (SAMBA)
+- Scaling function with smooth color filtering
+- Improved keyboard support for special characters
+- Numerous new tooltypes and configuration options
+- Automatic install scripts (Ubuntu / Debian Mate)
+- Direct launch of ApolloVNCServer at startup (optional autologin)
+- Bugfixes (stability and speed)
+
+@{b}25.10 R1@{ub}
+
+Initial version with the following main features:
+- FULLSCREEN, PIP and DUAL mode
+- Variable color compression (from YUV4 to YUV8)
+- Fast AMMX blitting and PIP hardware acceleration
+- Separate Y/U/V Run-length encoding (RLE) for data compression
+- Native AmigaOS mouse pointer for maximum reactivity
+- Password and IP restriction support
+- Full custom screen and PIP handling via VBL interrupt
+- Clean disconnect / reconnect (error) handling
+- Direct launch of a specific program on the server
+- Many options to configure / adapt the program
+- Detailed user guide in AmigaGuide format
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node installation "Installation"
+
+@{b}SETTING UP ApolloVNC@{ub}
+
+Installing ApolloVNC used to be tricky and challenging in the past. But here's the good news: Thanks to an automated install this is now as simple as running two scripts (one on Linux and one on the Vampire). This means that ANYONE now should be able to make a working installation of ApolloVNC in 30-60 mins (installing one of the Linux distributions included).
+
+@{b}(1) PRELIMINARY STEPS@{ub}
+
+@{b}(a) INSTALL LINUX@{ub}
+- Download latest Ubuntu 24.04 LTS Mate oder Debian (e.g. netinstaller) as iso or dvd image
+- Flash the image to a USB stick
+- Start you computer pressing ESC or DEL key to boot from the USB stick (depends on the compuer / BIOS you use)
+- Follow the instructions of the installer (on Debian deselect gnome desktop and install Mate instead)
+
+Tips and tricks:
+- You can chose (almost) any Linux username and any password you want ...
+BUT:
+(1) You MUST use a password has NOT MORE THAN 8 characters (this is a limitation of x11vnc)
+(2) You must use THIS SAME USERNAME and PASSWORD later in ALL PARTS of the installer (e.g. also for x11vnc and SAMBA)
+- Example: username=vncuser, password=12345678
+- On Debian, use the same password for user and root
+(Debian does not setup sudo by default.)
+PLEASE NOTE THAT LINUX IS CASE-SENSITIVE (so, 'vncuser' is NOT the same as 'VNCuser').
+
+Debian:
+- Deselect Gnome desktop and install Mate instead.
+
+Ubuntu:
+- You are given the possibility to chose with or without login (see 'Running ApolloVNC' for more details).
+- It is recommended to install 3rd party components and multimedia extensions.
+
+@{b}(b) DOWNLOAD APOLLOVNC@{ub}
+- You can get the FE = full version at apollo-vampire-lair.com (otherwise use the free LE = demo version which is limited to 5 minutes).
+- Extract the LHA file (e.g. on AmigaOS) and copy it entirely both to Linux (e.g. home directory) and the Vampire
+
+HINT:
+It is possible to extract the LHA file directly on Debian/Ubuntu by installing the lhasa package:
+sudo apt-get install lhasa
+
+=> Debian does not support sudo out-of-the box, so use the graphical installer (in "Control Center") instead and search for "lhasa" package.
+
+@{b}(2) INSTALLATION@{ub}
+
+@{b}(a) LINUX@{ub}
+@{b}(1)@{ub} 
+Open a shell / terminal and go to ApolloVNC folder (adapt the command depending on where you extracted the lha-archive):
+cd ApolloVNC_FE/Linux
+[e.g. if your archive was extracted to the Downloads folder, you must type: cd Downloads/ApolloVNC_FE/Linux instead and use the TAB for autocomplection.]
+
+@{b}(2)@{ub}
+@{b}(a)@{ub} If you are on Debian, first run the make-sudo script changing to the Linux folder and then typing (the dot . at the beginning is important):
+. make-sudo
+[You will have to do a complete LOGOUT / LOGIN to make the changes take effect]
+@{b}(b)@{ub} Now run the install script (the dot . at the beginning is important):
+cd ApolloVNC/Linux
+. install-avnc
+
+@{b}IMPORTANT:@{ub}
+The script stops several times and asks for a password (for root access, x11vnc, SAMBA etc.):
+- You must enter the EXACT SAME PASSWORD that you used for the username during the Linux install!
+(The default passwords - see above - are proposed.)
+- Confirm ALL actions by typing 'y' or 'Y' as asked by the script.
+
+=> If anything fails (e.g. you typed wrong one of the passwords), rerun the script.
+
+@{b}(b) AMIGA / VAMPIRE@{ub}
+- Open a shell and change to ApolloVNC folder (= folder that contains ApolloVNCClient)
+- Run the installer by typing:
+ApolloVNCClientInstall 192.168.1.108 vncuser 12345678
+
+NOTE:
+It is possible to add a custom volume name as 4th argument (otherwise "avnc" is used as default;  do not use : here, it will automatically be added by the smb-handler).
+If you want to use all functionalities (e.g. including ApolloVNCConnect GUI) please answer "y" (yes) to the questions of the installer.
+
+IMPORTANT:
+The installer needs 3 (or 4) arguments like shown in the example. Replace these by YOUR personal and settings - use the EXACT SAME SETTING as on Linux.
+- Reboot your Vampire and establish a network connection
+- Configuration of WoE (WiFi-over-Ethernet) is launched automatically by the installer (skip it if you don't want to use it).
+
+That's all - now proceed to "Running ApolloVNC".
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node running "running the programs"
+
+
+@{b}RUNNING APOLLOVNC@{ub}
+
+@{b}(a) LINUX@{ub}
+
+@{b}ICON@{ub}
+The simplest way to start / stop ApolloVNCServer is to click on the two icons on the MATE main desktop. This corresponds to launching ApolloVNCServer with password and ip restriction (all clients in the subnet 255.255.255.x will be allowed to connect).
+
+@{b}SHELL@{ub}
+Another way to run avs is to launch it manually from a normal user shell (= not as ROOT):
+
+cd /path/to/apollovncserver
+./avs pw ip=192.168.1.0-255
+
+This means that the server will be started using a password and an ip restriction (all IP addresses from 192.168.1.x are allowed to connect).
+
+@{b}WoE@{ub}
+If you want to use WiFi-over-Ethernet click on the ApolloWoE launcher make your WiFi accessible.
+(If you did not configure it during install, run: ./WoE.sh install from the ApolloVNCServer folder.)
+
+@{b}(b) AMIGA / VAMPIRE@{ub}
+Click on the ApolloVNC icon and wait until the connection has been established.
+
+=> The server may take some seconds to respond the first time it gets the request.
+=> You can try to "wake it up" by pinging the server IP from the Vampire:
+ping 192.168.1.x
+[Replace it by your IP address.]
+
+@{b}ApolloVNCConnect@{ub}
+Another way to establish a connection between the ApolloVNCClient and the ApolloVNCServer is the GUI ApolloVNCConnect. Enter your ip, pw and a color mode, then hit "Connect" or "Save". Please note: This will only give you a simple VNC connection (screen + mouse/keyboard events - other functionalities like bidrectional clipboard and video/audio download/playback are not [yet] available via ApolloVNCConnect).
+
+@{b}AUTOMATIC LAUNCH@{ub}
+Launching ApolloVNCServer manually (which means clicking on the icon or opening a shell) can be a bit annoying. To launch ApolloVNCServer automatically when the user logs in do the following (the procedure is slightly different on Debian or Ubuntu, but the basic steps remain the same):
+
+Debian:
+On your Mate desktop click on menu "System" => "Preferences" => "Personal" => "Startup Applications". Once the window opens, click on "+Add", use "Browse" to find up the avs executable. Finally add the necessary parameters. Your command line (for example for user "vncuser") should look like this: /home/vncuser/ApolloVNC/Linux/avs pw ip=192.168.1.0-255
+
+Ubuntu:
+Click on "Menu" => "Control Center", scroll down to "Startup Applications" and use "Add" like explained for Debian.
+
+IMPORTANT: 
+You must have installed ApolloVNC with install-avnc before to make sure that all necessary paths and the home directory are set correctly.
+
+@{b}AUTOLOGIN@{ub}
+You can even go further and make the user login automatic (this way everything is started automatically, you only need to power on your Linux box and can directly connect to it from your Vampire once it has booted).
+
+To do so, open the configuration file of the login manager (lightdm):
+sudo pluma /etc/lightdm/lightdm.conf
+
+Then change (= complete or uncomment) the following line:
+autologin-user=vncuser
+
+The user "vncuser" will automatically be logged in (and if autostart is selected, ApolloVNC will be started automatically).
+
+PLEASE NOTE THAT ANY USER THAT CAN PHYSICALLY PRESS THE POWER BUTTON OF YOUR SYSTEM WILL HAVE ACCESS TO IT WITHOUT ENTERING A PASSWORD! (In general Ubuntu and Debian lock the screen after a certain time and you must then enter a password again - which can even be done via ApolloVNC - but your system is NOT protected at startup.)
+
+There is the possibility to lock the screen immediately after AUTOLOGIN using the 'startup' option (please refer to the sections OPTIONS or FAQ for further information).
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node options "Options"
+
+@{b}OPTIONS@{ub}
+
+The following options are available:
+
+@{b}SERVER:
+------@{ub}
+
+@{"pw" link "optserv_pw"} / @{"ip=a.b.c.d" link "optserv_ip"} / @{"rfbport=p" link "optserv_rfbport"} / @{"vncport=p" link "optserv_vncport"} / @{"verbose=x" link "optserv_verbose"} / @{"repeat|norepeat" link "optserv_repeat"} / @{"startup" link "optserv_startup"} / @{"timing" link "optserv_timing"} / @{"xshm" link "optserv_xshm"} 
+
+@{b}CLIENT:
+-------@{ub}
+
+@{"SERVER=a.b.c.d" link "option_server"} / @{"PASSWORD=xxxxxx" link "option_password"} / @{"POSX=x" link "option_posxy"} / @{"POSX=y" link "option_posxy"} / @{"RFBPORT=p" link "option_rfbport"} / @{"VNCPORT=p" link "option_vncport"} / @{"PROGRAM=name" link "option_program"} / @{"COLORFMT" link "option_colorfmt"} / @{"SCALEWIDTH=width" link "option_scalewh"} / @{"SCALEHEIGHT=height" link "option_scalewh"} / @{"PIP" link "option_pipfs"} / @{"FULLSCREEN" link "option_pipfs"} / @{"CKEY=x" link "option_ckey"} / @{"TITLE=x" link "option_title"} / @{"MINWIDTH=x" link "option_minwh"} / @{"MINHEIGHT=y" link "option_minwh"} / @{"VERBOSE=x" link "option_verbose"} / @{"WBTOFRONT" link "option_wbtofront"} / @{"FSDEPTHGADGET" link "option_fsdepthgadget"} / @{"CLIPBOARD" link "option_clipoptions"} / @{"CLIPFREQUENCY=x" link "option_clipoptions"} / @{"CLIPFREQMIN=x" link "option_clipoptions"} / @{"CLIPV2LOFF" link "option_clipoptions"} / @{"CLIPL2VOFF" link "option_clipoptions"} / @{"VIDEOPLAYBACK" link "option_videoplayback"} / @{"AUTOPLAY" link "option_autoplay"} / @{"RIVAFS" link "option_rivafspip"} / @{"RIVAPIP" link "option_rivafspip"} / @{"RIVAOPTIONS=string" link "option_rivaoptions"} / @{"VIDEOPATH=path" link "option_videopath"} / @{"VIDEOTEXTCOLOR0" link "option_videotextcolor"} / @{"VIDEOTEXTCOLOR1" link "option_videotextcolor"} / @{"VIDEOTEXTCOLOR2" link "option_videotextcolor"} / @{"VIDEOQUALITY=x" link "option_videoquality"} / @{"VIDEOGADGETSRIGHTALIGN=x" link "option_videogadgetsrightalign"} / @{"MAGICMENUOFF" link "option_magicmenu"} / @{"NOIDCMPCLOSE" link "option_noidcmpclose"} / @{"NOKEYBOARDANDMOUSE" link "option_nokeyboardandmouse"} / @{"REMOTEPOINTER" link "option_remotepointer"} / @{"SERVERSTOP" link "option_serverstop"} / @{"SOFTPIP" link "option_softpip"} / @{"HIDEAMIGAOSPOINTER" link "option_hideamigaospointer"} / @{"SMARTHIDEAMIGAOSPOINTER" link "option_smarthideamigaospointer"} / @{"AUDIOPLAYEROPTIONS" link "option_audioplayeroptions"} / @{"AUDIOPLAYER" link "option_audioplayer"} / @{"VIDEOBITRATEAVG" link "option_videobitrateavg"} / @{"VIDEOBITRATEMAX" link "option_videobitratemax"} / @{"OPTIONS" link "option_options"} / @{"TASKPRIORITY" link "option_taskpriority"} / @{"NOPARALLELVIDEO" link "option_noparallelvideo"} / @{"FORCEPIP" link "option_forcepip"}
+
+@{b}TEMPLATE:@{ub}
+@{"LINK" link "option_template"} 
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node optserv_pw "OPTION: pw"
+
+@{b}pw@{ub}
+The client must give a password to connect to x11vnc.
+[= password set by x11vnc -storepasswd on server side.]
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_ip "OPTION: ip"
+
+@{b}ip=a.b.c.d@{ub}
+@{b}ip=a.b.c.d-e@{ub}
+Connection to avs is restricted to one IP address or a range of IP addresses.
+[ip=192.168.1.5 <=> only client 192.168.1.5 can connect]
+[ip=192.168.1.0-255 <=> all clients with ip 192.168.1.x can connect]
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_rfbport "OPTION: rfbport"
+
+@{b}rfbport=p@{ub}
+Use this port (remote framebuffer data) for avs / avc communication (default: 5555).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_vncport "OPTION: vncport"
+
+@{b}vncport=p@{ub}
+Use this port (VNC event data) for zvnc4avnc / x11vnc communication (default: 5900).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_verbose "OPTION: verbose"
+
+@{b}verbose=x@{ub}
+Define verbose/debug level (0 <= x <= 9, with 0 = no output and 9 = maximum output).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_repeat "OPTION: repeat | norepeat"
+
+@{b}repeat@{ub}
+@{b}norepeat@{ub}
+Launch x11vnc in repeat or norepeat mode (i.e. when a key is pressed for a longer time it will send several or just one key). Default: norepeat - use this if you encounter problems with repeat option. Typical problems with the repeat option are characters that are generated via two keypresses, i.e. ` or ג or similar. In that case it can happen, that the first key pressed is repeated endlessly (this normally stops when other key is pressed).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_startup "OPTION: startup"
+
+@{b}startup@{ub}
+The startup-script will be executed on the Linux-side. By default, this script locks the screen using the screensaver (so that the user must enter a passowrd). This option can be used in combination with autologin: the user will be logged in automatically but the screen will then be locked again (to avoid anauthorized access). To use the startup option, add a short delay (e.g. 1 second) at startup.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_timing "OPTION: timing"
+
+@{b}timing=x@{ub}
+This option can be used to benchmark ApolloVNC. Using timing=127 will show all available measurings (including an fps value). Bits 0-5 correspond to each measuring (from top do bottom looking at the printout), so setting the corresponding bit to 0 or 1 disables / enables the printout.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node optserv_xshm "OPTION: XSHM"
+
+@{b}xshm@{ub}
+
+XSHM stands for "X11 shared memory". 
+
+The ApolloVNCServer retrieves "screenshots" of the Linux desktop (which are then transformed, compressed and sent to the client). The X11 server offers basically two options to obtain such screenshots: 
+
+(1) XGetImage: In this case the screenbuffer content is sent via IPC (= interprocess communication) and each time the memory for the sent image is allocated / deallocated (which creates a certain overhead).
+
+(2) XShmGetImage: In this case, the server allocates once a shared memory space where it writes the screenbuffer content to; this same memory region can then be read by ApolloVNCServer (which, theoretically, means less overhead = faster). 
+
+On a 1280x720x24 desktop and a 2.6-3.2Ghz i5 taking a "screenshot" can typically cost around 8-9ms (for method #1) and 4-5ms (for method #2) in average (= about 50% faster). 
+
+Please note that retrieving the desktop data alone is not the only step needed in the entire process of sending data from the server to the client and that other steps (typically transform and compress) may conflict with xshm (typically when X11 and ApolloVNCServer try to access the shared memory region at the same time). So, "winning" 4-5ms here, does not automatically mean a better overall performance! But the XSHM option is there (on the server side) and when activated it works like this: 
+
+(1) ApolloVNCServer first checks if XSHM (which is part of XEXT) is available.
+(2) if it is available, it will be used - otherwise the server falls back to the classic XGetImage(). 
+
+Please note that XSHM (and the XEXT = X11 server extension) can only work on local desktops.
+
+You can find more info about XSHM here:
+https://www.xfree86.org/current/mit-shm.html
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_server "OPTION: SERVER"
+
+@{b}SERVER=a.b.c.d@{ub}
+IP address of the x11vnc / avs server.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_password "OPTION: PASSWORD"
+
+@{b}PASSWORD=xxxxxx@{ub}
+Connect to x11vnc with this password.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_posxy "OPTION: POSX / POSY"
+
+@{b}POSX=x or POSY=y@{ub}
+The window will be opened at this position (default: center the window horizontally / vertically).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_rfbport "OPTION: RFBPORT"
+
+@{b}RFBPORT=p@{ub}
+Use this port (remote framebuffer data) for avs / avc communication (default: 5555).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_vncport "OPTION: VNCPORT"
+
+@{b}VNCPORT=p@{ub}
+Use this port (VNC event data) for x11vnc / zvnc2avnc communication (default: 5900).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_program "OPTION: PROGRAM"
+
+@{b}PROGRAM=name@{ub}
+Open this program on Linux when connecting.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_colorfmt "OPTION: COLORFMT"
+
+@{b}COLORFMT@{ub}
+
+Color format that should be used. There are basically two color formats: YUV (luminance + chroma) and RGB (classic reg-green-blue), with different bit depths and blitting methods. YUV can only be used on V4. RGB can used on V4 and V2: on V4 it can be used either with hardware PIP oder SoftPIP. On V2 SoftPIP and RGB are the only color mode option. There are two general rules for speed: (1) less bit depth = less colors = better compression = less data = better speed and (2) PIP = no blitting into intuition screen = faster (+ active also when PIP window is in the background).
+
+@{b}YUV@{ub}
+
+- YUV4: 4'096 colors (2 bytes / 2 pixels)
+- YUV4N: 4096 colors(*) (2 bytes / 2 pixels)
+- YUV2N: 64 color(**) (1 byte / 2 pixels)
+- YUV5: 32'768 colors (4 bytes / 4 pixels)
+- YUV6: 262'144 colors (4 bytes / 4 pixels)
+- YUV7: 2'097'152 colors (4 bytes / 4 pixels)
+- YUV8: 16'777'216 colors (4 bytes / 4 pixels)
+
+(*) On cores >11403 YUV4N can be selected instead of YUV4. 
+The difference is that YUV4N will open a native YUV4 SAGA mode (= data is blitted into native YUV4). With YUV4 the YUV4 data is blitted to a YUV8 SAGA screen / pip.
+(**) Core >11403 mandatory - YUY2N offers very fast VNC (over 40 fps) but at the cost of very limited color accuracy.
+
+@{b}RGB@{ub}
+
+- RGB8: 256 colors (R3G3B2, 1 byte / pixel)
+- RGB9: 512 colors (R3G3B3, 2 bytes / pixel)
+- RGB12: 4096 colors (R4G4B4, 2 bytes / pixel)
+- RGB16: 65536 colors (R5G6B5, 2 bytes / pixel)
+
+@{b}Recommendations:@{ub}
+- Best performance / limited colors: YUV4 / YUV4N / RGB8
+- Reasonable performance and colors: YUV5 / RGB12
+- Best colors / low performance: YUV6 / YUV7 / YUV8 / RGB16
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_scalewh "OPTION: SCALEWIDTH / SCALEHEIGHT"
+
+@{b}SCALEWIDTH=width@{ub}
+@{b}SCALEHEIGHT=height@{ub}
+Scale the original resolution of the X11 desktop to width x height. Width should be a multiple of 16 (and a valid SAGA resolution in case of FULLSCREEN). ApolloVNC will apply a "smooth scaling" (with color filtering). This may have a small performance impact, so the recommended way is to set the Linux desktop to a native resolution.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_pipfs "OPTION: PIP / FULLSCREEN"
+
+@{b}PIP@{ub} / @{b}FULLSCREEN@{ub}
+Launch avc in PIP (default) or FULLSCREEN mode. When PIP and FULLSCREEN are given together both are active and it is possible to switch forth and back between them using depth gadget (recommended, see FSDEPTHGADGET) or AMIGA-M (can have side-effects). If the resolution of the server is not available as SAGA mode, avc will automatically default to PIP. If the size of the PIP window is bigger than the WB screen avc will abort (please note that a PIP must add the window borders to the screen resolution of the server, so opening the same resolution on the Workbench will NOT work). To exit the program from FULLSCREEN press both mouse buttons (left + right) simultaneously (in windowed mode, simply click on the close gadget).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_ckey "OPTION: CKEY"
+
+@{b}CKEY=x@{ub}
+Define a CKEY for the PIP window. Default: $8f0f, meaning "use color key f0f (pink)". Value 0 = don't use a color key (PIP window will not be correctly clipped when not in front). It is STRONGLY recommended to use a color key.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_title "OPTION: TITLE"
+
+@{b}TITLE=x@{ub}
+Set a title to be shown in the window top bar (can be empty or several words separated by spaces).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_minwh "OPTION: MINWIDTH / MINHEIGHT"
+
+@{b}MINWIDTH=x / MINHEIGHT=y@{ub}
+Set minimum width / height of the window (can be used to quickly minimize / "iconify" the window using the resize gadget on top). These are also the values that will be used when video playback is started via RiVA (in this case, the PIP of the main window must be deactivated because only one PIP window can be active at once).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_verbose "OPTION: VERBOSE"
+
+@{b}VERBOSE=x@{ub}
+Set verbose value between 0 and 9 for debug output in console (0 = no output, 9 = maximum output).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_wbtofront "OPTION: WBTOFRONT"
+
+@{b}WBTOFRONT@{ub}
+When both FULLSCREEN and PIP are selected (= "dual mode"), by default the newly opened VNC screen will be shown (= in front). If you want to have WB with PIP window in front instead add this option.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_fsdepthgadget "OPTION: FSDEPTHGADGET"
+
+@{b}FSDEPTHGADGET@{ub}
+Certain Linux distributions (like Ubuntu) do not like (and go completely mad with) the AMIGA+M keypresses which is used under Amiga to switch from one screen to another. As an alternative solution, this option keeps the depth gadget on the VNC screen. The depth gadget won't be shown but it is there "in the background" and is active. Therefore clicking on the upper right corner of the VNC screen will switch to the next screen in the intuition list.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_clipoptions "OPTION: CLIPBOARD / CLIPFREQUENCY / CLIPFREQMIN / CLIPV2LOFF / CLIPL2VOFF"
+
+@{b}CLIPBOARD@{ub}
+@{b}CLIPFREQUENCY@{ub}
+@{b}CLIPFREQMIN@{ub}
+@{b}CLIPL2VOFF / CLIPV2LOff@{ub}
+Enables bidirectional clipboard support. This has a (small) impact on performance. When enabling clipboard, several factors can be fine tuned: CLIPFREQUENCY=x sets the frequency at which clipboards are checked (both on Linux and on Amiga / Vampire). The value (ranging from 1-255) refers to the number of sent packets, thus value 16 means: ApolloVNC will first send 16 frames of pure video data and then check once the clipboard. CLIPFREQMIN=x sets the minimum frequency that can be set via CLIPFREQUENCY (default value is 16). Finally, the clipboard copying can be limited to one way only by using CLIPL2VOFF (turns of copying from Linux to Vampire) or CLIPV2LOFF (turns off copying from Vampire to Linux).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videoplayback "OPTION: VIDEOPLAYBACK"
+ 
+@{b}VIDEOPLAYBACK@{ub}
+Enables video playback via yt-dlp, ffmpeg, samba and RiVA. All of these must be configured correctly to make it work (this is done automatically by the install script). The currently supported video sites are listed in urls.list (which can be adapted by the user). To view a video, open a webbrowser, go to youtube (or one of the supported video sites), select the video you want to watch, pause it (optional) and copy the url to the clipboard (this can be done via mouse or by pressing CTRL-L + CTRL-C). Once the url is copied to the clipboard, the server (avs) will automatically detect the url and download the video/audio (using yt-dlp), convert it (using ffmpeg), notify the client when the video is ready and play it via RiVA. During the download/conversion three points "..." are visible at the top right of the ApolloVNC window. As soon as the video is ready, "Play!" will be shown and the video playback can be launched by clicking on it. During the video playback (via SAMBA and RiVA), ApolloVNC will be paused and the window minimized. After closing RiVA the ApolloVNC window will automatically be maximized and reactivated (and you can continue using VNC where you left off). The same is true when using AUTOPLAY with FULLSCREEN option (after stopping RiVA, the original ApolloVNC screen will be reactivated).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_autoplay "OPTION: AUTOPLAY"
+
+@{b}AUTOPLAY@{ub}
+Instead of launching the video playback manually, it will be automatically shown after a download. After that, a downloaded video can be replayed as often as wished by clicking manually on "Play!" at the top left of the ApolloVNC window.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_rivafspip "OPTION: RIVAFS / RIVAPIP"
+
+@{b}RIVAFS@{ub}
+@{b}RIVAPIP@{ub}
+The RiVA videoplayer will be launched in FULLSCREEN or PIP (windowed, default) mode. During playback it is possible to switch forth and back between FS and PIP by pressing RETURN. Instead of RIVAFS, you can use RIVAOPTION=FULLSCREEN.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_rivaoptions "OPTION: RIVAOPTIONS"
+
+@{b}RIVAOPTIONS=string@{ub}
+Any special options for video playback can be added here (refer to RiVA guide). For example:
+RIVAOPTION=mem 2
+Will increase the RiVA prebuffering (which can make the playback smoother if the network connecion is slow or delayed).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videopath "OPTION: VIDEOPATH"
+
+@{b}VIDEOPATH=x@{ub}
+This is the SAMBA path RiVA will use to play a video. It must link to the path where ApolloVNCServer (avs) stores the videos (default: ~/Downloads/).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videotextcolor "OPTION: VIDEOTEXTCOLOR0 / VIDEOTEXTCOLOR1 / VIDEOTEXTCOLOR2 "
+ 
+@{b}VIDEOTEXTCOLOR0=x@{ub}
+@{b}VIDEOTEXTCOLOR1=x@{ub}
+@{b}VIDEOTEXTCOLOR2=x@{ub}
+Colors used for video download / play title gadget: 0 = background, 1 = foreground, 2 = highlighted (when in copy mode).    
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videoquality "OPTION: VIDEOQUALITY"
+
+@{b}VIDEOQUALITY=x@{ub}
+Determines the quality at which the video (or audio) should be downloaded / converted. It is the scripts e4v that determines resolution and/or bitrate of the download / conversion. At the time of writing, the quality is defined as follows: 0=640x360, 1=720x405, 2=848x480 (landscape and similar for portrait format), 3=audio (no video). Bitrate is 2500/3000 kbit for all. Default (hardcoded) value is 1 (= middle quality). Currently selected quality is shown in the title bar: S=Small, M=Medium, H=High, A=Audio.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videogadgetsrightalign "OPTION: VIDEOGADGETSRIGHTALIGN"
+
+@{b}VIDEOGADGETSRIGHTALIGN=x@{ub}
+ApolloVNC can place additional "title gadgets" for video playback on the title bar (in windowed mode). In general, windows have system gadgets placed at the top right (e.g. resize / depth gadget). The VIDEOGADGETSRIGHTALIGN option allows you to set a custom value here that corresponds to the width of your system gadgets.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_magicmenu "OPTION: MAGICMENUOFF"
+
+@{b}MAGICMENUOFF@{ub}
+MagicMenu is a commodity often used on AmigaOS to get context menus (in addition to title bar menus). To achieve this, it intercepts and modifies many mouse and key events and the corresponding IDCMP messages. In other terms: It works in the exact same fields as zvnc4avnc (which also intercepts and modifies mouse and keyboard events and decides if they must be sent to the server or not). This concurrency (= parallel modification of messages) may lead to problems, reason why the original author of ZVNC disabled MagicMenu by default. ApolloVNC gives you the choice to leave MagicMenu enabled (which seems to work fine most of the time) or disactivate. The latter should be done whenever you get error messages from zvnc4avnc.
+
+[To complete the info, let's add that there may be other tools that modify mouse (and eventually keyboard) events plus the corresponding IDCMP messages. Another important example is ApolloWheel (which modifies IDCMP events to generate MOUSEUP/DOWN and MIDDLEBUTTON events for the wheel of usb mice). If you encounter any problems with zvnc4avnc try to turn off ApolloWheel by typing 'ApolloWheel STOP' on the command line. Other tools / commodities in the same category are FreeWheel or the included wheel functionality in AmigaOS 3.2.x.]
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_noidcmpclose "OPTION: NOIDCMPCLOSE"
+
+@{b}NOIDCMPCLOSE@{ub}
+Certain Linux programs (notably the famous text editor vi) use the ESC key which normally is not available in ApolloVNC (it is typically used by intuition to close a window, so that an IDCMP_CLOSEWINDOW message is generated and the key is not sent to Linux. To avoid this, the NOIDCMPCLOSE option completely disables IDCMP_CLOSEWINDOW message (i.e. both for mouse clicks and keypresses). ApolloVNC then checks the hardware to replace the intuition IDCMPCLOSEWINDOW To close the window. Alternatively a simultaneous click on LMB + RMB can also be used to close ApolloVNC (like in FS). In the DEMO (LE) version of ApolloVNC, this option also disables the requester (which redirects to the full version) that normally opens when closing the window.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_nokeyboardandmouse "OPTION: NOKEYBOARDANDMOUSE"
+
+@{b}NOKEYBOARDANDMOUSE@{ub}
+Do not send keyboard / mouse event (only shows the screen - activate REMOTEPOINTER to activate the mouse pointer).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_remotepointer "OPTION: REMOTEPOINTER"
+
+@{b}REMOTEPOINTER@{ub}
+This options activates the remote (= server) mouse pointer (as a "software pointer" in the form of a red arrow). This pointer is typically less fast that the native AmigaOS / ApolloOS mouse pointer. (But it can be used if you want to use a native mouse / keyboard on your Linux box for example.)
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_serverstop "OPTION: SERVERSTOP"
+
+@{b}SERVERSTOP@{ub}
+By default, the ApolloVNCServer is restarted when a client disconnects (so that a client can reconnect after a few seconds). Alternatively, with the SERVERSTOP option the server can be shut down after a disconnect (and must then be restarted manually).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_softpip "OPTION: SOFTPIP"
+
+@{b}SOFTPIP@{ub}
+This option can be used to switch between hardware PIP (on V4) and PIP rendered via software. On V2 software rendering is the only possibility, so this option is set by default.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_hideamigaospointer "OPTION: HIDEAMIGAOSPOINTER"
+
+@{b}HIDEAMIGAOSPOINTER@{ub}
+When REMOTEPOINTER is selected, by default the AmigaOS mouse pointer stays active (which means that both the remote and the native AmigaOS pointer will be shown). You can choose HIDEAMIGAOSPOINTER (or, alternatively, SMARTHIDEAMIGAOSPOINTER) to make the AmigaOS mouse pointer disappear. If you want to switch completely off this native mouse pointer, use HIDEAMIGAMOUSEPOINTER. Currently, this only works in PIP mode (FS mode will continue to use the smart hide mode in this case).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_smarthideamigaospointer "OPTION: SMARTHIDEAMIGAOSPOINTER"
+
+@{b}SMARTHIDEAMIGAOSPOINTER@{ub}
+When REMOTEPOINTER is selected, by default the AmigaOS mouse pointer stays active (which means that both the remote and the native AmigaOS pointer will be shown). You can choose SMARTHIDEAMIGAOSPOINTER (or, alternatively, HIDEAMIGAOSPOINTER) to make the AmigaOS mouse pointer disappear. With SMARTHIDEAMIGAMOUSEPOINTER the amigaos mouse pointer will be shown as long as you move the mouse around. As soon as you stop moving the mouse, the AmigaOS mouse pointer will be hidden (so that the remote mouse pointer can be seen). It makes sense to use this option in the following use case: (1) the remote mouse pointer has too much lag (so that working is uncomfortable - the native AmigaOS mouse pointer is much more reactive in this case) and/or (2) the remote application uses different mouse pointer types (e.g. a cross in a paint program to position the pointer very precisecly, e.g. in a pixel-exact way.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_audioplayer "OPTION: AUDIOPLAYER"
+
+@{b}AUDIOPLAYER@{ub}
+With this tooltype / option it is possible to give ApolloVNC the audioplayer (including path) that should be used for mp3 playback. To select audio extraction / playback, click several times on the quality title gadget (which then cycles through the values S = small video, M = medium video, H = high video and A = audio).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_audioplayeroptions "OPTION: AUDIOPLAYEROPTIONS"
+
+@{b}AUDIOPLAYEROPTIONS@{ub}
+With this tooltype / option additional options for the audio player can be added.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+
+@node option_videobitrateavg "OPTION: VIDEOBITRATEAVG"
+
+@{b}VIDEOBITRATEAVG@{ub}
+With this tooltype / option you can define the average bitrate used by ffmpeg for video conversion. Example: 2500 = average bitrate of 2500k. The value will be rounded to 100k, i.e. 2530 => 2500k.
+(Please note that setting higher bitrates does not lead to a better result if the original video has a lower bitrate format. Higher bitrates will create bigger files and need more network speed and decoding time.)
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_videobitratemax "OPTION: VIDEOBITRATEMAX"
+
+@{b}VIDEOBITRATEMAX@{ub}
+With this tooltype / option you can define the maximum bitrate used by ffmpeg for video conversion. Example: 3000 = average bitrage of 3000k. The value will be rounded to 100k, i.e. 3077 => 3000k.
+(Please note that setting higher bitrates does not lead to a better result if the original video has a lower bitrate format. Higher bitrates will create bigger files and need more network speed and decoding time.)
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_options "OPTION: OPTIONS"
+
+@{b}OPTIONS=x@{ub}
+Besides tooltypes and command line options OPTIONS introduces a third way to set options in ApolloVNC: x corresponds to a filename containing the options. The file must be in ASCII format, one option per line. 
+
+@{b}FORMAT:@{ub}
+- 1 option / line
+- Syntax: OPTIONNAME=value [identical to tooltypes]
+- Parenthesis can be used to diable an option, for example: (FULLSCREEN)
+
+@{b}IMPORTANT:@{ub}
+Basically, it is recommended to use either tooltypes / comand line options or file options.
+
+If the options are mixed (= both tooltypes / command line + file options) the following rules apply:
+
+@{b}- Tooltypes:@{ub} First, all tooltype options are parsed and set. After that, any file option will override any tooltype option. This is independent from the position of the OPTIONS keyword inside the tooltype list (file options can be at the beginning or at the end of the tooltype list, in both cases they will override the icon tooltypes).
+
+@{b}- Command line:@{ub} In thise case the options are parsed sequentially. You may first specify command line options, then a option file and then other command line options. The last option will override any previous option set.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_taskpriority "OPTION: TASKPRIORITY"
+
+@{b}TASKPRIORITY=x@{ub}
+Set the task priority for ApolloVNCClient. This value affects the multitasking behaviour of ApolloVNC, especially when (if) ApolloVNC should work with other very CPU-demanding programs (like RiVA) in parallel.
+
+The recommended values are:
+
+@{b}(1) No Tooltype (= no value): @{ub}
+@{b}(a) Cores <11900:@{ub} ApolloVNCClient will be launched with default priority on Cores <11900. Effect: In this case the core only offers one PIP which has to be shared between ApolloVNC and RiVA (= video playback via PIP is not possible in parallel to ApolloVNC). When RiVA is launched, ApolloVNC will minimize the main window and pause itself until RiVA playback has finished. 
+@{b}(b) Cores >11900:@{ub} ApolloVNCClient will be launched with a default priority of -2. Effect: Since the core offers 2 PIP, ApolloVNC will use PIP2, leaving PIP1 available for RiVA. Video playback will then occur in parallel and run with a higher priority (-1 and 0), which should garantee a fluid video experience (but ApolloVNC experience might be sluggish).
+
+@{b}(2) TASKPRIORITY=-1 (or 0): @{ub}
+@{b}(a) Cores <11900:@{ub} This will not have much effect (since ApolloVNC and RiVA will not be executed in parallel).
+@{b}(b) Cores >11900:@{ub} Since ApolloVNC now has a similar (or higher priority) than RiVA task, ApolloVNC will continue to work at full speed (= it will remain responsive even during video playback), BUT: RiVA might not get enough CPU time for video / audio decoding (= video will be sluggish, audio may stop at a certain moment and the message "decoder panic" may appear).
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_noparallelvideo "OPTION: NOPARALLELVIDEO"
+
+@{b}NOPARALLELVIDEO@{ub}
+By default, video playback is launched in parallel with ApolloVNC on cores >11900. The task priority of ApolloVNC is set to a lower (or a custom) value, so that video decoding has priority over ApolloVNC. Nonetheless, ApolloVNC might still use too much ressources, so that the video becomes sluggish. To avoid this, use the NOPARALLELVIDEO switch. In this case, the ApolloVNC window will be minimized and the program will be paused during video playback.
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_forcepip "OPTION: FORCEPIP"
+
+@{b}FORCEPIP=n@{ub}
+Starting with core 11900, two hardware PIP are available. By default, the 2nd pip is used for ApolloVNC (leaving 1st PIP for RiVA or other programs). This default value can be overriden by setting n to:
+
+0 = 1st (classic) PIP
+1 = 2nd PIP
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+@node option_template "OPTION: TEMPLATE"
+
+@{b}ApolloVNCClient@{ub}
+
+SERVER/A,RFBPORT/K/N,PROGRAM/K,REMOTEPOINTER/S,PASSWORD/K,POSX/K/N,POSY/K/N,COLORFMT/K,FULLSCREEN/S,
+PIP/S,CKEY/K/N,TITLE/K,MINWIDTH/K,MINHEIGHT/K,VNCPORT/K/N,VERBOSE/K/N,WBTOFRONT/S,FSDEPTHGADGET/S,
+CLIPBOARD/S,CLIPFREQMIN/K/N,CLIPFREQUENCY/K/N,CLIPL2VOFF/S,CLIPV2LOFF/S,VIDEOPLAYBACK/S,AUTOPLAY/S,
+RIVAFS/S,RIVAPIP/S,VIDEOPATH/K,VIDEOQUALITY/K/N,SCALEWIDTH/K/N,SCALEHEIGHT/K/N,RIVAOPTIONS/K,
+MAGICMENUOFF/S,NOIDCMPCLOSE/S,NOKEYBOARDANDMOUSE/S,SERVERSTOP/S,SOFTPIP/S,HIDEAMIGAOSPOINTER/S,
+SMARTHIDEAMIGAOSPOINTER/S,AUDIOPLAYER/K,AUDIOPLAYEROPTIONS/K,VIDEOBITRATEAVG/K/N,VIDEOBITRATEMAX/K/N
+OPTIONS/K,TASKPRIORITY/K/N,NOPARALLELVIDEO/S,FORCEPIP/K/N
+
+@{" Back to OPTIONS " link "options"}
+
+@endnode
+
+
+@node caveats "What you should keep in mind when using ApolloVNC ..."
+
+@{b}Caveats@{ub}
+
+@{b}SECURITY@{ub}
+
+Please be aware of the following:
+
+- When running x11vnc and avs without password and IP restriction means that ANY computer can connect to it.
+- Data transmission between server and client is NOT encrypted (keyboard and screen data could be sniffed).
+
+Hence the following recommendations are vital:
+- Set a PASSWORD and and IP RESTRICTION when using x11vnc / avs.
+- Do not do any sensitive stuff (e.g. e-banking) when using avc.
+
+WE DECLINE ANY RESPONSIBILITY FOR ANY DAMAGE THAT MAY HAPPEN DUE TO THE USE OF APOLLOVNC!
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node license "Under what license do we release ApolloVNC"
+
+@{b}License@{ub}
+
+ApolloVNC and its parts are released under the following licences:
+
+- ApolloVNCServer: This part is released as free software under GPL to make it possible for everyone to adapt it to other platforms / architectures if desired.
+- zvnc4avnc: This commodity is based on zvnc written by David Gerber and accompanied by the following copyright notice: "Everyone is permitted to copy and distribute verbatim or modified copies of this license document, and changing it is allowed as long as the name is changed." The modified version is closed source and (c) RedBug / ApolloTeam
+- ApolloVNCClient: This program is closed source and (c) RedBug / ApolloTeam.
+
+
+Other parts: x11vnc, xclip, yt-dlp, ffmpeg, smbd etc.
+These programs/tools/demons, although necessary for running ApolloVNC, are not directly distributed(*) via the archive, but available as free software under GPL on any Linux distribution.
+
+(*) In the case of yt-dlp a basic version is included which will update itself to the latest version via the official downloads.
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node more "More Magic through the wormhole ..."
+
+@{b}More Magic through the wormhole ...@{ub}
+
+There are other programs you can (and should:) use to complete your user experience of ApolloVNC:
+
+@{b}ApolloWoE:@{ub}
+WiFi-over-Ethernet allows you to connect your Vampire directly to your Linux box using a standard Ethernet and share the WiFi connection.
+
+@{b}ApolloWheel:@{ub}
+Integrates the wheel functionality of an USB mouse seemlessly into your desktop - very practical, for example, for scrolling when doing some webbrowsing (works also with texteditors, for programming for example). Please note that ApolloWheel has TWO modes send wheel events: try which one works best for you by clicking ONCE and outside of the PIP window on the middle button of the mouse (this toggle between wheelmode 0 and 1). Read the ApolloWheel documentation for more details.
+
+@{b}ApolloExplorer:@{ub}
+Ever wanted to look back to your Vampire "from the other side"? :) Then use ApolloExplorer via ApolloVNC! It is a fantastic tool to copy data from your Linux box to your Vampire. ApolloVNC is also the default tool used by ApolloCrossDev.
+
+@{b}ApolloCrossDev:@{ub}
+Thanks to ApolloVNC you can use cross-compilers / editors on Linux directly from your Vampire (and you can use ApolloExplorer and acp to deploy and test your programs on another Vampire:). ApolloCrossDev offers also great tools to debug your program (e.g. using debug output via the serial device).
+
+@{b}Other "classics":@{ub} 
+Other classic tools like ssh (secure remote shell) or scp (secure copy) may complete the happy symbiosis between Linux and Amiga / Vampire.
+
+@{b}The Vampire as your daily driver ... ?!@{ub}
+
+The goal of ApolloVNC is clearly to make your Vampire useable for any task a "modern" computer can do by using any Linux program that may complete your needs, for example:
+
+- Firefox / Chromium: Modern webbrowsers that give you access to any website (including the possibilty to download files and use them from the Vampire)
+- Gimp: A powerful graphical program with photoshop-like features.
+- LibreOffice: A modern word processor (+ a series of other programs included in the suite)
+- Mail: You can, of course, use any modern mail program that exists under Linux.
+ 
+... etc. etc.
+
+Thanks to the integration of Linux into AmigaOS/ApolloOS via ApolloVNC, your Vampire can become your daily driver now!
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node FAQ "Frequently asked questions"
+
+@{b}FAQ - Frequently asked questions@{ub}
+
+The questions are divided into different topics: 
+
+(1) Problems setting up ApolloVNC
+(2) General questions about using ApolloVNC
+(3) Can ApolloVNC run on other systems (e.g. Mac / Windows / Raspberry Pi)?
+(4) Video playback
+(5) Troubleshooting
+(6) Recommendations
+(7) Miscellaneous
+
+@{b}(1) SETTING UP APOLLOVNC@{ub}
+
+@{b}I clicked on the ApolloVNC icon but it says "connect failed: -1"@{ub}
+Did you adapt the IP address of the server it should connect to using the SERVER=x option? ApolloVNC must know to which IP it can connect - otherwise it won't work. Rerun ApolloVNCClientInstall from the Vampire side to set up the correct tooltypes.
+
+@{b}I have adapted the IP address of the server but I still get "connect failed: -1"@{ub}
+Did you start the server on the Linux box? The server is ready when you see the message "The VNC desktop is: xyz" and "PORT=xyz" and no errors. A typical error on server side is "bind failed - address already in use". If this is the case stop the server using CTRL-C, kill both x11vnc and avs (by using kill or pkill on the command line) and restart the server after some seconds. If that doesn't help (and you still get the bind error), restart your Linux and try again.
+
+@{b}The server is running (no errors) but I still can't connect ...@{ub}
+Check the "usual suspects": Are the ports given to the server client the same (5555 for avs/avc and 5900 for x11vnc/zvnc4avnc)? What happens many times is that when you restart the server shortly after stopping it, the port might not have been freed and the server tries to use one of the following ports (e.g. 5556 or 5901).
+
+@{b}The ports are identical but I still can't connect ...@{ub}
+Maybe x11vnc and/or ApolloVNCServer has been configured to use a password? In this case you must add the PASSWORD=xxxxx option. Please refer to the "Options" section for more info.
+
+@{b}How do I start the ApolloVNC server?@{ub}
+On your Linux box open a shell and type: @{i}./avs pw ip=192.168.1.0-255@{ui} and hit RETURN. The parameters pw and ip are optional, but it is highly recommended to use both a password and an ip restriction when running ApolloVNC. Please refer to the "Options" section for more info.
+
+@{b}How do I configure and run WoE (WiFi-over-Ethernet)?@{ub}
+To configure it, run ./WoE install from your ApolloVNCServer folder (on Linux). To run it, use ./WoE.sh start from the bash or click on the ApolloWoE launcher on your Desktop.
+
+@{b}(2) USING APOLLOVNC@{ub}
+
+@{b}I want to use ApolloVNC in fullscreen (FS) mode - how can I do that?@{ub}
+By default (and if possible) ApolloVNC opens in PIP mode. The easiest way to open ApolloVNC in FS is to adapt the tooltypes. Right-click on the ApolloVNCClient icon, select "Information" => "Icon" and adapt the tooltypes as needed. For example: For FULLSCREEN add the option to the list of tooltypes and click save, then launch ApolloVNCClient (by double-clicking on the icon).
+
+@{b}Can I do that via the shell also?@{ub}
+Yes, you can use any of the tooltypes indifferently via the icon or as a command line parameter in the shell. Please have a look at the "Options" section to get a list of the available tooltypes.
+
+@{b}I see that the (FULLSCREEN) option is there but with with parenthesis - what does that mean?@{ub}
+You can activate / deactivate any of the tooltypes putting parenthesis around it - this is a classic and elegant way on Amiga.
+
+@{b}Can I somehow switch from PIP to FS?@{ub}
+@{b}Can I use PIP and FS in parallel?@{ub}
+Yes. You have to open ApolloVNC client with both the PIP and and FULLSCREEN argument (tooltypes). Use the depth gadget (recommended) or Amiga+M (can have some side-effects) to switch between Workbench (with the PIP window) and the ApolloVNC screen.
+
+@{b}Will ApolloVNC be slower when I use both PIP and FULLSCREEN@{ub}
+No. When both FS and PIP are selected the screens are "cloned" (= they use the same framebuffer). Only one is active at the same time and they use the same efficient hardware accelerations (YUV color mode, AMMX routines).
+
+@{b}When I use AMIGA+M to switch from PIP to FS ApolloVNC seems "stuck" somehow ...@{ub}
+This can happen when the Linux distribution maps the Amiga-Key to something used by the distribution. For example, if the Amiga-Key is used as ALT and the distribution uses this key to activate the menus it might not react until you press the ALT/AMIGA-Key again (or use another combination, like ALT+TAB to get out of this selection). As an alternative you can use the FSDEPTHGADGET option to work around this problem. With this option it is possible to use the mouse to switch from ApolloVNC FULLSCREEN to another screen by left-clicking once on the top right corner of the screen.
+
+@{b}When I use both PIP and FULLSCREEN ApolloVNC will switch to FULLSCREEN by default - is there a way to have the PIP window in front?@{ub}
+Yes, use the WBTOFRONT option. This will show the Workbench screen with the PIP window as the active window.
+
+@{b}I am on a V2 which doesn't have hardware PIP - what can I do?@{ub}
+Add the SOFTPIP tooltype to the icon (or use it via the command line). In this case ApolloVNC will use a classic Workbench (intuition) window and blit the content of the VNC screen directly into that window. This options works also on V4 and makes it possible to have video playback and VNC in parallel.
+
+@{b}How do I exit ApolloVNC?@{ub}
+In PIP mode click on the close gadget (closes both PIP and FS if both are open). In FULLSCREEN press left and right mouse button simultaneously (this solution has been chosen because it avoids having any conflict with mapped keys and is also available with old DB9 mice).
+
+@{b}Can I disconnect / reconnect from / to the server several times in a row?@{ub}
+Yes. It is sufficient to start ApolloVNCServer once on the Linux side. After closing ApolloVNCClient on the Amiga / Vampire wait a short moment (approx. 10 seconds). The ApolloVNCServer will automatically disconnect, restart and wait for a new connection.
+
+@{b}The colors are not very good - how can I improve that?@{ub}
+Use the COLORFMT option (via tooltyes or command line). ApolloVNC supports different color formats (YUV and RGB with bit depths of 4-8 bits per color channel). Please refer to the COLORFMT description in the "Options" section for more info. Higher color resolutions means more data to transmit (= the framerate will decrease). The recommended modes are YUV4/RGB8 (e.g. when working with LibreOffice or using Discord in a Webbrowser), YUV5/YUV6/RGB12 for small video clips (e.g. Youtube) and YUV7/YUV8/RGB16 for maximum color accuracy (e.g. when working with GIMP). Please note that YUV modes cannot be used on V2.
+
+@{b}I cannot use any of the special characters (e.g. הצü, טיא, @{}[] etc.)@{ub}
+The keyboard events are sent via zvnc4avnc and all these special characters have been tested and are transmitted. What can happen, though, is that Linux maps the keypresses that are needed to produce these characters to other functions. For example many of these special characters need the ALT-Key to be pressed simultaneously with another key. If the remote system maps the ALT-Key to something else (like, for example, a hotkey that activates the menus), it will simply not work. Thus the solution is to change the keymapping on the server side.
+
+@{b}How do I disable the ALT-Key on the server to be able to type special chars like {},[] ...)?@{ub}
+1) Edit the XKB /usr/share/X11/xkb/symbols/pc 
+2) Find the line that contain include "altwin(meta_alt)" like so:
+key <ALT>  {        [ NoSymbol, Alt_L       ]       };
+include "altwin(meta_alt)"
+3) Comment it out by adding // before it like so:
+key <ALT>  {        [ NoSymbol, Alt_L       ]       };
+// include "altwin(meta_alt)"
+4) Save the file.
+5) Clear the XKB cache:
+sudo rm -rf /var/lib/xkb/*
+6) Reboot (or use: setmap -layout us)
+IMPORTANT: This will disable ALL ALT-Key combinations on Linux (for example you will not be able to use ALT-TAB any more to switch from one program to the other, it is of course possible to remap this functionality to another combination like CTRL-TAB for example).
+
+
+@{b}(3) OTHER SYSTEMS@{b}
+
+@{b}Does ApolloVNC work on Windows / Mac?@{ub}
+No. ApolloVNCServer has been tailored to Linux running on a x86-64 (little-endian) architecture, so anything else (read: other OS or other processors) will not work.
+
+@{b}Does ApolloVNC work on Raspberry Pi?@{ub}
+No (and no and no and no). And even if ApolloVNC could, theoretically, be compiled for the RPi - please: DO NOT DO THIS! (And don't ask for such a version on the RPi - there won't be official support for it!) The RPi is a cheap SOC board that is NOT suitable for VNC - you cannot by cheap stuff and the expect high (maximum) performance, that is simple not possible! Have a look also at FAQ "Recommendations".
+[PS: The fact that the RPi has hardware accelertion for video does NOT help for VNC. Framebuffer transmission does NOT pass via the graphics chip, it requires pure CPU speed that an ARM processor does NOT have.]
+
+@{b}Is it possible to make ApolloVNC work on a Linux that runs on another architecture than x86-64?@{ub}
+Yes. Most of the Debian-based distributions (especially with Mate desktop) should work out-of-the-box. For other distributions, it should work (at worst) with a recompile of the server sources (which are available under GPL).
+
+@{b}Would it eventually be possible to make ApolloVNC work on Windows / Mac too?@{ub}
+Probably - but that is not a priority now.
+
+@{b}So, I definitely can't use ApolloVNC under Windows/Mac - or is there another way to do it?@{ub}
+You can run ApolloVNC on Windows/Mac by using a virtual machine like VMWare, Virtualbox, qemu or similar. Please note though that ApolloVNC will run best natively on a Linux system.
+
+@{b}Does ApolloVNC work with "other" VNC servers, like TightVNC, RealVNC etc.?@{ub}
+No. ApolloVNC is NOT a classic VNC server/client. The RFB protocol (and a classic VNC server) is ONLY used for keyboard / mouse events. Everything else (= especially the handling of the framebuffer) has been written from scratch (to be faster and take advantage of the functionalities of the V4 cards).
+
+@{b}(4) Video playback@{ub}
+
+@{b}Can I watch Youtube (or other) videos with ApolloVNC@{ub}
+Yes! First of all any video that plays in a Linux webbrowser will automatically be compressed, transmitted and shown via VNC. This might be ok for small (embedded) videos, but in general framerates and colors are not great when watched this way. That's why there is anoter (much better!) way to watch videos with ApolloVNC: RiVA! ApolloVNC offers the possibility to automatically download, convert and play videos via RiVA if the according options (tooltypes) are set.
+
+@{b}Sounds great! - How can I watch Youtube videos with ApolloVNC then ... ?!@{ub}
+All needed tools and configurations are installed and done by the automated installers. All you have to do is:
+- Open a browser (any browser) on Linux via ApolloVNC
+- Go to a video site (e.g. Youtube)
+- Select a video and the copy the url to the clipboard (this can either be done via the mouse or the keyboard, typically CTRL-L followed by CTRL-C).
+The download (and playback if AUTOPLAY is set) will start automatically (you can see that in the ApolloVNC title bar where "Play" changes to "...").
+
+@{b}What resolutions are available?@{ub}
+Clicking on the title bar (PIP mode) toggles between different resolutions:
+S = small = 640x360
+M = medium = 720x405
+H = high = 848x480
+It is also possible to increase/decrease the average/maximum bitrates (have a look at "Options" for more details).
+
+@{b}Sometimes I just want to listen to a audio track - without downloading the video. Is that possible?@{ub}
+Yes! There is a 4th option labelled A = audio that you can use for that. The audio will be extracted using the best available bitrate in mp3 format. For the playback Songplayer will be used by default (a custom audio player can defined - please refer to "Options" section for more details).
+
+@{b}Can I change the bitrate (quality) of the videos?@{ub}
+Yes! Use the VIDEOBITRATEAVG and VIDEOBITRATEMAX tooltypes / options (refer to the "Options" section for more details).
+
+@{b}Which sites are supported?@{ub}
+Out-of-the-box ApolloVNC comes with more or less a dozen video sites preconfigured (have a look at urls.txt to see the entire list). You can add other sites to this list by referring to the official yt-dlp "supported sites" page.
+
+@{b}Can I only download / store / watch one video / audio at a time?@{ub}
+Every video / audio track will be download as the "actual" media and clicking on "Play!" on top right will play it. If you want to keep the video / audio track before downloading another one, press both SHIFT keys simultaneously. The numbers 0 1 2 .. 9 will now change color. Clicking on any of these numbers will then copy the media to this position (as soon as the copy has been done the numbers turn back to normal color - if this isn't the case after a few seconds reclick on the number and wait again some seconds). Clicking on any of the numbers in normal color means: Play the media stored under this number. There are 2x10 storing positions (10 for video + 10 for audio). Use S/M/H selection to access the video files and A to access the audio.
+
+@{b}Is the video playback also available in ApolloVNC FULLSCREEN mode?@{ub}
+Yes, but there is a difference: In windowed mode, you can use the title gadgets to restart / store videos and set the quality. In FULLSCREEN it is not possible to show these gadgets, so only one video (or audio) can be downloaded and played at once. To do so, set the VIDEOPLAYBACK and AUTOPLAY option (as for windowed mode). Copying the video-url to the clipboard will trigger the download, convert and playback feature as in windowed mode. If you want to what again the last downloaded (= actual) video, click simultaneously on the LEFT + RIGHT MOUSE BUTTON on the top left corner of the screen (Position 0,0).
+
+@{b}Where are the videos / audio tracks stored?@{ub}
+On Linux, the videos will be stored under ~/Downloads. To access the vidoes from the Vampire, the automated installer sets up a SAMBA share called AVNC: (which is automatically added to the icon as VIDEOPATH=ANVC:Downloads/). All this should work out-of-the-box if you use the automated installer.
+
+@{b}Oh my god ... this all sounds very tricky ... and it doesn't work on my machine ...  can I get some help somehow?@{ub}
+If you encounter any problem with ApolloVNC, please join our discord server and ask for help there. Please understand that every setup is different (e.g. Linux distribution used, AmigaOS/ApolloOS version used), so we cannot guarantee a solution for every usecase. 
+
+@{b}Why is the ApolloVNC window minimized during video playback@{ub}
+@{b}Can't I use ApolloVNC and watch a video at the same time?@{ub}
+By default, ApolloVNC uses hardware PIP (= picture-inside-picture) to display the remote framebuffer with a minimum latency. RiVA relies on the same hardware feature to obtain maximum speed. Only one program can use the PIP DMA at the same time. There is the possibility, though, to use the SOFTPIP tooltype / option. In this case, ApolloVNC will not use the hardware PIP feature of the Vampire (leaving it available for RiVA, which then can be executed in parallel / asynchronously). Please note that the ApolloVNC window will only be actualized when in front. Audio playback will always work in parallel (because the audio player doesn't need a hardwar PIP window).
+
+@{b}The video playback on V2 is not very good ... why is that?@{ub}
+There are several reasons for this:
+(1) The V2 lack several hardware features that are needed for fast video playback. In the first place, the V2 has no hardware PIP and no YUV support. In addition, the V2 have no ARNE (DMA) support for audio playback. This all means that an older version of RiVA (0.54) must be used for playback. In this version, all MPEG decoding (which is done in YUV by default) must be "translated" to RGB, all video data has be blitted into the workbench window and all audio data must be converted and played via AHI. All this together means a tremendous speed penalty on V2! In addition, the older RiVA 0.54 has no video prebuffering (like the latest RiVA 0.63 used on V4). 
+(2) The RAW CPU speed of a V4 is (now) much higher that a V4 (which now typically reach clock speads of 13x or 14x and also support newer cores that work faster).
+The only way to get better results is to lower the resolution / bitrate and maybe copy the remote video file to the ram disk (this might help instead of playing it via SAMBA).
+
+@{b}Download from Youtube (or other sites) does not work@{ub}
+Try updating yt-dlp by going to ApolloVNCServer/tools and typing:
+./yt-dlp -U
+
+@{b}Can I make ApolloVNCServer start automatically when I login on Linux?@{ub}
+Yes. The procedure is a bit different on Debian or Ubuntu, but it uses the exact same technique:
+
+Debian:
+On your Mate desktop click on menu "System" => "Preferences" => "Personal" => "Startup Applications". Once the window opens, click on "+Add", use "Browse" to find up the avs executable. Finally add the necessary parameters. Your command line (for example for user "vncuser") should look like this: /home/vncuser/ApolloVNC/Linux/avs pw ip=192.168.1.0-255
+
+Ubuntu:
+Click on "Menu" => "Control Center", scroll down to "Startup Applications" and use "Add" like explained for Debian.
+
+IMPORTANT: 
+When launching avs on startup, the program will be started from the root directory and will therefore not have a correct PWD (present working directory) environment variable. The program remends to that by loading the correct PWD from $HOME/.avnc/install_pwd which is a file created by the install script (so, you must have used the installer or create this file manually to make avs work this way).
+
+@{b}Ok, autostart works - but I have to login manually ... Can this be made changed?@{ub}
+Yes, you can make an automatic login. Please remind that in this case ANY user starting your laptop will be logged in automatically! To make an automatic login edit the lightdm.conf file with a text editor (e.g. Pluma):
+sudo pluma /etc/lightdm/lightdm.conf
+
+Change (= uncomment) the following line (use your username if different):
+autologin-user=vncuser
+
+The user "vncuser" will automatically be logged in (and if autostart is selected, ApolloVNC will be started automatically).
+
+@{b}Ok, autologin and autostart work now - can I somehow lock the screen, so that a PW must be entered?@{ub}
+Yes, to lock the scree, the following command must be executed via the shell:
+mate-screensaver-command -l
+
+This activates the Mate desktop screensaver - which will then ask for a password. You can make a script to run this immediately after automatic login (or add it as another startup program with a slight delay, for example 1 second).
+
+@{b}(5) Troubleshooting@{ub}
+
+@{b}When I connect to my 1366x768 Linux desktop the pictures is horizontally distorted ...@{ub}
+Due to the fast AMMX copy routines used, currently only resolutions with widths dividable by 32 (or eventually 16) are supported! Set your desktop to another resolution (e.g. 1280x720 or 960x540) or use the scaling option.
+
+@{b}When I restart the ApolloVNCClient from the Vampire I get an "Connect failed: -1"@{ub}
+After disconnecting from the server, you have to wait about 10 seconds before you can reconnect. This is the time the server needs to shutdown the x11 server, free the used ports and restart a new session (which will then start to listen for a reconnect). If you have waited longer than 10 seconds and the problems persist, then very likely there is something wrong with the server. You can try to stop the processes manually using CTRL-C and/or "pkill x11vnc" and "pkill avs" on the linux command line, then restart the server.
+
+@{b}When reconnecting, I can see the desktop but the keyboard and mouse do not respond / have no effect@{ub}
+In this case, the connection between ApolloVNCServer (avs) and ApolloVNCClient (avc) work, but not the connection between x11vnc and zvnc4avnc. You can try to close ApolloVNCClient, wait about 10 seconds and then retry (sometimes this solves the issue). If this doesn't help, open scout on the Vampire, select "Commodities" and search for "zvnc4avnc" in the list. Select the entry and click on the button "REMOVE" to shut down zvnc4avnc. Finally, relaunch ApolloVNCClient - mouse and keyboard should work now.
+
+@{b}It still doesn't work ... I can see the desktop, but it does not respond to keyboard and mouse@{ub}
+Please recheck the password of your x11vnc server both on Linux and Vampire side. The easiest is to reset a password for x11vnc:
+./x11vnc -storepasswd
+Make sure your password is 8 characters long.
+
+@{b}I rechecked the PW but it still doesn't work ... I can see the desktop, but it does not respond to keyboard and mouse@{ub}
+This most likely means that - for some reason (e.g. bad timing) - zvnc4avnc is not launched (correctly). You can try to launch it manually from the shell (after clicking on the ApolloVNCClient icon):
+zvnc4avnc HOST=a.b.c.d PASSWORD=xxxxxxxxx
+Replace a.b.c.d by the correct IP address and xxxxxxxxx by the password of your x11vnc server.
+
+@{b}When I open ApolloVNC in FULLSCREEN there is no mouse pointer@{ub}
+ApolloVNC uses the hardware sprite mouse pointer. Please check if you have "SOFTSPRITE" enabled in your P96 settings and disable it.
+
+@{b}When I open ApolloVNC in FULLSCREEN a click on the right mouse button has no effect.@{ub}
+Press the left CTRL key simultaneously in order to use the right mouse button.
+
+@{b}ApolloVNCServer crashes with a segfault error@{ub}
+This can occur for various reasons - the most common are:
+- You changed the resolution of your Linux desktop during an ApolloVNC session or without stopping an restarting ApolloVNCServer. Please note that the resolution of the Linux desktop CANNOT be changed "on-the-fly". If you want to change the resolution, first stop ApolloVNCServer, then change the resolution and finally restart it.
+- You are using different versions for ApolloVNCServer and ApolloVNCClient. Please note that both server and client MUST use the same version (ApolloVNC does not respect any standard in this regard and does not guarantee any backwards compatibility among different versions). When upgrading ApolloVNC, most of the time you can simply replace the exes of both the server (ApolloVNCServer and avs) and the client (ApolloVNCClient and avc). If that doesn't work it means that more than just the exes have changed. In this case, please delete the old versions completely and redo a fresh install from the beginning.
+
+@{b}What does "caught signal: 15" message mean on the server side?@{ub}
+This is not an error message, but the normal behaviour when the ApolloVNCClient disconnects. In that case, it sends a kill signal to the x11vnc server (which then needs some seconds to disconnect and notifies this by this message). If you see the message "bind failed - address already in use" it means, in general, that the ApolloVNCServer has been restarted BEFORE x11vnc has disconnected. In this case you should completely stop avs, kill the x11vnc process manually and restart avs via the following lines:
+pkill avs
+pkill x11vnc
+./avs pw 192.168.x.y
+
+@{b}What does "zvnc4avnc failed returncode 10" mean?@{ub}
+
+It means that zvnc4avnc (= commodity responsible for sending mouse and keyboard events from the Vampire to Linux) has not been restarted. In this case, you will see the Linux desktop but can not control the mouse and keyboard. Most of the time, the problem can be solved by disconnecting ApolloVNCClient, then wait 10 seconds and reconnect.
+
+@{b}There's a requester that shows a DEADEND error for zvnc4avnc - when I click suspend the system freezes @{ub}
+
+The origin of this error is still not clear (the most likely reason is probably a memory corruption). It should not happen very frequently - and if it does, you can use the following sequence to avoid a freeze of the system:
+1) First close ApolloVNC (by clicking on the close gadget or double-clicking left + right mouse button in FS).
+2) Now, you can click on "Suspend" on the requester (no system freeze).
+
+If you restart ApolloVNC now, mouse and keyboard events will unfortunately not be sent to the server. To mitigate this problem:
+1) Open Scout and choose "Commodities".
+2) Search for "zvnc4avnc", select it and then choose "Remove".
+
+After that you can reopen ApolloVNC and mouse/keyboard should work again.
+
+
+@{b}(7) Recommendations@{ub}
+
+@{b}What system should I run ApolloVNCServer on?@{ub}
+
+@{b}RULE 1:@{ub} Do not use a Raspberry Pi! The Rasperry Pi is a very cheap board that does not offer sufficient performance for a good user experience.
+
+@{b}RULE 2:@{ub} Use a fast x86-64 system, fast meaning >2.0 Ghz (better >2.5 Ghz). All tests were done on a Thinkpad x230 with an i5 3320M processor that runs at 2.6 Ghz (Base) - 3.3 Ghz (Turbo Boost). At a resolution of 1280x720 on the Linux server, this can give up to 25 FPS in YUV4 mode (over 40 fps measured in YUV2N mode).
+
+@{b}RULE 3:@{ub} If power consumption is a concern, a laptop board (like the x230 mentioned in RULE 2) can be used. This board uses 5 Watts (idle) - 30 Watts (under load). These values were measured without a panel / display (= headless setup).
+
+@{b}How can I setup a fully headless setup on Linux?@{ub} 
+On a laptop, you can normally close the lid to turn the screen of (and everything will run as usual). On the other hand, when you run a "fully naked" (laptop) board (like the x230 board mentioned), you may notice that ApolloVNC runs terribly slow when you suddenly disconnect the monitor and try to run it without any graphical output. The reason for this is that the X11 server now has no monitor data it can rely on and falls back to very slow standard values. To avoid this, do the following:
+
+Create a "dummy" video driver, i.e. a file named xorg.conf that contains the following definitions (for 1280x720 resolution):
+@{i}
+Section "Device"    Identifier  "Configured Video Device"
+    Driver      "dummy"
+    VideoRam 256000
+EndSection
+
+
+Section "Monitor"
+    Identifier  "Configured Monitor"
+    HorizSync 5.0 - 1000.0
+    VertRefresh 5.0 - 200.0
+    Modeline "1280x720" 27.41 1280 1312 1416 1448 720 737 740 757
+EndSection
+
+Section "Screen"
+    Identifier  "Default Screen"
+    Monitor     "Configured Monitor"
+    Device      "Configured Video Device"
+    DefaultDepth 24
+    SubSection "Display"
+    Depth 24
+    Modes "1280x720"
+    EndSubSection
+EndSection
+@{ui}
+
+Copy this file to /etc/X11 (as root) and restart the server.
+
+@{b}(7) Miscellaneous@{ub}
+
+@{b}ApolloVNC ate my hamster ... !@{ub}
+We have taken all possible precautions to make ApolloVNC a secure program to use. Nonetheless, ApolloVNC relies on a modified version of ZVNC (Zero VNC) and as the author states in the original readme, certain risks for hamsters can not be excluded.
+
+@{i}"Although zvnc has been thoroughly tested with different kind of hamsters, I cannot guarantee that there's no bug left in that area. It is highly advised that you don't let your hamster alone with zvnc especially if the room is dark."@{ui}
+
+Please understand that the Apollo Team cannot be hold responsible for unexpected things that might happen while using ApolloVNC ... ! :)
+
+@{b}Can I get some gummy bears with ApolloVCN ... ?@{ub}
+Although we do not provide gummy bears with the download of ApolloVNC, you can go to www.apollo-computer.com and order one of the brand new A6000. This wedge-case beauty featuring our new mainboard codenamed "Unicorn" will for sure be delivered to you with some gummy bears inside ... :) 
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+
+@node Checklist "Checklist"
+
+@{b}Checklist@{ub}
+
+The following points should all be answered by @{b}YES@{ub}.
+
+@{b}[00]@{ub} Did you read this guide, especially the installation part?
+@{b}[01]@{ub} Do you use Ubuntu/Debian Mate on an x86-64 machine?
+@{b}[02]@{ub} Did you set up a Linux username and a password not longer than 8 characters?
+@{b}[03]@{ub} Do you use the latest official core?
+@{b}[04]@{ub} Is the file zvnc4avnc present in the ApolloVNC_FE folder on the Vampire?
+@{b}[05]@{ub} Did you run install-avnc on Linux?
+@{b}[06]@{ub} Did you run ApolloVNCClientInstall on your Vampire?
+@{b}[07]@{ub} Did you use the SAME username and password everywhere (i.e. user login, samba and x11vnc?
+@{b}[08]@{ub} Did you type the username and password correctly each time it was asked?
+@{b}[09]@{ub} Did you start the server on Linux?
+@{b}[10]@{ub} Did you try to start the server without a password?
+@{b}[11]@{ub} Can you ping the server from the Vampire?
+@{b}[12]@{ub} Is the tooltype SERVER=x of the ApolloVNCClient icon correct?
+@{b}[13]@{ub} Is the tooltype PASSWORD=x of the ApolloVNClient icon correct?
+@{b}[14]@{ub} Do you have a monitor connected to your Linux box?
+@{b}[15]@{ub} Is this ONE SINGLE (not multiple) monitor(s)?
+@{b}[16]@{ub} Have you set your Linux box to a resolution lower than your WB?
+@{b}[17]@{ub} Are you using a 24 bit color mode (BGRA) on your Linux box?
+@{b}[18]@{ub} Is the width of the resolution used on Linux dividable by 32?
+@{b}[19]@{ub} Did you wait 10 seconds the first time you tried to connect?
+@{b}[20]@{ub} Did you try to reboot BOTH machines by powering them off?
+@{b}[21]@{ub} Do you have a firewall set up on your system / router?
+@{b}[22]@{ub} Are the ports 5900 / 5555 open for sending / receiving data?
+@{b}[23]@{ub} Did you run both the server and the client in verbose mode to get extra info?
+
+Here some additional hints if you answered @{b}NO@{ub} to one (or several) of the points above:
+
+@{b}[00]@{ub}
+RTFM.
+
+@{b}[01]@{ub}
+Do as it says (there are reasons for it - honestly).
+
+@{b}[02]@{ub} 
+If not, change your password to a maximum of 8 characters (this is a limitation of x11vnc).
+[It WON'T work with >8 characters - either believe us or fail.]
+
+@{b}[03]@{ub}
+Especially important for V2 users: ApolloVNC will NOT run on cores <2.18.
+(On V4 try to use the legacy version in SASC folder.)
+
+@{b}[04]@{ub}
+Sometimes, not all files are present due to a corrupted download or extraction (apparently, some lha tools can fail).
+Redownload / extract with a different tool.
+
+@{b}[05]@{ub}
+In a Linux shell, type:
+. install-avnc
+
+@{b}[06]@{ub}
+In an Amiga shell, type:
+ApolloVNCClientInstall ip username password
+
+@{b}[07]
+[08]@{ub}
+Again: not more than 8 characters - type SLOWLY (it is worth the extra time).
+
+@{b}[09]@{ub}
+In a Linux shell inside the ApolloVNCServer directory, type:
+./avs pw
+
+@{b}[10]@{ub}
+Same as [08], but only:
+./avs
+
+@{b}[11]@{ub}
+In an Amiga shell, type:
+ping ip-address-of-the-server
+
+To get the ip address of the server, in a Linux shell type:
+ip a
+
+@{b}[12]
+[13]@{ub}
+Select the ApolloVNCClient icon and chose "Icon" => "Information" from the menu.
+
+@{b}[14]
+ -
+[18]@{ub}
+It is recommended to connect a (= one!) monitor and not go higher than 1280x720.
+(You didn't have access to a modern browser and now you want to mirror your multiple-monitors desktop on Linux in 4K aka 3840x2160 to the Vampire - c'mon ... are you kidding me ... ?!)
+For headless setups (= without monitor) read the FAQ.
+
+@{b}[19]
+[20]@{ub}
+As explained in the guide, a certain time is necessary the first time ApolloVNC connects.
+If you tried to reconnect several times while ApolloVNC was trying to connect, this might have messed up your network - in this case a reboot is the best thing to do!
+
+@{b}[21]
+[22]@{ub}
+No firewall set up in a fresh install of Debian / Ubuntu (but check your router).
+
+@{b}[23]@{ub}
+In a Linux shell, type:
+./avs verbose=5
+
+In the icon set the following tooltype:
+VERBOSE=5
+
+(The higher the number, the more info you will get.)
+
+@{" Back to TOC " link "main"}
+
+@endnode

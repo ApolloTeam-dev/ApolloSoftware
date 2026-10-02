@@ -1,0 +1,250 @@
+@database FlashMandelVE
+@autor "RedBug"
+@(c) "Copyright (c) 2023-2024 Marcel Maci"
+@$VER: FlashMandelVE.guide 24.5 (20240517)
+@font courier.font 13
+@wordwrap
+@toc "main"
+@index "main"
+@help "main"
+
+
+@node main "Welcome to RiVA 0.63"
+                                                  
+@{b}TABLE OF CONTENTS@{ub}
+
+@{" Introduction     " link "introduction"} A brief introduction to RiVA
+@{" What's new?      " link "newfeatures"} New features in version 0.63
+@{" Options          " link "options"} Command line / tooltype options
+@{" Keyboard         " link "keys"} Keyboard functions during playback
+@{" Tips & tricks    " link "tips"} How to get the best experience with RiVA
+@{" Caveats ...      " link "caveats" } What you should not do with RiVA!
+@{" Become a member! " link "vampirelair" } Visit us at the Vampire Lair!
+
+Vampire(z) rule(z)! (Keep the momentum going ... :)
+
+@endnode
+
+@node introduction "Introduction"
+
+@{b}INTRODUCTION@{ub}
+
+Welcome to RiVA - the fastest MPEG-1 video player for your Vampire! 
+
+RiVA can play videos in windowed mode (PIP) or fullscreen.
+
+RiVA 0.63 has many @{" new features " link "newfeatures"} that make watching videos on your Vampire a real pleasure!
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node newfeatures "New features in version 0.63"
+
+@{b}NEW FEATURES@{ub}
+
+RiVA 0.63 comes with the following new features:
+
+- Smoother video playback (thanks to additional buffers)
+- Better playback of higher bitrates (both video and audio)
+- Support for all SAGA video modes (including new 720x405 on cores >11000)
+- Native audio playback via DMA (ARNE 16 bit)
+- Adaptive frameskip algorithm for higher video resolutions
+- Support for SRT (SubRipper) subtitle files (background solid or transparent)
+- Seek function (via command line, arrow left/right or F-keys)
+- New @{" options / tooltypes " link "options"} to customize the added features 
+- A series of bugfixes (e.g. switching FS/PIP or RTG/PAL)
+- A new loading screen (Vampire logo and progress bar during prebuffering)
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node options "Options"
+
+@{b}OPTIONS@{ub}
+
+From command line, RiVA can be given a filename. If no filename is given - or when RiVA is launched via the icon - the file to play can be selected via the filerequester.
+
+Further options include:
+
+@{b}NOLOGO/S, LOOP/S, SUBTITLES/S, SRTDELTAMS/K/N, AUDIOPRIO/K/N, VIDEOPRIO/K/N, ASYNCIO/K/N, START/K/N, VOLUME/K/N, CHANNEL/K/N, NOAUDIO/S, NOVIDEO/S, NOB/S, NOP/S, NOSKIP/S, VERBOSE/S, FULLSCREEN/S, NOWINDOW/S, AUDIOQUALITY/K/N, DEFAULTDIR/K, SRT/K, SRTVPOS/K/N, SRTRGB0/K/N, SRTRGB1/K/N, TRANSPARENT/S, MEMORY/K/N, PREBUFFERING/K/N@{ub}
+
+@{b}DESCRIPTION@{ub}
+
+@{b}NOLOGO/S:@{ub} Suppress the loading screen that is shown during prebuffering of the video file.
+
+@{b}LOOP/S:@{ub} Restart the video at the end (endless loop).
+
+@{b}SUBTITLES/S@{ub}: Easiest way to enable subtitles: For MOVIE.MPG save your subtitles as MOVIE.SRT and add this option to open and play the subtitles.
+
+@{b}SRTDELTAMS/K/N@{ub}: Certain SRT files may not 100% be in sync with the video files (because there is, for example, an additional intro that leads to "shifted subtitles"). This delta can be corrected via SRTDELTAMS (required argument is a positive or negative values in ms).
+
+@{b}AUDIOPRIO/K/N:@{ub}, @{b}VIDEOPRIO/K/N:@{ub}, @{b}ASYNCPRIO/K/N:@{ub} Do not modify these options under normal conditions! RiVA is running as three different task. If you encounter any problems during video playback (e.g. sound hiccups or similar) check the task priorities that your system gives to RiVA. As a rule of thumb: the video and audio decoder should have the same priority, the asyncio task (= the task that loads the video and audio data) should have a higher priority.
+
+@{b}START/K/N@{ub}: Start corresponds to a seek position that will be loaded when the video starts playing. Due to technical reason RiVA must first parse the header of the stream (so, it will play a few seconds) and then jump to the seek position.
+The seek position can be given in one of the following ways:
+  0 -   10:   10%, 20% ... 90% of the stream
+ 10 -  100:   10%, 11%, 12% ... 99% of the stream
+100 - 1000:   100 ... 999 promille of the stream
+     >1000:   the byteposition of the stream (corresponds roughly to the filesize)
+During playback you can use F1 - F10 to go forward or backwards in the stream (F0 = 0%, F9 = 90%).
+
+@{b}VOLUME/K/N@{ub}: Set a value between 0-255 to override the default volume (127). The volume is valid for both channels (stereo).
+
+@{b}CHANNEL/K/N@{ub}: Normally, it is not necessary to modify this value! Choose one of the 16 available audio channels (default: 8). If the chosen channel is not free, the next free channel will be used.
+
+@{b}NOAUDIO/S@{ub}: Only do video decoding (without decoding the audio).
+
+@{b}NOVIDEO/S@{ub}: Only decode audio (without decoding the video).
+
+@{b}NOSKIP/S@{ub}: Force RiVA to play without the possibility to skip frames when the decoder can keep the pace. It is NOT recommended to use this options (RiVA will stop immediately and display a "decoder panic" in case of a buffer underrun).
+
+@{b}VERBOSE/S@{ub}: This option is only available via command line. Show some info about the video played (e.g. statistics about frames played / skipped, audio quality used and fps).
+
+@{b}FULLSCREEN/S@{ub}: Open RiVA in fullscreen instead of windowed (the video must correspond to one of the native SAGA resolutions).
+
+@{b}NOWINDOW/S@{ub}: Fullscreen without a backing window or PIP (implies FULLSCREEN). RiVA switches straight to the SAGA screenmode of the video and switches back when playback ends; the fire button on joystick port 1 or 2 (e.g. the red button of a CD32 joypad) or the left mouse button stops playback. This is also selected automatically when FULLSCREEN is given and no screen is open at all (e.g. when RiVA is started from a startup-sequence to play an intro before a game), or when the PIP window does not fit on the current screen. Without a native SAGA screenmode for the video RiVA quits with a message instead of falling back to a window.
+
+@{b}AUDIOQUALITY/K/N@{ub}: Parameter for audio (mp2) decoding:
+0 = lowest quality (fastest)
+1 = default quality (fast)
+2 = high quality (slowest)
+
+@{b}DEFAULTDIR/K@{ub}: When no filename is given, the file requester will open this drawer to select a video file (can be used, for example, in tooltypes).
+
+@{b}SRT/K@{ub}: Indicate a subtitles file. As written under SUBTITLES, the easiest way is to play subtitles giving them the same filename as the movie (adding an .srt extension). If, for whatever reason, you want to play subtitles from another file, you can use this option.
+
+@{b}SRTVPOS/K/N@{ub}: Customize the position of the subtitles. Subtitles are always shown centered. With SRTVPOS you can define the vertical position in "empty lines from the bottom" (default is 1 = 1 empty line from the bottom). The decoder automatically adapts the position of the text if a subtitle spans over several lines (i.e. there will always be SRTVPOS empty lines at the bottom).
+
+@{b}SRTRGB0/K/N@{ub}, @{b}SRTRGB1/K/N@{ub}: Possibilty to define the background (SRTRGB0) and foreground (SRTRGB1) colors for subtitles (or text in general). These are RGB values that must be given in decimal, e.g. $ff0000 = 16711680 (red), $00ff00 = 65280 (green), $0000ff = 255 (blue). When the value is greater than $ffffff = 16777215 the background will be transparent (alternatively, you can use the TRANSPARENT option).
+
+@{b}TRANSPARENT/S@{ub}: When this switch is selected the background color of subtitles is not drawn (= only text is blitted into the video frame, in general subtitles are more difficult to read - but the text looks nicer:).
+
+@{b}MEMORY/K/N@{ub}: Via this option you can set how many buffers RiVA should use: 0=64 (default), 1=128, 2=256, 3=512, 4=1024
+Be aware of the following things: 
+@{b}(1)@{ub} pressing a key (e.g. 'd' to show debug information) can take VERY long until the take effect (they work best with 64 or 128 buffers). 
+@{b}(2)@{ub} higher resolutions can allocate a lot of memory (for a 848x480 video, for example, 1024 buffers can take up to 1 GB of memory).
+As a recommendation: values 1 (128 buffers) and 2 (256 buffers) should be sufficient for most cases!
+
+@{b}PREBUFFERING/K/N@{ub}: Number of frames that will be prebuffered before playback (when using the MEMORY option, this is by default set to the maximum of buffers, the option PREBUFFERING allows you to set a custom value).
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node keys "Keyboard commands"
+
+@{b}KEYS@{ub}
+
+@{b}F1-F10:@{ub} Jump to 0%, 10%, ... 90% of playback.
+@{b}RETURN:@{ub} Switch between PIP and fullscreen.
+@{b}'s':@{ub} Turn subtitles on / off.
+@{b}'t':@{ub} Turn transparency for subtitles on / off.
+@{b}'d':@{ub} Turn debugging info on / off.
+@{b}ESC:@{ub} Stop playback and quit.
+
+@{b}PERCENTAGE SEEK@{ub}
+
+Arrow keys have sepcial functions and can be used for a more fine grained seek and video syncing.
+
+When using left / right arrows, RiVA calculates the approximate actual position in percent and you can then adjust the seek position in steps of 1%:
+@{b}- arrow left: -1%@{ub}
+@{b}- arrow right: +1%@{ub}
+Once you stop pressing left or right arrow, RiVA will initiate the selected seek. If you want to cancel your seek, press once arrow up or down key.
+
+Unfortunately, with certain encodings it can happen that audio and video are not 100% in sync after a seek. In that case you can use up and down arrows to adjust video to audio in steps of 2 frames per keypress:
+@{b}- arrow up: +0.08s (24/25 fps) / +0.07s (30 fps)@{ub}
+@{b}- arrow down: -0.08s (24/25fps) / -0.07s (30 fps)@{ub}
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node tips "Tips & tricks"
+
+@{b}TIPS & TRICKS@{ub}
+
+@{b}CONVERTING VIDEOS@{ub}
+
+You can use ffmpeg with the following options to convert your favorite video to MPEG-1:
+
+@{i}ffmpeg -i input.mp4 -vcodec mpeg1video -filter:v scale=640:360 -b:v 2500k -maxrate:v 3500k -bf 3 -ar 44100 -ac 1 -acodec mp2 -b:a 128k myvideo.mpg@{ui}
+
+Instead of input.mp4 you can chose any other file format supported by ffmpeg and also adapt other parameters like described here below.
+
+@{b}RESOLUTION@{ub}
+
+All videos at 640x360 play without frameskip, so this is a good option (for small screens). If you are on a core >11000, you can convert your video to the new SAGA screenmode 720x405:
+
+@{i}-filter:v scale=720x405@{ui}
+
+Most videos play without frameskip at this resolution so that you get an optimal combination between size and quality (certain videos at 720x405 can have some frameskip, but it is, in general, less than <1%). You can, of course, use any of the higher SAGA resolution, but these files are bigger and will typically play with frameskip (a 848x480 movie, for example, has about 5-10% frameskip using a regular x13 core - overclocked cores or play a video from RAM may increase the framerate in that case). 
+
+@{b}OTHER OPTIONS@{ub}
+
+Bitrate: You can experiment with different average and maximum bitrates (we have successfully tested bitrates of 3500/4500k).
+@{i}-b:v 3500k@{ui}
+@{i}-maxrate:v 4500k@{ui}
+
+Audio: You can also set higher audio quality of course (e.g. we have succesfully played videos at 720x405 at 256kbps without any frameskip).
+@{i}-acodec mp2 -b:a 256k@{ui}
+
+@{b}SUBTITLES@{ub}
+
+Use the following steps to watch a movie with subtitles:
+
+1) Download subtitles (use SubRipper format with .srt extension)
+2) Copy the file to the same folder as your movie
+3) Give it the same name as the move (e.g. mymovie.mpg => mymovie.srt)
+4) Type @{i}RiVA mymovie.mpg subtitles@{ui} from command line (or use SUBTITLES tooltype in icon)
+
+You can press 's' to activate or disactivate subtitles or 't' to make background transparent while playing (corresponds to TRANSPARENT option from command line or with tooltypes).
+
+@{b}SD-CARDS@{ub}
+
+You should NOT use SD cards for video playback - they are simply too slow. Use a CF card instead (using @{i}ApolloControl ID=x@{ui} may or may not give better results when using higher resolution videos) or play your video from RAM to get maximum speed.
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node caveats "What you should keep in mind when using RiVA ..."
+
+@{b}Caveats@{ub}
+
+To get the best experience with RiVA we highly recommend to NOT do the following things:
+
+@{b}(1) Heavy programs@{ub}
+
+Video decoding is a very demanding task and uses up to 100% of CPU. Running heavy programs in parallel (e.g. POV-Ray, FlashMandel, Benchmarks like SysInfo or 3D demos etc.) will clearly bring a 92 Mhz machine to its limits. The consequence is that you will see "decoder panic" messages and (heavy) stuttering in RiVA. Doing some "light works" in parallel (e.g. write some text or chat via irc) should be no problem though.
+
+@{b}(2) Switching screens@{ub}
+
+Programs on AmigaOS/ApolloOS can run on different screens: You may want to start RiVA from Workbench and then open a program that runs on another - PAL/NTSC or RTG - screen. RiVA 0.63 allows you to use programs on other screens in parallel, but in this case you should not use RiVA in fullscreen mode as this can create different type of artefacts. If you run into such problems, in general pressing AMIGA-M and RETURN (several times, if necessary) should get you out of trouble. As explained under point (1) programs running in parallel (on different screens) should not be too "heavy".
+
+@{" Back to TOC " link "main"}
+
+@endnode
+
+@node vampirelair "Become a member!"
+
+@{b}BECOME A MEMBER@{ub}
+
+You like what we are doing? Then please visit us at the Vampire Lair and become a bronze, silver or gold member to support development around the Vampire:
+
+@{" The Vampire Lair " system "OpenURL https://www.apollo-vampire-lair.com"} 
+
+URL: https://www.apollo-vampire-lair.com
+
+From the 1st of July 2025 a membership will give you access to:
+- full versions of our programs
+- prerelease versions and updates
+- latest ApolloOS and ApolloROM
+- demo versions of games and programs
+- additional vampire-specific tools
+- special support for developpers
+
+@{" Back to TOC " link "main"}
+
+@endnode
