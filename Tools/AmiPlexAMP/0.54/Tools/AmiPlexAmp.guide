@@ -1,0 +1,972 @@
+@DATABASE AmiPlexAmp.guide
+@$VER: AmiPlexAmp.guide 0.54 (20.06.2026)
+@AUTHOR "Renaud Schweingruber"
+@(C) "2026 Renaud Schweingruber"
+
+@NODE Main "AmiPlexAmp 0.54 documentation"
+@TITLE "AmiPlexAmp 0.54"
+
+
+  AmiPlexAmp - Plex Media Server client for AmigaOS 3
+
+  by Renaud Schweingruber
+
+
+
+  @{"  Introduction         " LINK Introduction}
+  @{"  Features             " LINK Features}
+  @{"  Requirements         " LINK Requirements}
+  @{"  Installation         " LINK Installation}
+  @{"  First-time setup     " LINK Setup}
+  @{"  Servers and libraries" LINK Servers}
+  @{"  Browsing the library " LINK Browsing}
+  @{"  Playback             " LINK Playback}
+  @{"  Search               " LINK Search}
+  @{"  Streaming modes      " LINK Streaming}
+  @{"  Audio backends       " LINK Backends}
+  @{"  FLAC direct stream   " LINK FLAC}
+  @{"  Library cache        " LINK Cache}
+  @{"  Configuration file   " LINK ConfigFile}
+  @{"  International chars  " LINK Chars}
+  @{"  Demo / Registration  " LINK Registration}
+  @{"  Troubleshooting      " LINK Troubleshoot}
+  @{"  Credits              " LINK Credits}
+  @{"  License              " LINK License}
+  @{"  Contact              " LINK Contact}
+  @{"  Release notes        " LINK ReleaseNotes}
+
+
+@ENDNODE
+
+
+@NODE Introduction "Introduction"
+@TITLE "Introduction"
+
+
+AmiPlexAmp is a native MUI 3.8 client for Plex Media Server that lets
+you browse and play your audio library directly from an AmigaOS 3
+machine. It connects to your Plex server over the local network,
+decodes MP3 streams with mpega.library and FLAC streams with dr_flac,
+and outputs through either AHI or directly through the SAGA HQ audio
+channel on Apollo Vampire boards.
+
+The application is a native AmigaOS 3.0+ executable targeting
+m68k. It runs on stock 68030 systems and scales up to the Apollo
+Vampire 68080 with SAGA-accelerated audio output.
+
+This documentation covers installation, usage, configuration and
+troubleshooting. The corresponding Aminet ReadMe in this same archive
+gives a shorter overview.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Features "Features"
+@TITLE "Features"
+
+
+  - Plex authentication via the plex.tv/link PIN flow (no password
+    ever typed into AmigaOS). The auth token is persisted in
+    PROGDIR:AmiPlexAmp.config so you only do this once.
+
+  - Automatic discovery of Plex servers on your account, with a
+    picker when more than one is reachable. Same for music
+    libraries on the selected server. See
+    @{"Servers and libraries" LINK Servers}.
+
+  - Hierarchical library browsing: alphabetical filter, artists,
+    albums, tracks. Cover art via datatypes on AGA, via
+    cybergraphics.library WritePixelArray for 24-bit RTG.
+
+  - @{"Library search" LINK Search} via the Plex /hubs/search API.
+
+  - Native MP3 and FLAC playback. See @{"FLAC direct stream" LINK FLAC}.
+
+  - Progressive @{"streaming" LINK Streaming} for both formats.
+
+  - Library @{"cache" LINK Cache} for fast startup.
+
+  - Window state persistence (position, size, compact mode).
+
+  - Album queue with auto-advance.
+
+  - Pause/resume, volume slider, previous/next, progress bar with
+    elapsed and total time.
+
+  - Compact and full UI modes: hide the library browser to keep just
+    the now-playing transport visible.
+
+  - Two @{"audio backends" LINK Backends}: standard AHI or direct SAGA HQ.
+
+  - Status line in the bottom of the window for feedback.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Requirements "Requirements"
+@TITLE "Requirements"
+
+
+Operating system
+
+  AmigaOS 3.0 or newer (Kickstart 39+).
+
+
+CPU and memory
+
+  - 68030 minimum. MP3 plays without issue on 68030 50 MHz; FLAC
+    decoding is heavier and starts to be comfortable from 68040.
+  - 68060 and Apollo Vampire (68080) recommended.
+  - 8 MB Fast RAM minimum.
+
+
+Required libraries and devices
+
+  - MUI 3.8 or newer (mui.library and the standard MUI gadgets).
+  - mpega.library by Stephane Tavenard, for MP3 decoding.
+  - AmiSSL 5.1 or newer, for HTTPS to plex.tv and to your Plex
+    server (when remote).
+  - bsdsocket.library v4 (Roadshow, AmiTCP-Genesis, MiamiDX, etc.).
+  - icon.library, intuition.library, graphics.library, dos.library,
+    utility.library, datatypes.library (all standard).
+
+
+Optional libraries
+
+  - cybergraphics.library, for 24-bit cover art on RTG.
+  - ahi.device for the @{"AHI backend" LINK Backends}.
+  - codesets.library is NOT required: international characters are
+    handled internally.
+
+
+Hardware
+
+  - Network connection to your Plex server (wired or wireless).
+  - Audio: either an AHI-compatible setup (Paula, Prelude, Toccata,
+    Vampire AHI driver) or the SAGA HQ output on a Vampire V2 or V4.
+  - Real-time clock set to the correct date and time. HTTPS
+    certificate validation depends on it.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Installation "Installation"
+@TITLE "Installation"
+
+
+Unpack the .lha archive anywhere you like. AmiPlexAmp is a single
+drawer containing the AmiPlexAmp executable, this guide, the ReadMe,
+and the icon.
+
+To install:
+
+  1. Drag the AmiPlexAmp drawer to wherever you want it on your hard
+     drive (e.g. Work:Music/AmiPlexAmp).
+
+  2. Double-click the AmiPlexAmp icon to run it. The app starts in
+     5-minute demo mode by default - see @{"Registration" LINK Registration}
+     for how to remove the time limit.
+
+  3. Make sure your bsdsocket stack is online (Roadshow, AmiTCP,
+     MiamiDX...).
+
+  4. Make sure your system clock is correctly set. See
+     @{"Troubleshooting" LINK Troubleshoot} if you get a "Clock not
+     set" requester at launch.
+
+There is no automated Installer script and nothing to copy to LIBS:
+or DEVS:. The bundled SDK headers in sdk/ are for rebuilding from
+source -- they are not needed at runtime and can be deleted if you
+just want to run the binary.
+
+
+First launch
+
+The first time you launch AmiPlexAmp, you go through the
+@{"plex.tv/link" LINK Setup} authentication flow.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Setup "First-time setup"
+@TITLE "First-time setup"
+
+
+On first launch (no auth token stored), AmiPlexAmp opens a small
+window with a 4-character code and a URL:
+
+
+    Visit https://plex.tv/link from any browser
+
+    Enter the code:  ABCD
+
+
+To complete the authentication:
+
+  1. Open a web browser on any device (your phone, your PC, etc.).
+  2. Go to https://plex.tv/link
+  3. Log in to your Plex account.
+  4. Enter the 4-character code shown by AmiPlexAmp.
+
+Within a few seconds the PIN window closes itself and AmiPlexAmp
+moves on to server and library selection. The auth token is now
+stored in PROGDIR:AmiPlexAmp.config and you will not have to go
+through the PIN flow again unless you "Deauthorize server" from
+the Project menu.
+
+After authentication, AmiPlexAmp asks plex.tv for the list of
+servers associated with your account and the music libraries on
+the chosen server. If you have exactly one of each, the selection
+is silent. If you have several, see @{"Servers and libraries" LINK Servers}.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Servers "Servers and libraries"
+@TITLE "Servers and libraries"
+
+
+Plex accounts can have several Media Servers attached to them, and
+each server can have several music libraries (Plex calls these
+"sections"). AmiPlexAmp lets you pick which combination to use.
+
+
+Server selection
+
+After authentication, AmiPlexAmp queries plex.tv for all the
+servers associated with your account. If only one owned server is
+reachable, AmiPlexAmp adopts it silently. If several are reachable,
+a picker opens listing each server's name and its host:port. Pick
+one to use it; cancel to abort the launch.
+
+The selection is keyed against the server's stable Plex
+clientIdentifier rather than its IP address, so it survives the
+server being moved to a new network, a different DHCP lease, or
+behind a different relay.
+
+Picking later: Project / Select server in the menu re-opens the
+picker at any time. Selecting a different server invalidates the
+local library cache (it would describe the previous server's
+content) and prompts you to re-pick the music library on the new
+server.
+
+
+Library selection
+
+The Plex sections of type "artist" are the music libraries. The
+same logic as for servers applies: single library is selected
+silently, multiple libraries pop a picker showing each library
+name as you've configured it on the server.
+
+Picking later: Project / Select library in the menu re-opens the
+picker on the current server. Selecting a different library
+invalidates the cache and reloads the artist list from the new
+section.
+
+
+Where the choice lives
+
+Server and library choices persist between sessions in
+PROGDIR:AmiPlexAmp.config under the keys ServerClientID,
+Server, Port, ServerName, SectionID and SectionName. The simplest
+way to start fresh is Project / Deauthorize server, which clears
+everything and brings you back to plex.tv/link.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Browsing "Browsing the library"
+@TITLE "Browsing the library"
+
+
+The main window has four list columns side by side:
+
+  A-Z         Alphabetical filter. Click a letter to restrict the
+              artists column to artists whose name starts with that
+              letter. "All" shows every artist, "#" matches artists
+              whose name starts with a non-letter.
+
+  Artists     One row per artist in your music library, sorted
+              alphabetically.
+
+  Albums      Albums for the artist selected in the previous column,
+              sorted by year (newest first).
+
+  Tracks      Tracks for the album selected in the previous column,
+              in their original track order.
+
+Selecting an artist populates the albums list. Selecting an album
+populates the tracks list. Double-click a track to start playback.
+
+The cover art for the current track is displayed at the top of the
+window along with the artist, album and track titles.
+
+At the bottom of the window:
+
+  - Search bar (see @{"Search" LINK Search}).
+  - Status line showing the current state.
+
+Across the middle:
+
+  - Transport buttons: Previous, Play/Pause, Stop, Next.
+  - Volume slider (0-100).
+  - Compact-mode toggle (top-left triangle): hides the four lists
+    to leave only the cover and transport visible.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Playback "Playback"
+@TITLE "Playback"
+
+
+Double-click a track in the Tracks column (or hit Play after
+selecting one). AmiPlexAmp queues all subsequent tracks from the
+same album so playback auto-advances to the next track. To start
+from track #1 of the album, select the album then hit Play.
+
+During playback:
+
+  - The progress bar at the top shows elapsed and total time.
+  - The Play button becomes Pause; click to toggle.
+  - Stop interrupts the current track and resets the queue.
+  - Previous jumps back to the start of the current track if it's
+    been playing more than 3 seconds, or to the previous track
+    otherwise.
+  - Next jumps to the next track in the queue.
+  - The volume slider is live: drag to adjust on the fly.
+
+The codec format and audio metadata (sample rate, bit depth) are
+displayed in the top-right of the cover area, e.g. "FLAC 44.1kHz
+16bit" or "MP3 320kbps".
+
+
+Behavior on track end
+
+When a track finishes, AmiPlexAmp automatically advances to the next
+track in the queue. When the last track of the queue finishes, the
+status line shows "Playback finished." and the transport returns to
+its idle state.
+
+
+Behavior on Stop
+
+Stop both interrupts playback and clears the queue. To resume, you
+have to start a new track yourself.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Search "Search"
+@TITLE "Search"
+
+
+Type a search query in the search bar at the bottom of the window
+and hit Enter or click Go. AmiPlexAmp issues a Plex /hubs/search
+request and the three list columns are populated with the matching
+artists, albums and tracks across your entire library.
+
+In search mode, album rows are shown with their parent artist for
+context (e.g. "The Wall (1979) - Pink Floyd") and track rows show
+the artist and album (e.g. "Wish You Were Here - Wish You Were Here -
+Pink Floyd").
+
+Click the "x" button next to Go to clear the search and return to
+the normal alphabetical browse.
+
+Search matches Plex's own logic (case-insensitive, substring on
+artist / album / track names) and respects the credentials of your
+account -- if your library has artists shared from a friend's Plex
+server, those are also searched.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Streaming "Streaming modes"
+@TITLE "Streaming modes"
+
+
+AmiPlexAmp offers two playback modes, selectable from
+Settings -> Playback mode:
+
+
+Stream (default)
+
+  Playback starts as soon as ~200 KB are buffered to the local
+  temporary file (typically 1-2 seconds at usable bandwidth). The
+  rest of the track keeps downloading in the background while the
+  decoder reads from the growing file.
+
+  Pros: instant playback. The user perceives no delay.
+
+  Cons: a network stall during playback can cause a glitch. For
+  fast-moving network conditions (Wi-Fi roaming, sleeping a remote
+  server), Download mode is more robust.
+
+  Both MP3 and FLAC support progressive streaming. For FLAC the
+  decoder uses dr_flac's custom I/O callbacks to wait when the
+  decoder catches up to the network writer.
+
+
+Download
+
+  AmiPlexAmp fetches the full file to T:plexplayer.{mp3,flac} before
+  starting playback. The time-to-first-sound is the time required
+  to download the entire track.
+
+  Pros: robust to network stalls. The whole file is on disk before
+  decoding starts.
+
+  Cons: 30-second wait on slow connections / large FLAC files.
+
+
+The choice persists to PROGDIR:AmiPlexAmp.config.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Backends "Audio backends"
+@TITLE "Audio backends"
+
+
+AHI backend (default)
+
+Uses ahi.device CMD_WRITE with ahir_Link chaining, giving gapless
+double-buffering through the standard AHI mixer. A dedicated
+producer task decodes frames asynchronously into a queue while the
+decoder process consumes them and submits the IORequest pair to
+ahi.device. Output quality depends on the AHI mode configured in
+Prefs/AHI.
+
+Compatible with any audio hardware that has an AHI driver (Paula,
+Toccata, Prelude, Vampire AHI driver, etc.).
+
+
+Arne backend (Vampire only)
+
+Specific to Apollo Vampire (SAGA core). Writes directly to the
+SAGA HQ channel 3 registers ($DFF430...) for 16-bit stereo, with a
+double-buffer ping-pong pattern driven by the AUD3 hardware
+interrupt vector. SAGA HQ channels 0-3 share the standard AUD0-3
+IRQ vectors with classic Paula, which lets the decoder process
+sleep on a Signal until the chip flips buffers -- no polling,
+sample-accurate.
+
+The result is the same pristine 16-bit DMA you get from native
+SAGA tools like VaMP3, with no mixer in the path. Recommended for
+the best audio quality on Vampire V2/V4 hardware.
+
+Decoding is synchronous in the Arne path: the codec is called
+between buffer flips inside the decoder process.
+
+
+Selecting the backend
+
+Settings -> Audio output -> AHI or Arne. The choice is saved to
+PROGDIR:AmiPlexAmp.config and takes effect at the next launch. The
+backend is not hot-swappable mid-session because the I/O setup
+differs at startup time.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE FLAC "FLAC direct stream"
+@TITLE "FLAC direct stream"
+
+
+When the source track on the Plex server is a FLAC file, AmiPlexAmp
+fetches the original file untouched (DirectStream) and decodes it
+locally with dr_flac. This is bit-perfect lossless playback.
+
+dr_flac is a single-header public-domain FLAC decoder by David
+Reid (github.com/mackron/dr_libs). The library is compiled into
+AmiPlexAmp at build time with DR_FLAC_NO_OGG, DR_FLAC_NO_CRC and
+DR_FLAC_NO_WCHAR to keep the binary lean.
+
+Progressive streaming for FLAC is implemented via custom I/O
+callbacks (read / seek / tell) handed to drflac_open(). The
+callbacks track a BPTR file handle that is re-opened on EOF if
+the writer has appended more bytes since our last view, which is
+how the decoder can read past the cached file size that
+AmigaOS DOS reports.
+
+
+Force MP3 toggle
+
+If you don't have the CPU budget for FLAC decoding (e.g. on
+68030 with high sample-rate sources), enable Settings -> Force
+MP3 to route FLAC sources through Plex's MP3 transcoder. The
+transcoded MP3 is then decoded by mpega.library. Bandwidth is
+reduced and CPU load is lower at the cost of audio quality.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Cache "Library cache"
+@TITLE "Library cache"
+
+
+To make startup fast, AmiPlexAmp caches the list of artists, albums
+and tracks of your library to PROGDIR:AmiPlexAmp.cache. A
+1000-artist library that takes 20 seconds to fetch over the network
+loads in under a second from cache.
+
+
+How it works
+
+After a successful first fetch, the entire list is serialized to
+PROGDIR:AmiPlexAmp.cache. On subsequent launches, the cache file is
+checked against the current server identity (hostname). If they
+match, the cache is loaded from disk and the browse window opens
+immediately. If they differ, the cache is invalidated and a fresh
+fetch is performed.
+
+
+Cache file format
+
+The cache file is a binary AmigaOS-native format with a magic
+number ('APAC'), a version number and a header. It is not designed
+to be edited by hand. Delete it to force a full re-fetch on next
+launch.
+
+
+Invalidation
+
+The cache version is bumped whenever the storage format changes
+(e.g. when new fields are added). Older caches are automatically
+rejected and replaced on next launch.
+
+Manual invalidation: use Project -> Refresh to force a re-fetch
+of the library, or Project -> Deauthorize server to clear the
+cache along with the auth token (you will have to re-authenticate
+via @{"plex.tv/link" LINK Setup} after this).
+
+
+Settings -> Library cache toggle
+
+Disable this if you want every launch to re-fetch from the server.
+Useful during development or if your library changes often.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE ConfigFile "Configuration file"
+@TITLE "Configuration file"
+
+
+All persistent settings are stored in PROGDIR:AmiPlexAmp.config,
+a plain text file with one key=value per line. It is created on
+first launch and updated whenever a setting changes.
+
+
+Format
+
+    Server=192.168.1.100
+    Port=32400
+    ServerName=My Plex Server
+    ServerClientID=abc123def456...
+    SectionID=3
+    SectionName=Music
+    Token=Xxxxxxxxxxxxxxxxxx
+    ClientID=Yyyyyyyyyyyyyyyyyy
+    Mode=stream
+    UseCache=1
+    AudioBackend=ahi
+    ForceMP3=0
+    MinimizeOnPlay=0
+    WinX=72
+    WinY=24
+    WinW=820
+    WinH=540
+    FullW=820
+    FullH=540
+    BrowseHidden=0
+    Volume=75
+
+
+Keys
+
+  Server / Port / ServerName
+                  Currently-selected Plex server's address and
+                  display name. Refreshed at every launch from
+                  plex.tv to track network/IP changes.
+  ServerClientID  Stable identifier of the selected server. Used
+                  to match the same server across launches even
+                  when its IP / port have moved.
+  SectionID       Numeric ID of the selected music library
+                  (Plex section). 0 means "not picked yet" and
+                  triggers the library picker at next startup.
+  SectionName     Display name of the selected library, used in
+                  the picker label and the cache header.
+  Token / ClientID
+                  Persistent auth credentials. Don't share these.
+  Mode            "stream" or "download".
+  UseCache        0 or 1.
+  AudioBackend    "ahi" or "arne".
+  ForceMP3        0 or 1.
+  MinimizeOnPlay  0 or 1.
+  WinX / WinY     Last window position.
+  WinW / WinH     Last window size (current mode at quit).
+  FullW / FullH   Last full-UI window size.
+  BrowseHidden    1 if quit in compact mode.
+  Volume          0-100.
+
+
+You can edit this file by hand to change settings while AmiPlexAmp
+is not running. Delete it entirely to reset to defaults and start
+fresh -- you will have to re-authenticate.
+
+The library cache is in a separate file (AmiPlexAmp.cache) and not
+intended to be edited.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Chars "International characters"
+@TITLE "International characters"
+
+
+Plex sends accented characters in its XML responses as numeric
+character entities (e.g. "&#252;" for u-umlaut, "&#233;" for
+e-acute). AmiPlexAmp's XML decoder transforms these to their
+matching ISO-8859-1 byte where possible:
+
+  - Codepoints U+0080..U+00FF (Latin-1 supplement) become the
+    single matching byte. Western European accented characters
+    (German, French, Spanish, Italian) render natively.
+
+  - Codepoints in Latin Extended-A (U+0100..U+017F) get
+    transliterated to the closest ASCII look-alike, since the
+    standard AmigaOS font lacks the glyphs. Examples:
+
+      Polish:    a-ogonek -> a, e-ogonek -> e,
+                 s-acute  -> s, c-acute  -> c,
+                 l-stroke -> l, n-acute  -> n,
+                 z-acute  -> z, z-dot    -> z
+
+      French:    oe-ligature -> oe, OE -> OE
+
+      Czech:     s-caron -> s, z-caron -> z,
+                 c-caron -> c, r-caron -> r
+
+      Common BMP punctuation also normalised:
+                 smart quotes -> ' and "
+                 em-dash      -> -
+                 ellipsis     -> ...
+
+So a Polish artist comes out as "Ania Dabrowska" rather than
+"Ania D?browska" or worse "Ania D" (truncated). A French album
+title displays "Coeur de pirate" rather than "C?ur de pirate".
+
+This is a deliberate trade-off: rendering the actual Latin
+Extended-A glyphs would require a non-standard font (ISO-8859-2
+or ISO-8859-15 compatible) that most AmigaOS users don't have
+installed.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Registration "Demo / Registration"
+@TITLE "Demo / Registration"
+
+
+Demo mode
+
+Out of the box AmiPlexAmp runs as a 5-minute demo session: a
+requester pops up at the end of the session announcing the time
+limit, the audio is stopped, and the application exits cleanly
+when you click OK. The window title shows "(unregistered)" so
+you always know what mode the application is in. The About box
+similarly shows an unregistered notice.
+
+Everything else works in demo mode - browsing, search, playback,
+caching, both audio backends - so you can fully evaluate the
+application before deciding whether to register.
+
+
+Registering
+
+To remove the time limit, become a supporter of the Apollo
+Vampire community at:
+
+
+    https://apollo-vampire-lair.com
+
+
+Supporters receive an amiplexamp.key file. Drop it either in:
+
+  PROGDIR:amiplexamp.key  (alongside the AmiPlexAmp executable)
+  S:amiplexamp.key        (system-wide, available to all instances)
+
+PROGDIR: takes precedence when both are present. On the next
+launch the title bar loses the "(unregistered)" tag, the About
+box shows your registered name, and the 5-minute timer is off.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Troubleshoot "Troubleshooting"
+@TITLE "Troubleshooting"
+
+
+"Clock not set" requester at startup
+
+The HTTPS certificate validation needs a correct system date.
+Open Prefs/Time, set the current date/time, save it. Then
+relaunch AmiPlexAmp. If you don't have a working RTC battery,
+you may need to set the time manually at every boot or use an
+NTP client.
+
+
+"Could not open AmiSSL"
+
+Install AmiSSL 5.1 or newer from Aminet or the official AmiSSL
+repository. AmiPlexAmp links statically against the AmiSSL
+inline macros provided by its SDK, so the library needs to be
+present in LIBS: at runtime.
+
+
+"Cannot find Plex server"
+
+  - Make sure your Plex Media Server is reachable from the
+    AmigaOS machine: try pinging its IP from a shell, or open
+    the Plex web UI on another machine that's on the same LAN.
+  - Make sure your bsdsocket stack is online (Roadshow,
+    AmiTCP, MiamiDX).
+  - If your Plex account has several servers and you picked an
+    unreachable one, use Project / Select server to pick a
+    different one. See @{"Servers and libraries" LINK Servers}.
+
+
+Playback stutters
+
+  - For MP3 on 68030, this is expected at higher bitrates.
+    Enable Settings -> Force MP3 if you're listening to FLAC
+    sources -- the lower CPU load helps.
+  - On AHI, check that the AHI mode configured in Prefs/AHI is
+    appropriate (44.1 kHz 16-bit stereo at reasonable mixer
+    rate).
+  - On a Vampire V2/V4, switch to the @{"Arne" LINK Backends}
+    backend for the cleanest audio path.
+
+
+Cover art doesn't appear
+
+  - On a 256-colour AGA screen, cover art uses datatypes. Make
+    sure your installation has working picture datatypes
+    (jpeg.datatype, png.datatype etc.) in SYS:Classes/Datatypes.
+  - On RTG (15-bit or higher), AmiPlexAmp uses
+    cybergraphics.library WritePixelArray. Make sure
+    cybergraphics.library is in LIBS:.
+
+
+No playback starts, "Playback finished" appears immediately
+
+This typically meant a decoder open failure in earlier versions.
+v0.45+ fixes the FLAC-streaming case where the partial download
+size confused dr_flac's metadata bounds check. If you still see
+this, check the Plex server logs for transcoding failures.
+
+
+Window title shows "(unregistered)"
+
+The application can't find a valid amiplexamp.key file. See
+@{"Demo / Registration" LINK Registration} for how to install one.
+
+
+Polish / Czech artists show as ASCII look-alikes
+
+This is by design. See @{"International characters" LINK Chars}.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Credits "Credits"
+@TITLE "Credits"
+
+
+  Plex Media Server team
+        For the well-documented HTTP API.
+
+  Stephane Tavenard
+        For mpega.library, the native AmigaOS MP3 decoder.
+
+  David Reid (mackron)
+        For dr_flac, the single-header public-domain FLAC decoder
+        from github.com/mackron/dr_libs.
+
+  Jens Maus and contributors
+        For AmiSSL, the AmigaOS port of OpenSSL.
+
+  Stefan Stuntz
+        For MUI, the AmigaOS GUI framework.
+
+  Apollo Team (Gunnar von Boehn, Flype, Renaud Schweingruber etc.)
+        For the SAGA HQ documentation and the Vampire boards that
+        the Arne backend targets.
+
+  Anthropic's Claude
+        Used as a development assistant during the implementation
+        of several iterations.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE License "License"
+@TITLE "License"
+
+
+AmiPlexAmp is closed-source freeware. The binary distribution is
+free to download, install and evaluate via the built-in 5-minute
+demo session. Unrestricted use is unlocked via a license key file
+available to supporters of the Apollo Vampire community at
+https://apollo-vampire-lair.com (see Registration above).
+
+Redistribution of the unmodified archive itself is permitted and
+encouraged. Redistribution of license key files is not.
+
+AmiPlexAmp links against or bundles several third-party components,
+each retaining its own license:
+
+  - mpega.library by Stephane Tavenard, used as a shared library
+    at runtime.
+  - dr_flac by David Reid, statically linked single-header decoder
+    (public domain / MIT).
+  - AmiSSL by Jens Maus and contributors, used as a shared library
+    at runtime.
+  - MUI by Stefan Stuntz, used as a shared library at runtime.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE Contact "Contact"
+@TITLE "Contact"
+
+
+Bug reports, feature requests, full version requests:
+
+
+    Renaud Schweingruber
+
+    renaud.schweingruber@protonmail.com
+
+
+Please include in your message:
+
+  - AmiPlexAmp version (shown in the window title).
+  - Whether the app is registered or running in demo mode (the
+    window title shows "(unregistered)" when in demo mode).
+  - Your AmigaOS version and the hardware (CPU, Vampire model
+    if any).
+  - The audio backend in use (AHI or Arne).
+  - Steps to reproduce, if you're reporting a bug.
+
+For Apollo Vampire / SAGA-specific issues, the Apollo Discord is
+also a good place to discuss audio output.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE
+
+
+@NODE ReleaseNotes "Release notes"
+@TITLE "Release notes"
+
+
+Version 0.54
+
+Internal audio path micro-optimisations for m68k. The MP3 stereo
+interleave loop and the FLAC mono-to-stereo expansion loop are
+now count-down loops with pure pointer arithmetic, on advice from
+Gunnar von Boehn that the AC68080 pipeline produces an ALU-to-EA
+dependency stall when a loop counter is also used as a memory
+index. The previous code already used walking pointers in most
+places; the FLAC mono path was the one outlier. No user-visible
+behaviour change. CPU load in the audio mixing layer drops by a
+small percentage on classic 68k, more pronounced on 68030/40.
+
+
+Version 0.53
+
+Multi-server and multi-library selection. Plex accounts with
+several servers (or servers with several music libraries) now
+get a picker rather than a silent pick of the first entry. The
+choice persists across sessions and can be revisited from the
+Project menu via "Select server" and "Select library".
+
+Server identity is now tracked by the stable Plex
+clientIdentifier instead of host:port. The selected server is
+re-found correctly even after a network move, a DHCP lease
+rotation, or a Plex relay reconfiguration. The library cache is
+invalidated automatically when either the server or the section
+changes, so the artist list always matches the configured
+combination.
+
+
+Earlier versions
+
+For a record of changes prior to 0.53 see the README on Aminet
+or the project README in this archive.
+
+Back to @{"contents" LINK Main}
+
+
+@ENDNODE

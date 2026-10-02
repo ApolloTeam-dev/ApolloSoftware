@@ -1,0 +1,26 @@
+Greetings lucky consumer!
+
+Congratulations on attaining the first and only version of "GrapeAmp . . . The Purple WinAmp Skin With . . . um . . . well . . . purple."
+I created it because I like purple and because I wished to dedicate a work of "art" to the often forgotten Grape Ape (Grape Ape . . . 
+GrapeAmp . . . get it?) of my cartoon youth.  He is far too often overlooked as one of the greats of the cartoon world.  I'm talking out of 
+my butt.  Please ignore me.  :)
+
+Real reasons:
+
+	1)  Yes I like purple.  That part its true.
+	2)  Making a WinAmp skin seemed like a fun challenge.  It was.
+	3)  Well, actually the first two are the only real reasons.
+
+Installation:
+
+Put the "GrapeAmp.zip"file in your WinAmp v1.80 (or higher) directory and unzip.  It should automatically go into your Skins
+directory.  Then run WinAmp, type in "Alt-S" and choose GrapeAmp from the skins list.
+
+If you have any questions or comments, bitches or moans, praises or condemnations, please address them to
+boycekb@mindspring.com.  To find out more about the twisted mind from which GrapeAmp sprung, aim you favorite web browser to
+http://www.mindspring.com/~boycekb/ .
+
+Enjoy GrapAmp and Happy Living!
+
+- Kerry
+

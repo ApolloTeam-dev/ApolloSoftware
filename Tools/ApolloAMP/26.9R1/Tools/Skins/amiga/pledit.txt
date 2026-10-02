@@ -1,0 +1,6 @@
+[Text]
+Normal=#888888
+Current=#000000
+NormalBG=#E9E9E9
+SelectedBG=#CCCCCC
+Font=MS Sans Serif

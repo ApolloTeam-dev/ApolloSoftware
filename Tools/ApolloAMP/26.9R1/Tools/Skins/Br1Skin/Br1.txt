@@ -1,0 +1,15 @@
+This is an alternate frontend for nullsoft's winamp.
+(visit http://www.nullsoft.com and http://www.winamp.com for more info).
+
+Unzip all files to the /winamp/skins/ directory. Then choose Options,
+Select skin from the pulldown menu.
+
+This skin uses 24-bit graphics
+
+--------------------
+BR1 winamp-skin, first Version !
+--------------------
+04-September-1998
+by Bruno Pollet
+--------------------
+http://hlm.le-village.com

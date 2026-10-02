@@ -1,0 +1,2 @@
+38,52,85   // 0 = black (background color #1)
+0,0,0      // 1 = grey (background color #2)

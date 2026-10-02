@@ -1,0 +1,260 @@
+Short:        Plex Media Server audio client
+Author:       renaud.schweingruber@protonmail.com (Renaud Schweingruber)
+Uploader:     renaud schweingruber protonmail com (Renaud Schweingruber)
+Type:         mus/play
+Version:      0.54
+Requires:     MUI 3.8+, mpega.library, AmiSSL 5.1+, bsdsocket v4 (Roadshow or AmiTCP), correct system clock, AHI for system audio output OR an Apollo Vampire V4 for SAGA HQ direct audio (V4 only)
+Architecture: m68k-amigaos >= 3.0
+Distribution: Aminet
+
+AmiPlexAmp is a native MUI 3.8 client for Plex Media Server, letting
+you browse and play your audio library straight from an AmigaOS 3
+machine. It connects to a Plex server on your local network, decodes
+MP3 streams on the Amiga side with mpega.library and FLAC streams
+with dr_flac, and outputs through either AHI or directly through the
+SAGA HQ audio channel on Apollo Vampire V4.
+
+AmiPlexAmp runs as an unrestricted 5-minute demo session out of the
+box. Registered users (see Registration below) drop an
+amiplexamp.key file into PROGDIR: or S: to unlock unrestricted use.
+
+
+Changes in 0.54
+
+  Audio path micro-optimisations for m68k: stereo interleave and
+  FLAC mono-to-stereo loops rewritten to count down with pure
+  pointer arithmetic (per Gunnar von Boehn's advice on AC68080
+  pipeline behaviour). No user-visible change; a couple of
+  percent lower CPU load on classic Amigas.
+
+
+Changes in 0.53
+
+  - Multi-server picker: when your Plex account has several
+    servers, AmiPlexAmp asks which one to use at first launch and
+    via Project / Select server later.
+
+  - Multi-library picker: when the chosen server has several
+    music libraries (sections of type artist), choose which to
+    browse. Project / Select library re-opens the picker at any
+    time.
+
+  - Selected server identity is now persisted via the stable
+    Plex clientIdentifier rather than host:port, so the choice
+    survives network changes (laptop scenarios, DHCP rotation,
+    relay reconfiguration).
+
+
+Features
+
+  - Plex authentication via the plex.tv/link PIN flow (no password
+    ever typed into AmigaOS). The auth token is persisted in
+    PROGDIR:AmiPlexAmp.config so you only do this once.
+  - Automatic discovery of the Plex servers on your account. When
+    more than one is reachable, a picker lets you choose; ditto
+    for music libraries on the selected server. Choices persist
+    and can be changed from the Project menu at any time.
+  - Hierarchical library browsing: alphabetical filter -> artists ->
+    albums -> tracks. Cover art is fetched and displayed via datatypes
+    on AGA and via cybergraphics.library WritePixelArray for clean
+    24-bit rendering on RTG.
+  - Library search via the Plex /hubs/search API: type a query in the
+    search bar above the lists, hit Enter or Go, and the artists,
+    albums and tracks columns populate with the matching results from
+    across the entire library. Album and track entries show their
+    parent artist/album in search mode for context. Clear returns to
+    the normal alphabetical browse.
+  - Native MP3 and FLAC playback. MP3 sources are decoded with
+    mpega.library; FLAC sources are decoded with dr_flac (single-
+    header public-domain library by David Reid) and DirectStream'd
+    from Plex untouched for bit-perfect lossless playback. Format is
+    auto-detected from the track's source codec, with an optional
+    "Force MP3" toggle in the Settings menu if you want to fall back
+    to the MP3 transcoder for FLAC sources (e.g. to save bandwidth).
+  - Progressive streaming for both MP3 and FLAC: playback starts as
+    soon as ~200 KB are buffered, while the rest of the track keeps
+    downloading in the background. Lossless FLAC streams progressively
+    without waiting for the full file.
+  - Library cache: artists / albums / tracks lists are saved to
+    PROGDIR:AmiPlexAmp.cache and reloaded on subsequent launches.
+  - Window state persistence: position, size and compact/full mode
+    are remembered between sessions.
+  - Album queue with auto-advance to the next track.
+  - Pause / resume, live volume slider, previous / next track,
+    progress bar with elapsed / total time.
+  - Compact and full UI modes: hide the library browser to keep just
+    the now-playing transport visible. Width is restored when the
+    browser is shown again.
+  - Two audio backends, selectable from the Settings menu (see below).
+  - Status line showing the current state (connecting, decoding,
+    streaming, etc.).
+  - International character handling: accented latin-1 characters
+    (German, French, Spanish, Italian) are rendered natively. Latin
+    Extended-A characters (Polish, Czech, French oe ligature etc.)
+    are transliterated to their closest ASCII look-alike when the
+    system font lacks the glyph, so polish artists show as e.g.
+    "Ania Dabrowska" rather than "Ania D?browska".
+
+
+Audio backends
+
+The "AHI" backend (default) uses ahi.device CMD_WRITE with ahir_Link
+chaining, which gives gapless double-buffering through the standard
+AHI mixer. A dedicated producer task decodes audio frames asynchronously
+into a queue while the decoder process consumes them and submits the
+IORequest pair to ahi.device. Output quality depends on the AHI mode
+configured in Prefs/AHI.
+
+The "Arne" backend targets the SAGA HQ output channel of the Apollo
+Vampire V4. SAGA HQ is a V4-only feature; Vampire V2 does not have
+it and must use the AHI backend like classic Amigas. Arne writes
+directly to the SAGA HQ channel 3 registers ($DFF430...) for 16-bit
+stereo, with a double-buffer ping-pong pattern driven by the AUD3
+hardware interrupt vector. SAGA HQ channels 0-3 share the standard
+AUD0-3 IRQ vectors with classic Paula for backward-compat signaling,
+which lets the decoder process sleep on a Signal until the chip
+flips buffers -- no polling, sample-accurate. Decoding is synchronous
+in this path: the codec is called between buffer flips inside the
+decoder process. The result is the same pristine 16-bit DMA you get
+from native SAGA tools like VaMP3, with no mixer in the path.
+
+To switch backend, pick "AHI" or "Arne" from the Settings menu. The
+choice is saved to PROGDIR:AmiPlexAmp.config and takes effect at the
+next launch of AmiPlexAmp -- the backend is not hot-swappable
+mid-session.
+
+
+Settings
+
+The Settings menu exposes options persisted to
+PROGDIR:AmiPlexAmp.config across sessions:
+
+  Playback mode -- Stream (default) or Download.
+
+    Stream: playback starts as soon as the prebuffer is filled
+    (~200 KB, ~5 seconds at typical MP3 rates); the rest of the
+    track keeps downloading in the background. Time-to-first-sound
+    is just a couple of seconds, for MP3 and FLAC alike.
+
+    Download: AmiPlexAmp fetches the full file to a temporary file
+    before starting playback. More robust on slow connections, but
+    latency to first sound is the time it takes to download the
+    whole track.
+
+  Audio output -- AHI (default) or Arne (Vampire V4 only).
+
+  Force MP3 -- when enabled, FLAC tracks are also routed through
+    the MP3 transcoder. Saves bandwidth, sacrifices quality. Off
+    by default.
+
+  Minimize GUI on play -- collapses the window to its compact form
+    when playback starts, restores it on stop. Off by default.
+
+  Library cache -- enabled by default. The artist / album / track
+    lists are saved to PROGDIR:AmiPlexAmp.cache after the first
+    successful fetch and reloaded on subsequent launches. A
+    1000-artist library that takes 20 seconds to fetch loads in
+    under a second from cache. Cleared by "Deauthorize server"
+    from the Project menu. Use "Refresh" from the same menu to
+    force a re-fetch if your library has changed.
+
+The configuration file is plain key=value text in PROGDIR: which you
+can inspect, edit or delete by hand. AmiPlexAmp creates it on first
+run; if it's missing, defaults apply.
+
+
+Recommended hardware
+
+68030 minimum (MP3 may stutter, FLAC requires more), 68040 or 68060
+comfortable, Apollo Vampire (68080) excellent. 8 MB Fast RAM minimum.
+RTG screen for the best cover art experience (any colour depth >=
+16-bit). On Vampire V4 the Arne backend is recommended for the
+cleanest audio path (V4 only; Vampire V2 uses AHI like classic
+machines).
+
+
+Installation
+
+Unpack the archive anywhere on your system, then run AmiPlexAmp from
+its drawer. On first launch you are prompted to authenticate via
+plex.tv/link -- the app gives you a 4-character code and a URL, you
+visit the URL on any browser (phone, PC, whatever), enter the code,
+and the auth token is captured automatically. No further interaction
+needed for subsequent sessions.
+
+If you have multiple Plex servers reachable from your network, a
+picker appears at first launch so you can pick which one to use.
+The choice persists across sessions and can be revisited at any
+time from Project / Select server in the menu. Single-server
+accounts skip the picker silently.
+
+Music libraries work the same way: if the chosen server has more
+than one music library (Plex calls these "sections" with
+type="artist"), a picker lets you choose. Single-library servers
+skip silently. Project / Select library re-opens the picker at
+any time and clears the local cache so the new library reloads
+from scratch.
+
+Important: your system clock must be set correctly. AmiPlexAmp
+connects to plex.tv over HTTPS, which validates the server's SSL
+certificate against the current date. If your RTC battery is dead or
+the clock has never been set, validation fails and the app shows a
+"Clock not set" requester at startup. Use Prefs/Time to set the
+correct date and time, then restart AmiPlexAmp. This is not specific
+to AmiPlexAmp -- any HTTPS client on Amiga has the same requirement.
+
+
+Registration
+
+Out of the box AmiPlexAmp runs as a 5-minute demo: a requester pops
+up at the end of the session and the application exits cleanly. The
+window title shows "(unregistered)" so you always know the state.
+
+To remove the time limit, become a supporter of the Apollo Vampire
+community at:
+
+    https://apollo-vampire-lair.com
+
+Supporters receive an amiplexamp.key file. Drop it into PROGDIR:
+(alongside the AmiPlexAmp executable) or into S:; both work and
+PROGDIR: takes precedence. On the next launch the title bar loses
+the "(unregistered)" tag, the About box shows the registered name,
+and the 5-minute timer is off.
+
+
+Known limitations
+
+  - No seeking inside a track. Play, pause, next, previous only.
+  - Single-thread HTTP. While a track is downloading, only Prev,
+    Next, Stop and Quit are responsive; everything else applies
+    once the download is done.
+  - No iconify yet.
+  - Polish / Czech / Eastern European characters are transliterated
+    to ASCII rather than rendered as their actual glyph, because
+    ISO-8859-1 (the AmigaOS classic codeset) doesn't include those
+    code points.
+
+
+Credits
+
+  - Plex Media Server team for the well-documented HTTP API.
+  - mpega.library by Stephane Tavenard for native MP3 decoding.
+  - dr_flac by David Reid for single-header public-domain FLAC
+    decoding (github.com/mackron/dr_libs).
+  - AmiSSL by Jens Maus and contributors for TLS.
+  - MUI by Stefan Stuntz for the GUI framework.
+  - Apollo Team for the SAGA HQ documentation and the Vampire boards.
+
+
+License
+
+The full source code of AmiPlexAmp is included in this archive and is
+released to the public domain by the author. You may use, modify and
+redistribute it freely. The bundled third-party SDK headers and
+libraries each keep their original license.
+
+
+Contact
+
+Bug reports, feedback, full version requests:
+  Renaud Schweingruber <renaud.schweingruber@protonmail.com>

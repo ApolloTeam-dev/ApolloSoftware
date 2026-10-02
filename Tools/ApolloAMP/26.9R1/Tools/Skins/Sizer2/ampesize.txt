@@ -1,0 +1,13 @@
+This is an alternate frontend for nullsoft's winamp.
+(visit http://www.nullsoft.com and http://www.winamp.com for more info).
+
+Unzip all files to the /winamp/skins/ directory. Then choose Options,
+Select skin from the pulldown menu.
+
+--------------------
+Ampesizer winamp-skin
+--------------------
+22-07-1998
+by MATDesign
+--------------------
+http://www.matdesign.demon.nl/skins.htm

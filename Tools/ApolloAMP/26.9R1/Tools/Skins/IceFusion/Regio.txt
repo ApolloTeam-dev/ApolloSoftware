@@ -1,0 +1,9 @@
+; TODO: document 0-116=y    0-275=x
+
+[Normal]
+NumPoints=4
+PointList= 10,10,275,116, 275,116, 0,116
+
+[zoom]
+NumPoints=4
+PointList= 10,10,275,116, 275,116, 0,116

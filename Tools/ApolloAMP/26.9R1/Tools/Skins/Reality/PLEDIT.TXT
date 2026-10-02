@@ -1,0 +1,6 @@
+[Text]
+Normal=#6e6b5f
+Current=#37362e
+NormalBG=#9d9a88
+SelectedBG=#858273
+Font=Verdana

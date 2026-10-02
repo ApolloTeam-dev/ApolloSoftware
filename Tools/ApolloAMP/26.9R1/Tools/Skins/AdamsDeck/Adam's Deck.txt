@@ -1,0 +1,14 @@
+
+Adam's Deck.
+
+It's fusionAmp, but I've made it blue.
+
+I also added dialog colour support (doesn't look too great yet) which 
+came with WinAmp v1.92
+
+Here's hoping that 'wainamp style dialog boxes' will soon include
+bitmapped title bars.
+
+They do!
+
+This now works with winamp v2.02

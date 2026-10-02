@@ -1,0 +1,77 @@
+#EXTM3U
+
+#EXTINF:-1,01 - RTS La 1ère
+http://stream.srg-ssr.ch/m/la-1ere/mp3_128
+
+#EXTINF:-1,02 - RTS Espace 2
+http://stream.srg-ssr.ch/m/espace-2/mp3_128
+
+#EXTINF:-1,03 - RTS Couleur 3
+http://stream.srg-ssr.ch/m/couleur3/mp3_128
+
+#EXTINF:-1,04 - RTS Option Musique
+http://stream.srg-ssr.ch/m/option-musique/mp3_128
+
+#EXTINF:-1,05 - One FM
+http://onefm.ice.infomaniak.ch/onefm-high.mp3
+
+#EXTINF:-1,06 - Rouge FM
+http://rougefm.ice.infomaniak.ch/rougefm-high.mp3
+
+#EXTINF:-1,07 - LFM - Lausanne FM
+http://lausannefm.ice.infomaniak.ch/lausannefm-high.mp3
+
+#EXTINF:-1,08 - Radio Lac
+http://radiolac.ice.infomaniak.ch/radiolac-high.mp3
+
+#EXTINF:-1,09 - Radio Rhône FM
+http://rhonefm.ice.infomaniak.ch/rhonefm-high.mp3
+
+#EXTINF:-1,10 - Radio Chablais
+http://radiochablais.ice.infomaniak.ch/radiochablais-high.mp3
+
+#EXTINF:-1,11 - RFJ - Radio Fréquence Jura
+http://rfj.ice.infomaniak.ch/rfj-high.mp3
+
+#EXTINF:-1,12 - RJB - Radio Jura bernois
+http://rjb.ice.infomaniak.ch/rjb-high.mp3
+
+#EXTINF:-1,13 - RTN - Radio Télévision Neuchâteloise
+http://rtn.ice.infomaniak.ch/rtn-high.mp3
+
+#EXTINF:-1,14 - GRRIF - dechiRRe ta RRoutine
+http://grrif.ice.infomaniak.ch/grrif-high.mp3
+
+#EXTINF:-1,15 - Radio Fribourg
+http://radiofribourg.ice.infomaniak.ch/radiofribourg-high.mp3
+
+#EXTINF:-1,16 - Radionet+ Romandie
+http://radionetplus.ice.infomaniak.ch/radionetplus-high.mp3
+
+#EXTINF:-1,17 - Spoon Radio
+http://spoonradio.ice.infomaniak.ch/spoonradio-high.mp3
+
+#EXTINF:-1,18 - Yes FM
+http://yesfm.ice.infomaniak.ch/yesfm-high.mp3
+
+#EXTINF:-1,19 - RADIO R
+http://radior.ice.infomaniak.ch/radior-128.mp3
+
+#EXTINF:-1,20 - Radio Chablais Urban
+http://stream.radiochablais.ch/chablais-urban.mp3
+
+#EXTINF:-1,21 - Radio ORBITAL
+http://orbital.ice.infomaniak.ch/orbital.mp3
+
+#EXTINF:-1,22 - Radio Nord Vaudois
+http://rnvradionordvaudois.ice.infomaniak.ch/rnvradionordvaudois-128.mp3
+
+#EXTINF:-1,23 - Radio Swiss Classic (French)
+http://stream.srg-ssr.ch/m/rsc_fr/mp3_128
+
+#EXTINF:-1,24 - Vertical Radio
+http://verticalradio.ice.infomaniak.ch/verticalradio-128.mp3
+
+#EXTINF:-1,25 - World Radio Switzerland
+http://19373.live.streamtheworld.com/WRS.mp3
+
