@@ -1,4 +1,4 @@
 ; Icons/def_SDROM - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Default SD-Card Icon

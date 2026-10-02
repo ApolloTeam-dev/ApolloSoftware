@@ -1,4 +1,4 @@
 ; Tools/i2clock - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Load/Save date & time to RTC

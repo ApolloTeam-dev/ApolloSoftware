@@ -1,4 +1,4 @@
 ; Tools/ApolloMon - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=CPU Monitoring Widget

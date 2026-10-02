@@ -1,4 +1,4 @@
 ; Drivers/cd.device - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=CD32-Driver

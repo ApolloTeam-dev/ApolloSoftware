@@ -1,4 +1,4 @@
 ; Libraries/i2c.library - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=I2C Chip Library
