@@ -7,6 +7,7 @@
 ; ApolloSoftware repo. Lines starting with ";" are comments.
 ; Leave the Version empty for a Name that is not installed.
 
+Drivers/amitcp/
 Drivers/arne.audio/4.14
 Drivers/cd.device/40.29
 Drivers/exfat-handler/1.11
@@ -26,15 +27,14 @@ Libraries/maggie.library/1.30
 Tools/AmiPlexAMP/
 Tools/ApolloAMP/
 Tools/ApolloControl/2.18
-Tools/ApolloExplorer/1.3.0
+Tools/ApolloExpROM/
 Tools/ApolloFlash/2.22
-Tools/ApolloFlashWeb/
 Tools/ApolloFloppy/1.0
 Tools/ApolloMap/2.22
 Tools/ApolloMon/1.0
-Tools/ApolloSnap/
 Tools/ApolloUpdate/0.0
 Tools/ApolloVNC/
 Tools/ApolloWHDSet/0.3.3
+Tools/ApolloWheel/
 Tools/i2clock/0.7
 Tools/RiVA/0.63R1
