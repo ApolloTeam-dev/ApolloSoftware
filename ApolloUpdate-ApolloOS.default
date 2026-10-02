@@ -1,4 +1,4 @@
-; ApolloUpdate lookup table -- SYS:System/ApolloUpdate
+; ApolloUpdate lookup table -- SYS:ApolloUpdate/ApolloUpdate
 ; Default for ApolloOS R9.5: the release of every Name as shipped in R9.5.
 ; One entry per line: Category/Name/Version
 ; Category, Name and Version are the Level-1/2/3 folder names in the
@@ -10,15 +10,15 @@ Drivers/Keymaps/1.0
 Drivers/sagagfx.hidd/0.9
 Drivers/v4net.device/2.36
 
+ExpROM/cd.device/40.29
+ExpROM/exfat-handler/1.11
+ExpROM/ODFileSystem/0.8.0
+ExpROM/sagasd.device/2.41
+
 Icons/def_SDROM/1.0
 
 Libraries/i2c.library/40.0
 Libraries/maggie.library/1.30
-
-ROM/cd.device/40.29
-ROM/exfat-handler/1.11
-ROM/ODFileSystem/0.8.0
-ROM/sagasd.device/2.41
 
 Tools/AmiPlexAMP/
 Tools/ApolloAMP/

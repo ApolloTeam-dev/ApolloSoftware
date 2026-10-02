@@ -1,0 +1,4 @@
+; ExpROM/exfat-handler - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+MINCORE=
+DESCRIPTION=Ex-FAT Filesystem

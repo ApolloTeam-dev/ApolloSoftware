@@ -6,15 +6,15 @@ Drivers/Keymaps	OS=ApolloOS,AmigaOS	DESCRIPTION=Keyboard Configurations
 Drivers/sagagfx.hidd	OS=ApolloOS	DESCRIPTION=CyberGraphics RTG Driver
 Drivers/v4net.device	OS=ApolloOS,AmigaOS	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS	DESCRIPTION=Picasso 96 RTG Driver
+ExpROM/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
+ExpROM/exfat-handler	OS=ApolloOS,AmigaOS	DESCRIPTION=Ex-FAT Filesystem
+ExpROM/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
+ExpROM/ODFileSystem	OS=ApolloOS,AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
+ExpROM/sagasd.device	OS=ApolloOS,AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
+ExpROM/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
 Icons/def_SDROM	OS=ApolloOS,AmigaOS	DESCRIPTION=Default SD-Card Icon
 Libraries/i2c.library	OS=ApolloOS,AmigaOS	DESCRIPTION=I2C Chip Library
 Libraries/maggie.library	OS=ApolloOS,AmigaOS	DESCRIPTION=Maggie 3DFX API library
-ROM/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
-ROM/exfat-handler	OS=ApolloOS,AmigaOS	DESCRIPTION=Ex-FAT Filesystem
-ROM/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
-ROM/ODFileSystem	OS=ApolloOS,AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
-ROM/sagasd.device	OS=ApolloOS,AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
-ROM/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
 Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=Plex Audio Client
 Tools/ApolloAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Audioplayer
 Tools/ApolloControl	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo V4 Settings
