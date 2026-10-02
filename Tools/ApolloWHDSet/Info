@@ -1,5 +1,6 @@
 ; Tools/ApolloWHDSet - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=
+OWNER=Renaud
+CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Set SAGA Display ToolTypes

@@ -1,5 +1,6 @@
 ; Tools/ApolloVNC - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 OWNER=
+CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=

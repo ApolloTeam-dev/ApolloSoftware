@@ -1,5 +1,6 @@
 ; Tools/ApolloWheel - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=
+OWNER=Marcel
+CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Apollo MouseWheel Driver

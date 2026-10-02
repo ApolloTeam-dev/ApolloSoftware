@@ -1,5 +1,6 @@
 ; Drivers/vampiregfx.card - read by ApolloUpdate, see README.md
 OS=AmigaOS
-OWNER=
+OWNER=Renaud
+CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Picasso 96 RTG Driver

@@ -1,5 +1,6 @@
 ; Tools/ApolloFloppy - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=
+OWNER=Juan007
+CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Apollo Virtual Floppy Loader

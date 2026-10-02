@@ -1,5 +1,6 @@
 ; Drivers/AmiTCP - read by ApolloUpdate, see README.md
 OS=AmigaOS
-OWNER=
+OWNER=MW0MWZ
+CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=TCP/IP Stack

@@ -1,5 +1,6 @@
 ; Tools/ApolloControl - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=
+OWNER=Willem
+CONTRIBUTORS=Renaud
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Apollo V4 Settings

@@ -1,31 +1,31 @@
 ; ApolloSoftware.index - generated from the Info files by .github/scripts/releases.py, do not edit
-; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>OWNER=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
-Drivers/AmiTCP	OS=AmigaOS
-Drivers/arne.audio	OS=ApolloOS,AmigaOS
-Drivers/cd.device	OS=ApolloOS,AmigaOS
-Drivers/exfat-handler	OS=ApolloOS,AmigaOS
-Drivers/fat95	OS=AmigaOS
-Drivers/Keymaps	OS=ApolloOS,AmigaOS
-Drivers/ODFileSystem	OS=ApolloOS,AmigaOS
-Drivers/sagagfx.hidd	OS=ApolloOS
-Drivers/sagasd.device	OS=ApolloOS,AmigaOS
-Drivers/scsi.device	OS=AmigaOS
-Drivers/v4net.device	OS=ApolloOS,AmigaOS
-Drivers/vampiregfx.card	OS=AmigaOS
-Icons/def_SDROM	OS=ApolloOS,AmigaOS
-Libraries/i2c.library	OS=ApolloOS,AmigaOS
-Libraries/maggie.library	OS=ApolloOS,AmigaOS
-Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS
-Tools/ApolloAMP	OS=ApolloOS,AmigaOS
-Tools/ApolloControl	OS=ApolloOS,AmigaOS
-Tools/ApolloExpROM	OS=AmigaOS
-Tools/ApolloFlash	OS=ApolloOS,AmigaOS
-Tools/ApolloFloppy	OS=ApolloOS,AmigaOS
-Tools/ApolloMap	OS=ApolloOS,AmigaOS
-Tools/ApolloMon	OS=ApolloOS,AmigaOS
+; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>OWNER=...<TAB>CONTRIBUTORS=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
+Drivers/AmiTCP	OS=AmigaOS	OWNER=MW0MWZ	DESCRIPTION=TCP/IP Stack
+Drivers/arne.audio	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=AHI Audio Driver
+Drivers/cd.device	OS=ApolloOS,AmigaOS	OWNER=Willem	DESCRIPTION=CD32-Driver
+Drivers/exfat-handler	OS=ApolloOS,AmigaOS	OWNER=Willem	DESCRIPTION=Ex-FAT Filesystem
+Drivers/fat95	OS=AmigaOS	OWNER=Jaroslav Pulchart	CONTRIBUTORS=Willem	DESCRIPTION=FAT Filesystem
+Drivers/Keymaps	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Keyboard Configurations
+Drivers/ODFileSystem	OS=ApolloOS,AmigaOS	OWNER=Stefan Reinauer	CONTRIBUTORS=Willem	DESCRIPTION=CD (ISO9660) Filesystem
+Drivers/sagagfx.hidd	OS=ApolloOS	OWNER=Willem	DESCRIPTION=CyberGraphics RTG Driver
+Drivers/sagasd.device	OS=ApolloOS,AmigaOS	OWNER=Willem	DESCRIPTION=SD-Card Driver
+Drivers/scsi.device	OS=AmigaOS	OWNER=Renaud	CONTRIBUTORS=Willem	DESCRIPTION=IDE Driver for AmigaOS
+Drivers/v4net.device	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Network Interface Driver
+Drivers/vampiregfx.card	OS=AmigaOS	OWNER=Renaud	DESCRIPTION=Picasso 96 RTG Driver
+Icons/def_SDROM	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Default SD-Card Icon
+Libraries/i2c.library	OS=ApolloOS,AmigaOS	DESCRIPTION=I2C Chip Library
+Libraries/maggie.library	OS=ApolloOS,AmigaOS	OWNER=Morten	DESCRIPTION=Maggie 3DFX API library
+Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Plex Audio Client
+Tools/ApolloAMP	OS=ApolloOS,AmigaOS	OWNER=Marcel	DESCRIPTION=SAGA Audioplayer
+Tools/ApolloControl	OS=ApolloOS,AmigaOS	OWNER=Willem	CONTRIBUTORS=Renaud	DESCRIPTION=Apollo V4 Settings
+Tools/ApolloExpROM	OS=AmigaOS	OWNER=Willem	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
+Tools/ApolloFlash	OS=ApolloOS,AmigaOS	OWNER=Willem	CONTRIBUTORS=Renaud	DESCRIPTION=Flash Core or ROM
+Tools/ApolloFloppy	OS=ApolloOS,AmigaOS	OWNER=Juan007	DESCRIPTION=Apollo Virtual Floppy Loader
+Tools/ApolloMap	OS=ApolloOS,AmigaOS	OWNER=Willem	CONTRIBUTORS=Renaud	DESCRIPTION=Map ROM (SoftKick)
+Tools/ApolloMon	OS=ApolloOS,AmigaOS	OWNER=Flype	DESCRIPTION=CPU Monitoring Widget
 Tools/ApolloUpdate	OS=ApolloOS,AmigaOS
 Tools/ApolloVNC	OS=ApolloOS,AmigaOS
-Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS
-Tools/ApolloWheel	OS=ApolloOS,AmigaOS
-Tools/i2clock	OS=ApolloOS,AmigaOS
-Tools/RiVA	OS=ApolloOS,AmigaOS
+Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Set SAGA Display ToolTypes
+Tools/ApolloWheel	OS=ApolloOS,AmigaOS	OWNER=Marcel	DESCRIPTION=Apollo MouseWheel Driver
+Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
+Tools/RiVA	OS=ApolloOS,AmigaOS	OWNER=Marcel	DESCRIPTION=SAGA Videoplayer
