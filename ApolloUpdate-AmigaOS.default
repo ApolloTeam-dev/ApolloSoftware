@@ -7,30 +7,34 @@
 ; ApolloSoftware repo. Lines starting with ";" are comments.
 ; Leave the Version empty for a Name that is not installed.
 
-Drivers/amitcp/4.1.7
-Drivers/arne.audio/4.22
+Drivers/arne.audio/4.14
 Drivers/cd.device/40.29
 Drivers/exfat-handler/1.11
 Drivers/fat95/4.0
 Drivers/Keymaps/1.0
 Drivers/ODFileSystem/0.8.0
-Drivers/sagasd.device/2.41
+Drivers/sagasd.device/2.22
 Drivers/scsi.device/48.13
 Drivers/v4net.device/2.36
-Drivers/vampiregfx.card/1.60
+Drivers/vampiregfx.card/1.56
 
 Icons/def_SDROM/1.0
 
 Libraries/i2c.library/40.0
-Libraries/maggie.library/4.0
+Libraries/maggie.library/1.30
 
-Tools/ApolloControl/2.05
-Tools/ApolloExpROM/1.0
-Tools/ApolloFlash/2.2
+Tools/AmiPlexAMP/
+Tools/ApolloAMP/
+Tools/ApolloControl/2.18
+Tools/ApolloExplorer/1.3.0
+Tools/ApolloFlash/2.22
+Tools/ApolloFlashWeb/
 Tools/ApolloFloppy/1.0
-Tools/ApolloMap/2.2
+Tools/ApolloMap/2.22
 Tools/ApolloMon/1.0
+Tools/ApolloSnap/
 Tools/ApolloUpdate/0.0
-Tools/ApolloWHDSet/0.3
-Tools/ApolloWheel/0.1i
+Tools/ApolloVNC/
+Tools/ApolloWHDSet/0.3.3
 Tools/i2clock/0.7
+Tools/RiVA/0.63R1
