@@ -9,13 +9,7 @@
 
 Drivers/AmiTCP/
 Drivers/arne.audio/4.14
-Drivers/cd.device/40.29
-Drivers/exfat-handler/1.11
-Drivers/fat95/4.0
 Drivers/Keymaps/1.0
-Drivers/ODFileSystem/0.8.0
-Drivers/sagasd.device/2.22
-Drivers/scsi.device/48.13
 Drivers/v4net.device/2.36
 Drivers/vampiregfx.card/1.56
 
@@ -23,6 +17,13 @@ Icons/def_SDROM/1.0
 
 Libraries/i2c.library/40.0
 Libraries/maggie.library/1.30
+
+ROM/cd.device/40.29
+ROM/exfat-handler/1.11
+ROM/fat95/4.0
+ROM/ODFileSystem/0.8.0
+ROM/sagasd.device/2.22
+ROM/scsi.device/48.13
 
 Tools/AmiPlexAMP/
 Tools/ApolloAMP/

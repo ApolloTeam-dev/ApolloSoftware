@@ -1,4 +1,4 @@
-; Drivers/ODFileSystem - read by ApolloUpdate, see README.md
+; ROM/ODFileSystem - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 MINCORE=
 DESCRIPTION=CD (ISO9660) Filesystem

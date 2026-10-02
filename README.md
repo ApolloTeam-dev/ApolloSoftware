@@ -15,6 +15,26 @@ Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1)
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
+### ROM
+
+The category `ROM` holds what is flashed, not copied to SYS:. Its
+Deployment folder (Level-4) holds one empty tag file - `Core`, `KickROM` or
+`ExpROM` - and beside it:
+
+| Tag | Files | Flashed by |
+|---|---|---|
+| `Core` | exactly one: the core, ready to flash | ApolloFlash |
+| `KickROM` | exactly one: the Kickstart ROM, ready to flash | ApolloFlash |
+| `ExpROM` | one or more ROM modules | ApolloExpROM, which builds them into the Expansion ROM first |
+
+No drawers. ApolloUpdate keeps the files in `SYS:ROM/<tag>/` (so
+`SYS:ROM/ExpROM/` holds the modules of every ExpROM entry installed) and then
+starts the flash tool. Example:
+
+- ROM/sagasd.device/Info
+- ROM/sagasd.device/2.41/ExpROM
+- ROM/sagasd.device/2.41/sagasd.device
+
 Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
 
@@ -63,19 +83,19 @@ Example (multiple files):
 |---|---|---|---|:-:|:-:|---|---|
 | Drivers | AmiTCP | **4.1.7** |  |  | ✓ |  | TCP/IP Stack |
 | Drivers | arne.audio | **4.23** | 4.18 | ✓ | ✓ |  | AHI Audio Driver |
-| Drivers | cd.device | **40.29** |  | ✓ | ✓ |  | CD32-Driver |
-| Drivers | exfat-handler | **1.11** |  | ✓ | ✓ |  | Ex-FAT Filesystem |
-| Drivers | fat95 | **4.0** |  |  | ✓ |  | FAT Filesystem |
 | Drivers | Keymaps | **1.0** |  | ✓ | ✓ |  | Keyboard Configurations |
-| Drivers | ODFileSystem | **0.8.0** |  | ✓ | ✓ |  | CD (ISO9660) Filesystem |
 | Drivers | sagagfx.hidd | **1.0** |  | ✓ |  |  | CyberGraphics RTG Driver |
-| Drivers | sagasd.device | **2.41** |  | ✓ | ✓ | 12500 | SD-Card Driver |
-| Drivers | scsi.device | **48.13** |  |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.99** |  | ✓ | ✓ |  | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.60** |  |  | ✓ |  | Picasso 96 RTG Driver |
 | Icons | def_SDROM | **1.0** |  | ✓ | ✓ |  | Default SD-Card Icon |
 | Libraries | i2c.library | **40.0** |  | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** |  | ✓ | ✓ |  | Maggie 3DFX API library |
+| ROM | cd.device | **40.29** |  | ✓ | ✓ |  | CD32-Driver |
+| ROM | exfat-handler | **1.11** |  | ✓ | ✓ |  | Ex-FAT Filesystem |
+| ROM | fat95 | **4.0** |  |  | ✓ |  | FAT Filesystem |
+| ROM | ODFileSystem | **0.8.0** |  | ✓ | ✓ |  | CD (ISO9660) Filesystem |
+| ROM | sagasd.device | **2.41** |  | ✓ | ✓ | 12500 | SD-Card Driver |
+| ROM | scsi.device | **48.13** |  |  | ✓ |  | IDE Driver for AmigaOS |
 | Tools | AmiPlexAMP | **0.54** |  | ✓ | ✓ |  | Plex Audio Client |
 | Tools | ApolloAMP | **26.9R1** |  | ✓ | ✓ |  | SAGA Audioplayer |
 | Tools | ApolloControl | **2.21** |  | ✓ | ✓ |  | Apollo V4 Settings |

@@ -16,6 +16,13 @@ repository to find SYS: files installed by both.
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
+    ROM / Name / Release / <tag> + files    not for SYS: but for flashing:
+        tag Core or KickROM           + one ROM file, flashed by ApolloFlash
+        tag ExpROM                    + one or more modules that ApolloExpROM
+                                        builds into the Expansion ROM
+                                      ApolloUpdate keeps the files in
+                                      SYS:ROM/<tag>/ (the collision check
+                                      treats that as their SYS: path)
     Category / Name / Info            KEY=VALUE lines, ";" comments:
         OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
@@ -46,6 +53,8 @@ OSES = ("ApolloOS", "AmigaOS")
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "OWNER", "CONTRIBUTORS", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 INFO = "Info"
+ROM = "ROM"                                           # the category to flash
+ROM_TAGS = ("Core", "KickROM", "ExpROM")              # its tag files
 INDEX = "ApolloSoftware.index"
 MAX_DESC = 160                  # what fits in the bubble help ...
 WRAP_DESC = 48                  # ... at this many characters per line
@@ -291,18 +300,48 @@ def scan(root, avl=False):
     return names, errors, warnings
 
 
+def release_files(root, cat, name, rel, errors=None):
+    """[(path below the release, lower-case SYS path)] of one release, junk
+    left out. A ROM release: its files directly in it, beside one tag file,
+    which is not installed; the SYS path is ROM/<tag>/<file>. With errors,
+    a ROM release that breaks those rules is reported."""
+    rpath = os.path.join(root, cat, name, rel)
+    out = []
+    if cat == ROM:
+        label = f"{cat}/{name}/{rel}"
+        ents = sorted(e for e in os.listdir(rpath) if not JUNK.match(e))
+        tags = [e for e in ents if e in ROM_TAGS]
+        dirs = [e for e in ents if os.path.isdir(os.path.join(rpath, e))]
+        files = [e for e in ents if e not in tags and e not in dirs]
+        if errors is not None:
+            if len(tags) != 1:
+                errors.append(f"{label}: needs exactly one tag file, {', '.join(ROM_TAGS)} "
+                              f"(has {', '.join(tags) or 'none'})")
+            for d in dirs:
+                errors.append(f"{label}/{d}: no drawers in a ROM release, only the tag "
+                              "and the ROM file(s)")
+            if tags and tags[0] in ("Core", "KickROM") and len(files) != 1:
+                errors.append(f"{label}: a {tags[0]} release holds exactly one ROM file "
+                              f"(has {len(files)})")
+        if len(tags) == 1:
+            out = [(f, f"rom/{tags[0].lower()}/{f.lower()}") for f in files]
+        return out
+    for dirpath, dirs, fns in os.walk(rpath):
+        for fn in fns:
+            if not JUNK.match(fn):
+                sub = os.path.relpath(os.path.join(dirpath, fn), rpath)
+                out.append((sub, sub.lower()))
+    return out
+
+
 def sys_paths(root, names):
     """{(os, lower-case SYS path): "Cat/Name"} for every release of every Name"""
     owner = {}
     for cat, name, tags, releases, tier in names:
         for rel in releases:
-            rpath = os.path.join(root, cat, name, rel)
-            for dirpath, dirs, fns in os.walk(rpath):
-                for fn in fns:
-                    if not JUNK.match(fn):
-                        sub = os.path.relpath(os.path.join(dirpath, fn), rpath)
-                        for o in tags:
-                            owner.setdefault((o, sub.lower()), f"{cat}/{name}")
+            for sub, key in release_files(root, cat, name, rel):
+                for o in tags:
+                    owner.setdefault((o, key), f"{cat}/{name}")
     return owner
 
 
@@ -337,20 +376,17 @@ def check_files(root, names, errors, warnings):
                     if any(ord(ch) < 32 or ord(ch) > 126 for ch in d) or any(ch in d for ch in ':*?"<>|'):
                         errors.append(f"{os.path.relpath(os.path.join(dirpath, d), root)}: "
                                       "character that AmigaDOS or GitHub cannot take")
-                for fn in fns:
-                    if JUNK.match(fn):
-                        continue
-                    files += 1
-                    sub = os.path.relpath(os.path.join(dirpath, fn), rpath)
-                    if os.sep not in sub:
-                        warnings.append(f"{cat}/{name}/{rel}/{fn}: lands in the root of SYS:")
-                    for o in tags:
-                        key = (o, sub.lower())
-                        mine = f"{cat}/{name}"
-                        if key in owner and owner[key] != mine:
-                            errors.append(f"SYS:{sub} ({o}) is installed by both "
-                                          f"{owner[key]} and {mine}")
-                        owner.setdefault(key, mine)
+            for sub, path in release_files(root, cat, name, rel, errors):
+                files += 1
+                if cat != ROM and os.sep not in sub:
+                    warnings.append(f"{cat}/{name}/{rel}/{sub}: lands in the root of SYS:")
+                for o in tags:
+                    key = (o, path)
+                    mine = f"{cat}/{name}"
+                    if key in owner and owner[key] != mine:
+                        errors.append(f"SYS:{path} ({o}) is installed by both "
+                                      f"{owner[key]} and {mine}")
+                    owner.setdefault(key, mine)
             if files == 0:
                 errors.append(f"{cat}/{name}/{rel}: empty release")
 

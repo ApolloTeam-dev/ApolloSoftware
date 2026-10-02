@@ -2,19 +2,19 @@
 ; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
 Drivers/AmiTCP	OS=AmigaOS	DESCRIPTION=TCP/IP Stack
 Drivers/arne.audio	OS=ApolloOS,AmigaOS	DESCRIPTION=AHI Audio Driver
-Drivers/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
-Drivers/exfat-handler	OS=ApolloOS,AmigaOS	DESCRIPTION=Ex-FAT Filesystem
-Drivers/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
 Drivers/Keymaps	OS=ApolloOS,AmigaOS	DESCRIPTION=Keyboard Configurations
-Drivers/ODFileSystem	OS=ApolloOS,AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
 Drivers/sagagfx.hidd	OS=ApolloOS	DESCRIPTION=CyberGraphics RTG Driver
-Drivers/sagasd.device	OS=ApolloOS,AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
-Drivers/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
 Drivers/v4net.device	OS=ApolloOS,AmigaOS	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS	DESCRIPTION=Picasso 96 RTG Driver
 Icons/def_SDROM	OS=ApolloOS,AmigaOS	DESCRIPTION=Default SD-Card Icon
 Libraries/i2c.library	OS=ApolloOS,AmigaOS	DESCRIPTION=I2C Chip Library
 Libraries/maggie.library	OS=ApolloOS,AmigaOS	DESCRIPTION=Maggie 3DFX API library
+ROM/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
+ROM/exfat-handler	OS=ApolloOS,AmigaOS	DESCRIPTION=Ex-FAT Filesystem
+ROM/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
+ROM/ODFileSystem	OS=ApolloOS,AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
+ROM/sagasd.device	OS=ApolloOS,AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
+ROM/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
 Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=Plex Audio Client
 Tools/ApolloAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Audioplayer
 Tools/ApolloControl	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo V4 Settings
