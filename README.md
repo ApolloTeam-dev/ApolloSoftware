@@ -54,16 +54,20 @@ Example (multiple files):
 | Icons | def_SDROM | **1.0** |  | ✓ | ✓ |
 | Libraries | i2c.library | **40.0** |  | ✓ | ✓ |
 | Libraries | maggie.library | **4.0** |  | ✓ | ✓ |
+| Tools | AmiPlexAMP | **0.54** |  | ✓ | ✓ |
+| Tools | ApolloAMP | **26.9R1** |  | ✓ | ✓ |
 | Tools | ApolloControl | **2.21** |  | ✓ | ✓ |
 | Tools | ApolloExpROM | **1.1** |  |  | ✓ |
 | Tools | ApolloFlash | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloMon | **1.0e** |  | ✓ | ✓ |
-| Tools | ApolloUpdate | **0.23** | 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
+| Tools | ApolloUpdate | **0.24** | 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
+| Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ |
 | Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ |
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ |
 | Tools | i2clock | **0.7** |  | ✓ | ✓ |
+| Tools | RiVA | **0.63R4** | 0.63R3 | ✓ | ✓ |
 
-25 items: 20 for ApolloOS, 24 for AmigaOS.
+29 items: 24 for ApolloOS, 28 for AmigaOS.
 <!-- releases:end -->
