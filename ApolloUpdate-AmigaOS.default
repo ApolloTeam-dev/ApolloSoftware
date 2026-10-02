@@ -7,7 +7,7 @@
 ; ApolloSoftware repo. Lines starting with ";" are comments.
 ; Leave the Version empty for a Name that is not installed.
 
-Drivers/amitcp/
+Drivers/AmiTCP/
 Drivers/arne.audio/4.14
 Drivers/cd.device/40.29
 Drivers/exfat-handler/1.11
