@@ -10,20 +10,19 @@ Drivers/cd.device/40.29
 Drivers/exfat-handler/1.11
 Drivers/Keymaps/1.0
 Drivers/ODFileSystem/0.8.0
-Drivers/sagagfx.hidd/1.0
+Drivers/sagagfx.hidd/0.9
 Drivers/sagasd.device/2.41
 Drivers/v4net.device/2.36
 
 Icons/def_SDROM/1.0
 
 Libraries/i2c.library/40.0
-Libraries/maggie.library/4.0
+Libraries/maggie.library/1.30
 
 Tools/ApolloControl/2.05
-Tools/ApolloExpROM/1.0
-Tools/ApolloFlash/2.2
+Tools/ApolloFlash/2.18
 Tools/ApolloFloppy/1.0
-Tools/ApolloMap/2.2
+Tools/ApolloMap/2.18
 Tools/ApolloMon/1.0
 Tools/ApolloUpdate/0.0
 Tools/ApolloWHDSet/0.3
