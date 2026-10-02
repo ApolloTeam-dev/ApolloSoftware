@@ -16,7 +16,7 @@ repository to find SYS: files installed by both.
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
-    Core    / Name / Release / file      flashed, not copied to SYS::
+    Cores   / Name / Release / file      flashed, not copied to SYS::
     KickROM / Name / Release / file        one ROM file, by ApolloFlash
     ExpROM  / Name / Release / files       modules, ApolloExpROM builds them
                                            into the Expansion ROM
@@ -54,7 +54,7 @@ OSES = ("ApolloOS", "AmigaOS")
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "OWNER", "CONTRIBUTORS", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 INFO = "Info"
-ROM_CATS = {"Core": "ApolloUpdate/Cores",             # categories to flash, and
+ROM_CATS = {"Cores": "ApolloUpdate/Cores",             # categories to flash, and
             "KickROM": "ApolloUpdate/KickROM",        # where ApolloUpdate keeps
             "ExpROM": "ApolloUpdate/ExpROM"}          # their files
 INDEX = "ApolloSoftware.index"
@@ -304,7 +304,7 @@ def scan(root, avl=False):
 
 def release_files(root, cat, name, rel, errors=None):
     """[(path below the release, lower-case SYS path)] of one release, junk
-    left out. A release of Core, KickROM or ExpROM: its files directly in
+    left out. A release of Cores, KickROM or ExpROM: its files directly in
     it, kept in SYS:ApolloUpdate/... (ROM_CATS). With errors, one that breaks
     the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
@@ -318,7 +318,7 @@ def release_files(root, cat, name, rel, errors=None):
             for d in dirs:
                 errors.append(f"{label}/{d}: no drawers in a {cat} release, only the "
                               "file(s) to flash")
-            if cat in ("Core", "KickROM") and len(files) > 1:
+            if cat in ("Cores", "KickROM") and len(files) > 1:
                 errors.append(f"{label}: a {cat} release holds exactly one ROM file "
                               f"(has {len(files)})")
         return [(f, f"{ROM_CATS[cat]}/{f}".lower()) for f in files]
