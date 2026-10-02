@@ -55,7 +55,7 @@ Example (multiple files):
 | Libraries | i2c.library | **40.0** |  | ✓ | ✓ |
 | Libraries | maggie.library | **4.0** |  | ✓ | ✓ |
 | Tools | ApolloControl | **2.21** |  | ✓ | ✓ |
-| Tools | ApolloExpROM | **1.1** |  | ✓ | ✓ |
+| Tools | ApolloExpROM | **1.1** |  |  | ✓ |
 | Tools | ApolloFlash | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ |
@@ -65,5 +65,5 @@ Example (multiple files):
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ |
 | Tools | i2clock | **0.7** |  | ✓ | ✓ |
 
-25 items: 21 for ApolloOS, 24 for AmigaOS.
+25 items: 20 for ApolloOS, 24 for AmigaOS.
 <!-- releases:end -->
