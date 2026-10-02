@@ -39,6 +39,9 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 Leave a value empty when unknown. On every push a GitHub workflow checks the
 layout and the `Info` files, and writes the table below and
 `ApolloSoftware.index`, the file ApolloUpdate reads (do not edit it).
+A new Name without an `Info` gets one from the workflow: for both OSes,
+and a line without version in both default tables. Check them and fill in
+the rest.
 
 Example (single file):
 - Drivers/ApolloMap/Info

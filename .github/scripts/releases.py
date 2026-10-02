@@ -355,6 +355,50 @@ def check_files(root, names, errors, warnings):
                 errors.append(f"{cat}/{name}/{rel}: empty release")
 
 
+def create_info(root, avl, warnings):
+    """A new Name (release folders, no Info, no old markers) gets a template
+    Info - for both OSes and, in ApolloSoftware-AVL, the Bronze level - and
+    a line without version in both default tables. A warning asks to check
+    them. Returns the "Cat/Name" made."""
+    made = []
+    for cat in sorted(c for c in os.listdir(root) if not c.startswith(".") and is_dir(root, c)):
+        for name in sorted(os.listdir(os.path.join(root, cat)), key=str.lower):
+            npath = os.path.join(root, cat, name)
+            if not os.path.isdir(npath):
+                continue
+            ents = os.listdir(npath)
+            if INFO in ents or any(e in OSES or e.startswith("AVL-") for e in ents):
+                continue
+            if not any(os.path.isdir(os.path.join(npath, e)) for e in ents):
+                continue
+            lines = [f"; {cat}/{name} - read by ApolloUpdate, see README.md",
+                     "OS=" + ",".join(OSES)]
+            if avl:
+                lines.append("AVL=" + TIERS[0])
+            lines += ["OWNER=", "CONTRIBUTORS=", "MINCORE=", "DESCRIPTION="]
+            open(os.path.join(npath, INFO), "w", newline="\n").write("\n".join(lines) + "\n")
+            for o in OSES:
+                add_default(os.path.join(root, f"ApolloUpdate-{o}.default"), cat, name)
+            made.append(f"{cat}/{name}")
+            warnings.append(f"{cat}/{name}: new Name - made its Info (OS={','.join(OSES)}"
+                            + (f", AVL={TIERS[0]}" if avl else "") + ") and an empty line in the "
+                            "default tables: check them, fill in OWNER and DESCRIPTION")
+    return made
+
+
+def add_default(path, cat, name):
+    """Cat/Name/ (not installed) after the last line of its category"""
+    if not os.path.isfile(path):
+        return
+    lines = open(path, encoding="latin-1").read().splitlines()
+    at = len(lines)
+    for i, l in enumerate(lines):
+        if l.strip().lower().startswith(cat.lower() + "/"):
+            at = i + 1
+    lines.insert(at, f"{cat}/{name}/")
+    open(path, "w", encoding="latin-1", newline="\n").write("\n".join(lines) + "\n")
+
+
 def check_defaults(root, names, errors):
     """The default tables list exactly the Names tagged for their OS."""
     for o in OSES:
@@ -481,6 +525,8 @@ def main():
     ap.add_argument("--check", action="store_true", help="fail on layout errors")
     ap.add_argument("--readme", help="README.md to update")
     ap.add_argument("--index", help=f"{INDEX} to write")
+    ap.add_argument("--create-info", action="store_true",
+                    help="give a new Name a template Info and default table lines")
     ap.add_argument("--root", default=".", help="top of the repository")
     ap.add_argument("--avl", action="store_true", help="ApolloSoftware-AVL rules (AVL= levels)")
     ap.add_argument("--public", help="AVL: checkout of the public ApolloSoftware to compare with")
@@ -489,7 +535,11 @@ def main():
     if args.selftest:
         return 0 if selftest() else 1
 
+    made_warnings = []
+    if args.create_info:
+        create_info(args.root, args.avl, made_warnings)
     names, errors, warnings = scan(args.root, args.avl)
+    warnings[:0] = made_warnings
     check_files(args.root, names, errors, warnings)
     check_defaults(args.root, names, errors)
     if args.avl and args.public:

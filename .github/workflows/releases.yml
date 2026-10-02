@@ -1,6 +1,8 @@
 # Checks the ApolloSoftware layout on every push, keeps the releases table
 # in README.md up to date and writes ApolloSoftware.index (from the Info
-# files) for ApolloUpdate. The script: .github/scripts/releases.py
+# files) for ApolloUpdate.
+# A new Name without an Info file gets a template one (both OSes
+# and, in ApolloSoftware-AVL, Bronze) plus empty default table lines. The script: .github/scripts/releases.py
 #
 # A push that only changes README.md / the index does not start it, and its own commit
 # (made with GITHUB_TOKEN) never starts another run.
@@ -30,13 +32,13 @@ jobs:
         run: python3 .github/scripts/releases.py --selftest
 
       - name: Check the layout, update the table and the index
-        run: python3 .github/scripts/releases.py --check --readme README.md --index ApolloSoftware.index
+        run: python3 .github/scripts/releases.py --create-info --check --readme README.md --index ApolloSoftware.index
 
       - name: Commit the table and the index
         run: |
-          git add README.md ApolloSoftware.index
+          git add README.md ApolloSoftware.index ApolloUpdate-*.default ':(glob)*/*/Info'
           if git diff --cached --quiet; then
-            echo "Releases table and index unchanged"
+            echo "Releases table, index and Info files unchanged"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
