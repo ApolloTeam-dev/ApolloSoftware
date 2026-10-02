@@ -1,4 +1,4 @@
-; Drivers/exfat-handler - read by ApolloUpdate, see README.md
+; ROM/exfat-handler - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 OWNER=@WillemDrijver
 CONTRIBUTORS=

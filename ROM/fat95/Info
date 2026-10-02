@@ -1,4 +1,4 @@
-; Drivers/fat95 - read by ApolloUpdate, see README.md
+; ROM/fat95 - read by ApolloUpdate, see README.md
 OS=AmigaOS
 OWNER=Jaroslav Pulchart
 CONTRIBUTORS=@WillemDrijver
