@@ -1,0 +1,5 @@
+; Drivers/cd.device - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+OWNER=
+MINCORE=
+DESCRIPTION=

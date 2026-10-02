@@ -5,24 +5,28 @@ writes the releases table in README.md. Run by .github/workflows/releases.yml
 on every push, and by hand from the top of the repository:
 
     python3 .github/scripts/releases.py --selftest
-    python3 .github/scripts/releases.py --check --readme README.md
-    python3 .github/scripts/releases.py --avl --public ../ApolloSoftware --check --readme README.md
+    python3 .github/scripts/releases.py --check --readme README.md --index ApolloSoftware.index
+    python3 .github/scripts/releases.py --avl --public ../ApolloSoftware --check --readme README.md --index ApolloSoftware.index
 
 The same script serves both repositories; --avl selects the rules of
-ApolloSoftware-AVL (every Name needs exactly one AVL-Bronze / AVL-Silver /
-AVL-Gold tag, the minimum membership level), and --public points at a
-checkout of the public repository to find SYS: files installed by both.
+ApolloSoftware-AVL (every Name needs AVL=Bronze|Silver|Gold, the minimum
+membership level), and --public points at a checkout of the public
+repository to find SYS: files installed by both.
 
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
-    Category / Name / ApolloOS        empty marker: Name is for ApolloOS
-    Category / Name / AmigaOS         empty marker: Name is for AmigaOS
-    Category / Name / AVL-Bronze      ApolloSoftware-AVL only: lowest level
-                    / AVL-Silver      that may see the Name
-                    / AVL-Gold
+    Category / Name / Info            KEY=VALUE lines, ";" comments:
+        OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
+        AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
+        OWNER=                        who maintains it
+        MINCORE=                      lowest Apollo core it runs on (number)
+        MINCORE.<release>=            the same for one release
+        DESCRIPTION=                  one line, at most 160 characters
     ApolloUpdate-ApolloOS.default     lookup table defaults per OS
     ApolloUpdate-AmigaOS.default
+    ApolloSoftware.index              generated from the Info files: what
+                                      ApolloUpdate reads (do not edit)
 
 "Latest" must be what ApolloUpdate picks, so version_cmp() below is a
 line-by-line port of Repo_VersionCmp() in ApolloUpdate's repo.c, and the
@@ -34,13 +38,20 @@ import functools
 import os
 import re
 import sys
+import textwrap
+import unicodedata
 
 OSES = ("ApolloOS", "AmigaOS")
-TIERS = ("AVL-Bronze", "AVL-Silver", "AVL-Gold")      # low to high
+TIERS = ("Bronze", "Silver", "Gold")                  # low to high
+KEYS = ("OS", "AVL", "OWNER", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
+INFO = "Info"
+INDEX = "ApolloSoftware.index"
+MAX_DESC = 160                  # what fits in the bubble help ...
+WRAP_DESC = 48                  # ... at this many characters per line
 MARK_START = "<!-- releases:start -->"
 MARK_END = "<!-- releases:end -->"
 MAX_NAME = 30                   # FFS file name limit
-TOP_FILES = {"README.md", ".gitattributes", ".gitignore"}
+TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX}
 JUNK = re.compile(r"^(\.DS_Store|\._.*|Thumbs\.db|desktop\.ini)$", re.I)
 
 
@@ -132,8 +143,106 @@ def is_dir(*p):
     return os.path.isdir(os.path.join(*p))
 
 
+ASCII = {"\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201c": '"', "\u201d": '"',
+         "\u201e": '"', "\u2013": "-", "\u2014": "-", "\u2026": "...", "\u00a0": " ",
+         "\u00d7": "x", "\u00df": "ss", "\u00e6": "ae", "\u00c6": "AE", "\u00f8": "o",
+         "\u00d8": "O", "\u2122": "(TM)", "\u00a9": "(C)", "\u00ae": "(R)"}
+
+
+def to_ascii(text):
+    """Printable ASCII for the Amiga: typographic quotes and dashes become
+    plain ones, accents are dropped, anything else is left out."""
+    out = []
+    for ch in text:
+        ch = ASCII.get(ch, ch)
+        if len(ch) == 1 and not (32 <= ord(ch) <= 126):
+            ch = "".join(c for c in unicodedata.normalize("NFKD", ch) if 32 <= ord(c) <= 126)
+        out.append(ch)
+    return "".join(out)
+
+
+def read_info(path, label, releases, avl, errors, warnings):
+    """The Info file of a Name -> {KEY: value}, plus {"MINCORE.<rel>": value}"""
+    raw = open(path, "rb").read()
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        text = raw.decode("latin-1")        # edited on the Amiga
+    info = {}
+    for i, line in enumerate(text.splitlines(), 1):
+        s = line.strip()
+        if not s or s.startswith((";", "#")):
+            continue
+        if "=" not in s:
+            errors.append(f"{label}:{i}: not KEY=VALUE")
+            continue
+        key, value = s.split("=", 1)
+        key, value = key.strip().upper(), value.strip()
+        if key.startswith("MINCORE."):
+            rel = s.split("=", 1)[0].strip()[8:]
+            if rel not in releases:
+                errors.append(f"{label}:{i}: MINCORE.{rel}: there is no release {rel}")
+                continue
+            key = "MINCORE." + rel
+        elif key not in KEYS:
+            errors.append(f"{label}:{i}: unknown key {key} (known: {', '.join(KEYS)}, MINCORE.<release>)")
+            continue
+        if key in info:
+            errors.append(f"{label}:{i}: {key} given twice")
+        info[key] = value
+    for key in ("OWNER", "MINCORE", "DESCRIPTION"):
+        info.setdefault(key, "")
+
+    oses = [o.strip() for o in info.get("OS", "").split(",") if o.strip()]
+    for o in oses:
+        if o not in OSES:
+            errors.append(f"{label}: OS={o}? (ApolloOS and/or AmigaOS)")
+    if not oses:
+        errors.append(f"{label}: no OS= line (OS=ApolloOS, OS=AmigaOS or OS=ApolloOS,AmigaOS)")
+    info["OS"] = [o for o in OSES if o in oses]
+
+    tier = info.get("AVL", "")
+    if avl:
+        match = [t for t in TIERS if t.lower() == tier.lower()]
+        if not match:
+            errors.append(f"{label}: AVL={tier or '?'} - needs AVL=Bronze, AVL=Silver or AVL=Gold")
+        info["AVL"] = match[0] if match else None
+    else:
+        if tier:
+            errors.append(f"{label}: AVL={tier} - AVL entries belong in ApolloSoftware-AVL, "
+                          "not in the public repository")
+        info["AVL"] = None
+
+    for key in [k for k in info if k.startswith("MINCORE")]:
+        if info[key] and not info[key].isdigit():
+            errors.append(f"{label}: {key}={info[key]} is not a core number")
+            info[key] = ""
+
+    owner = to_ascii(info.get("OWNER", ""))
+    info["OWNER"] = owner.replace("\t", " ")
+    desc = to_ascii(info.get("DESCRIPTION", ""))
+    if desc != info.get("DESCRIPTION", ""):
+        warnings.append(f"{label}: DESCRIPTION has characters the Amiga lacks - changed to ASCII")
+    desc = desc.replace("\t", " ")
+    if len(desc) > MAX_DESC:
+        warnings.append(f"{label}: DESCRIPTION is {len(desc)} characters - cut to {MAX_DESC}")
+        desc = desc[:MAX_DESC - 3].rstrip() + "..."
+    if not desc:
+        warnings.append(f"{label}: no DESCRIPTION")
+    info["DESCRIPTION"] = desc
+    return info
+
+
+def wrap(desc):
+    """The description as bubble help lines; "\\n" in the text forces a break."""
+    lines = []
+    for part in desc.split("\\n"):
+        lines += textwrap.wrap(part, WRAP_DESC) or [""]
+    return lines
+
+
 def scan(root, avl=False):
-    """[(category, name, {os}, [releases newest first], tier)], errors, warnings"""
+    """[(category, name, {os}, [releases newest first], info)], errors, warnings"""
     errors, warnings, names = [], [], []
 
     for entry in sorted(os.listdir(root)):
@@ -152,35 +261,31 @@ def scan(root, avl=False):
             if not os.path.isdir(npath):
                 errors.append(f"{cat}/{name}: a file directly in a category")
                 continue
-            tags, tiers, releases = set(), [], []
+            releases, has_info = [], False
             for e in os.listdir(npath):
-                if e in OSES and os.path.isfile(os.path.join(npath, e)):
-                    tags.add(e)
-                elif e in TIERS and os.path.isfile(os.path.join(npath, e)):
-                    tiers.append(e)
+                if e == INFO and os.path.isfile(os.path.join(npath, e)):
+                    has_info = True
                 elif os.path.isdir(os.path.join(npath, e)):
                     releases.append(e)
+                elif JUNK.match(e):
+                    errors.append(f"{cat}/{name}/{e}: macOS/Windows metadata")
+                elif e in OSES or e.startswith("AVL-"):
+                    errors.append(f"{cat}/{name}/{e}: marker files are replaced by the "
+                                  f"Info file - remove it")
                 else:
-                    errors.append(f"{cat}/{name}/{e}: only ApolloOS / AmigaOS"
-                                  + (" / AVL-* " if avl else " ") +
-                                  "markers and release folders belong in a Name folder")
+                    errors.append(f"{cat}/{name}/{e}: only the Info file and release "
+                                  "folders belong in a Name folder")
             if not releases:
                 errors.append(f"{cat}/{name}: no release folder")
                 continue
-            if not tags:
-                errors.append(f"{cat}/{name}: no OS tag - add an empty ApolloOS and/or "
-                              "AmigaOS file (ApolloUpdate does not show it)")
-            tier = None
-            if avl:
-                if len(tiers) != 1:
-                    errors.append(f"{cat}/{name}: needs exactly one of {', '.join(TIERS)} "
-                                  f"(has {', '.join(sorted(tiers)) or 'none'})")
-                else:
-                    tier = tiers[0]
-            elif tiers:
-                errors.append(f"{cat}/{name}: {tiers[0]} tag - AVL entries belong in "
-                              "ApolloSoftware-AVL, not in the public repository")
-            names.append((cat, name, tags, newest_first(releases), tier))
+            if has_info:
+                info = read_info(os.path.join(npath, INFO), f"{cat}/{name}/{INFO}",
+                                 releases, avl, errors, warnings)
+            else:
+                errors.append(f"{cat}/{name}: no Info file (at least OS=ApolloOS,AmigaOS"
+                              + (" and AVL=Bronze" if avl else "") + ")")
+                info = {"OS": [], "AVL": None, "OWNER": "", "MINCORE": "", "DESCRIPTION": ""}
+            names.append((cat, name, set(info["OS"]), newest_first(releases), info))
     return names, errors, warnings
 
 
@@ -280,22 +385,72 @@ def check_defaults(root, names, errors):
 # README table
 # --------------------------------------------------------------------------
 
+def cores(info, releases):
+    """MINCORE for the table: "11000", or "11000 (0.2: 10900)" """
+    per = ["%s: %s" % (r, info["MINCORE." + r]) for r in releases
+           if info.get("MINCORE." + r)]
+    text = info.get("MINCORE", "")
+    if per:
+        text = (text + " " if text else "") + "(" + ", ".join(per) + ")"
+    return text
+
+
+def cell(text):
+    return text.replace("|", "\\|").replace("\\n", " ")
+
+
 def table(names, avl=False):
     rows = [MARK_START,
             "<!-- Generated by .github/scripts/releases.py on every push - do not edit by hand. -->",
             "",
-            "| Category | Name | Latest | Older releases | ApolloOS | AmigaOS |" + (" Level |" if avl else ""),
-            "|---|---|---|---|:-:|:-:|" + ("---|" if avl else "")]
-    for cat, name, tags, releases, tier in names:
+            "| Category | Name | Latest | Older releases | ApolloOS | AmigaOS |"
+            + (" Level |" if avl else "") + " Owner | Min. Core | Description |",
+            "|---|---|---|---|:-:|:-:|" + ("---|" if avl else "") + "---|---|---|"]
+    for cat, name, tags, releases, info in names:
         older = ", ".join(releases[1:])
         rows.append("| %s | %s | **%s** | %s | %s | %s |" % (
             cat, name, releases[0], older,
             "✓" if "ApolloOS" in tags else "", "✓" if "AmigaOS" in tags else "")
-            + (" %s |" % (tier[4:] if tier else "?") if avl else ""))
+            + (" %s |" % (info["AVL"] or "?") if avl else "")
+            + " %s | %s | %s |" % (cell(info["OWNER"]), cores(info, releases),
+                                   cell(info["DESCRIPTION"])))
     apollo = sum(1 for n in names if "ApolloOS" in n[2])
     amiga = sum(1 for n in names if "AmigaOS" in n[2])
     rows += ["", f"{len(names)} items: {apollo} for ApolloOS, {amiga} for AmigaOS.", MARK_END]
     return "\n".join(rows)
+
+
+def index(names, avl=False):
+    """ApolloSoftware.index: one line per Name, Cat/Name then TAB separated
+    KEY=VALUE fields; the description wrapped, its line breaks as "\\n"."""
+    out = [f"; {INDEX} - generated from the Info files by "
+           ".github/scripts/releases.py, do not edit",
+           "; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>OWNER=...<TAB>MINCORE=..."
+           "<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\\nline"]
+    for cat, name, tags, releases, info in names:
+        f = [f"{cat}/{name}", "OS=" + ",".join(o for o in OSES if o in tags)]
+        if info["AVL"]:
+            f.append("AVL=" + info["AVL"])
+        if info["OWNER"]:
+            f.append("OWNER=" + info["OWNER"])
+        if info["MINCORE"]:
+            f.append("MINCORE=" + info["MINCORE"])
+        for r in releases:
+            if info.get("MINCORE." + r):
+                f.append(f"MINCORE.{r}=" + info["MINCORE." + r])
+        if info["DESCRIPTION"]:
+            f.append("DESCRIPTION=" + "\\n".join(wrap(info["DESCRIPTION"])))
+        out.append("\t".join(f))
+    return "\n".join(out) + "\n"
+
+
+def write_index(path, names, avl=False):
+    new = index(names, avl)
+    old = open(path, encoding="ascii").read() if os.path.exists(path) else None
+    if new != old:
+        open(path, "w", encoding="ascii", newline="\n").write(new)
+        return True
+    return False
 
 
 def write_readme(path, names, avl=False):
@@ -320,8 +475,9 @@ def main():
     ap.add_argument("--selftest", action="store_true", help="test the release order only")
     ap.add_argument("--check", action="store_true", help="fail on layout errors")
     ap.add_argument("--readme", help="README.md to update")
+    ap.add_argument("--index", help=f"{INDEX} to write")
     ap.add_argument("--root", default=".", help="top of the repository")
-    ap.add_argument("--avl", action="store_true", help="ApolloSoftware-AVL rules (AVL-* tags)")
+    ap.add_argument("--avl", action="store_true", help="ApolloSoftware-AVL rules (AVL= levels)")
     ap.add_argument("--public", help="AVL: checkout of the public ApolloSoftware to compare with")
     args = ap.parse_args()
 
@@ -350,12 +506,15 @@ def main():
             f.write("\n".join(report) + "\n" if report else "All checks passed.\n")
 
     if args.check and errors:
-        print(f"{len(errors)} error(s): README not updated")
+        print(f"{len(errors)} error(s): README and index not updated")
         return 1
 
     if args.readme:
         changed = write_readme(args.readme, names, args.avl)
         print(f"{args.readme}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
+    if args.index:
+        changed = write_index(args.index, names, args.avl)
+        print(f"{args.index}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
     return 0
 
 
