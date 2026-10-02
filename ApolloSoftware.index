@@ -8,7 +8,7 @@ Drivers/fat95	OS=AmigaOS	OWNER=Jaroslav Pulchart	CONTRIBUTORS=@WillemDrijver	DES
 Drivers/Keymaps	OS=ApolloOS,AmigaOS	OWNER=@TuKo	DESCRIPTION=Keyboard Configurations
 Drivers/ODFileSystem	OS=ApolloOS,AmigaOS	OWNER=Stefan Reinauer	CONTRIBUTORS=@WillemDrijver	DESCRIPTION=CD (ISO9660) Filesystem
 Drivers/sagagfx.hidd	OS=ApolloOS	OWNER=@WillemDrijver	DESCRIPTION=CyberGraphics RTG Driver
-Drivers/sagasd.device	OS=ApolloOS,AmigaOS	OWNER=@WillemDrijver	DESCRIPTION=SD-Card Driver
+Drivers/sagasd.device	OS=ApolloOS,AmigaOS	OWNER=@WillemDrijver	MINCORE=12500	DESCRIPTION=SD-Card Driver
 Drivers/scsi.device	OS=AmigaOS	OWNER=@TuKo	CONTRIBUTORS=@WillemDrijver	DESCRIPTION=IDE Driver for AmigaOS
 Drivers/v4net.device	OS=ApolloOS,AmigaOS	OWNER=@TuKo	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS	OWNER=@TuKo	DESCRIPTION=Picasso 96 RTG Driver
