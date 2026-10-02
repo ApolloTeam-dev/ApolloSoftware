@@ -1,6 +1,6 @@
 ; Tools/ApolloVNC - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=
+OWNER=Marcel
 CONTRIBUTORS=
 MINCORE=
-DESCRIPTION=
+DESCRIPTION=Fast & Easy Remote VNC Application

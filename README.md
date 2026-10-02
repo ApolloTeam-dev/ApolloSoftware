@@ -81,8 +81,8 @@ Example (multiple files):
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ | Juan007 |  |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ | Willem | Renaud |  | Map ROM (SoftKick) |
 | Tools | ApolloMon | **1.0e** |  | ✓ | ✓ | Flype |  |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.27** | 0.26, 0.25, 0.24, 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |  |  |  |  |
-| Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ |  |  |  |  |
+| Tools | ApolloUpdate | **0.27** | 0.26, 0.25, 0.24, 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ | Willem |  |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ | Marcel |  |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ | Renaud |  |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ | Marcel |  |  | Apollo MouseWheel Driver |
 | Tools | i2clock | **0.7** |  | ✓ | ✓ |  |  |  | Load/Save date & time to RTC |

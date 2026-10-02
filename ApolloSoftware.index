@@ -23,8 +23,8 @@ Tools/ApolloFlash	OS=ApolloOS,AmigaOS	OWNER=Willem	CONTRIBUTORS=Renaud	DESCRIPTI
 Tools/ApolloFloppy	OS=ApolloOS,AmigaOS	OWNER=Juan007	DESCRIPTION=Apollo Virtual Floppy Loader
 Tools/ApolloMap	OS=ApolloOS,AmigaOS	OWNER=Willem	CONTRIBUTORS=Renaud	DESCRIPTION=Map ROM (SoftKick)
 Tools/ApolloMon	OS=ApolloOS,AmigaOS	OWNER=Flype	DESCRIPTION=CPU Monitoring Widget
-Tools/ApolloUpdate	OS=ApolloOS,AmigaOS
-Tools/ApolloVNC	OS=ApolloOS,AmigaOS
+Tools/ApolloUpdate	OS=ApolloOS,AmigaOS	OWNER=Willem	DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS
+Tools/ApolloVNC	OS=ApolloOS,AmigaOS	OWNER=Marcel	DESCRIPTION=Fast & Easy Remote VNC Application
 Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS	OWNER=Renaud	DESCRIPTION=Set SAGA Display ToolTypes
 Tools/ApolloWheel	OS=ApolloOS,AmigaOS	OWNER=Marcel	DESCRIPTION=Apollo MouseWheel Driver
 Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
