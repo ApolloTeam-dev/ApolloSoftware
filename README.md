@@ -39,7 +39,7 @@ Example (multiple files):
 
 | Category | Name | Latest | Older releases | ApolloOS | AmigaOS |
 |---|---|---|---|:-:|:-:|
-| Drivers | amitcp | **4.1.7** |  |  | ✓ |
+| Drivers | AmiTCP | **4.1.7** |  |  | ✓ |
 | Drivers | arne.audio | **4.23** | 4.18 | ✓ | ✓ |
 | Drivers | cd.device | **40.29** |  | ✓ | ✓ |
 | Drivers | exfat-handler | **1.11** |  | ✓ | ✓ |
@@ -62,7 +62,7 @@ Example (multiple files):
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloMon | **1.0e** |  | ✓ | ✓ |
-| Tools | ApolloUpdate | **0.24** | 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
+| Tools | ApolloUpdate | **0.25** | 0.24, 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
 | Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ |
 | Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ |
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ |
