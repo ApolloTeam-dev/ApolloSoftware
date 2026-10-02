@@ -1,6 +1,6 @@
 ; Drivers/exfat-handler - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Willem
+OWNER=@WillemDrijver
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=Ex-FAT Filesystem

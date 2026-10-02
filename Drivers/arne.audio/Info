@@ -1,6 +1,6 @@
 ; Drivers/arne.audio - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Renaud
+OWNER=@TuKo
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=AHI Audio Driver

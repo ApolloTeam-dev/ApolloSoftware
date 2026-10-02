@@ -1,6 +1,6 @@
 ; Tools/ApolloFlash - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Willem
-CONTRIBUTORS=Renaud
+OWNER=@WillemDrijver
+CONTRIBUTORS=@TuKo
 MINCORE=
 DESCRIPTION=Flash Core or ROM

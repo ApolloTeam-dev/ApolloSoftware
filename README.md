@@ -59,34 +59,34 @@ Example (multiple files):
 | Category | Name | Latest | Older releases | ApolloOS | AmigaOS | Owner | Contributors | Min. Core | Description |
 |---|---|---|---|:-:|:-:|---|---|---|---|
 | Drivers | AmiTCP | **4.1.7** |  |  | ✓ | MW0MWZ |  |  | TCP/IP Stack |
-| Drivers | arne.audio | **4.23** | 4.18 | ✓ | ✓ | Renaud |  |  | AHI Audio Driver |
-| Drivers | cd.device | **40.29** |  | ✓ | ✓ | Willem |  |  | CD32-Driver |
-| Drivers | exfat-handler | **1.11** |  | ✓ | ✓ | Willem |  |  | Ex-FAT Filesystem |
-| Drivers | fat95 | **4.0** |  |  | ✓ | Jaroslav Pulchart | Willem |  | FAT Filesystem |
-| Drivers | Keymaps | **1.0** |  | ✓ | ✓ | Renaud |  |  | Keyboard Configurations |
-| Drivers | ODFileSystem | **0.8.0** |  | ✓ | ✓ | Stefan Reinauer | Willem |  | CD (ISO9660) Filesystem |
-| Drivers | sagagfx.hidd | **1.0** |  | ✓ |  | Willem |  |  | CyberGraphics RTG Driver |
-| Drivers | sagasd.device | **2.41** |  | ✓ | ✓ | Willem |  |  | SD-Card Driver |
-| Drivers | scsi.device | **48.13** |  |  | ✓ | Renaud | Willem |  | IDE Driver for AmigaOS |
-| Drivers | v4net.device | **2.99** |  | ✓ | ✓ | Renaud |  |  | Network Interface Driver |
-| Drivers | vampiregfx.card | **1.60** |  |  | ✓ | Renaud |  |  | Picasso 96 RTG Driver |
-| Icons | def_SDROM | **1.0** |  | ✓ | ✓ | Renaud |  |  | Default SD-Card Icon |
-| Libraries | i2c.library | **40.0** |  | ✓ | ✓ |  |  |  | I2C Chip Library |
-| Libraries | maggie.library | **4.0** |  | ✓ | ✓ | Morten |  |  | Maggie 3DFX API library |
-| Tools | AmiPlexAMP | **0.54** |  | ✓ | ✓ | Renaud |  |  | Plex Audio Client |
-| Tools | ApolloAMP | **26.9R1** |  | ✓ | ✓ | Marcel |  |  | SAGA Audioplayer |
-| Tools | ApolloControl | **2.21** |  | ✓ | ✓ | Willem | Renaud |  | Apollo V4 Settings |
-| Tools | ApolloExpROM | **1.1** |  |  | ✓ | Willem |  |  | Flash/Dump Expansion ROM ($F0) |
-| Tools | ApolloFlash | **2.30** |  | ✓ | ✓ | Willem | Renaud |  | Flash Core or ROM |
-| Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ | Juan007 |  |  | Apollo Virtual Floppy Loader |
-| Tools | ApolloMap | **2.30** |  | ✓ | ✓ | Willem | Renaud |  | Map ROM (SoftKick) |
-| Tools | ApolloMon | **1.0e** |  | ✓ | ✓ | Flype |  |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.27** | 0.26, 0.25, 0.24, 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ | Willem |  |  | Apollo Update Manager for ApolloOS and AmigaOS |
-| Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ | Marcel |  |  | Fast & Easy Remote VNC Application |
-| Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ | Renaud |  |  | Set SAGA Display ToolTypes |
-| Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ | Marcel |  |  | Apollo MouseWheel Driver |
-| Tools | i2clock | **0.7** |  | ✓ | ✓ |  |  |  | Load/Save date & time to RTC |
-| Tools | RiVA | **0.63R4** | 0.63R3 | ✓ | ✓ | Marcel |  |  | SAGA Videoplayer |
+| Drivers | arne.audio | **4.23** | 4.18 | ✓ | ✓ | @TuKo |  |  | AHI Audio Driver |
+| Drivers | cd.device | **40.29** |  | ✓ | ✓ | @WillemDrijver |  |  | CD32-Driver |
+| Drivers | exfat-handler | **1.11** |  | ✓ | ✓ | @WillemDrijver |  |  | Ex-FAT Filesystem |
+| Drivers | fat95 | **4.0** |  |  | ✓ | Jaroslav Pulchart | @WillemDrijver |  | FAT Filesystem |
+| Drivers | Keymaps | **1.0** |  | ✓ | ✓ | @TuKo |  |  | Keyboard Configurations |
+| Drivers | ODFileSystem | **0.8.0** |  | ✓ | ✓ | Stefan Reinauer | @WillemDrijver |  | CD (ISO9660) Filesystem |
+| Drivers | sagagfx.hidd | **1.0** |  | ✓ |  | @WillemDrijver |  |  | CyberGraphics RTG Driver |
+| Drivers | sagasd.device | **2.41** |  | ✓ | ✓ | @WillemDrijver |  |  | SD-Card Driver |
+| Drivers | scsi.device | **48.13** |  |  | ✓ | @TuKo | @WillemDrijver |  | IDE Driver for AmigaOS |
+| Drivers | v4net.device | **2.99** |  | ✓ | ✓ | @TuKo |  |  | Network Interface Driver |
+| Drivers | vampiregfx.card | **1.60** |  |  | ✓ | @TuKo |  |  | Picasso 96 RTG Driver |
+| Icons | def_SDROM | **1.0** |  | ✓ | ✓ | @TuKo |  |  | Default SD-Card Icon |
+| Libraries | i2c.library | **40.0** |  | ✓ | ✓ | Unknown |  |  | I2C Chip Library |
+| Libraries | maggie.library | **4.0** |  | ✓ | ✓ | @Morten |  |  | Maggie 3DFX API library |
+| Tools | AmiPlexAMP | **0.54** |  | ✓ | ✓ | @TuKo |  |  | Plex Audio Client |
+| Tools | ApolloAMP | **26.9R1** |  | ✓ | ✓ | @RedBug |  |  | SAGA Audioplayer |
+| Tools | ApolloControl | **2.21** |  | ✓ | ✓ | @WillemDrijver | @TuKo |  | Apollo V4 Settings |
+| Tools | ApolloExpROM | **1.1** |  |  | ✓ | @WillemDrijver |  |  | Flash/Dump Expansion ROM ($F0) |
+| Tools | ApolloFlash | **2.30** |  | ✓ | ✓ | @WillemDrijver | @TuKo |  | Flash Core or ROM |
+| Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ | @juandoble07 |  |  | Apollo Virtual Floppy Loader |
+| Tools | ApolloMap | **2.30** |  | ✓ | ✓ | @WillemDrijver | @TuKo |  | Map ROM (SoftKick) |
+| Tools | ApolloMon | **1.0e** |  | ✓ | ✓ | @flype |  |  | CPU Monitoring Widget |
+| Tools | ApolloUpdate | **0.27** | 0.26, 0.25, 0.24, 0.23, 0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ | @WillemDrijver |  |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloVNC | **26.6R1** |  | ✓ | ✓ | @RedBug |  |  | Fast & Easy Remote VNC Application |
+| Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ | @TuKo |  |  | Set SAGA Display ToolTypes |
+| Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ | @RedBug |  |  | Apollo MouseWheel Driver |
+| Tools | i2clock | **0.7** |  | ✓ | ✓ | Unknown |  |  | Load/Save date & time to RTC |
+| Tools | RiVA | **0.63R4** | 0.63R3 | ✓ | ✓ | @RedBug |  |  | SAGA Videoplayer |
 
 29 items: 24 for ApolloOS, 28 for AmigaOS.
 <!-- releases:end -->

@@ -1,6 +1,6 @@
 ; Drivers/sagagfx.hidd - read by ApolloUpdate, see README.md
 OS=ApolloOS
-OWNER=Willem
+OWNER=@WillemDrijver
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=CyberGraphics RTG Driver

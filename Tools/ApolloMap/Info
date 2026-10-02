@@ -1,6 +1,6 @@
 ; Tools/ApolloMap - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Willem
-CONTRIBUTORS=Renaud
+OWNER=@WillemDrijver
+CONTRIBUTORS=@TuKo
 MINCORE=
 DESCRIPTION=Map ROM (SoftKick)

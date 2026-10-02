@@ -1,6 +1,6 @@
 ; Drivers/ODFileSystem - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 OWNER=Stefan Reinauer
-CONTRIBUTORS=Willem
+CONTRIBUTORS=@WillemDrijver
 MINCORE=
 DESCRIPTION=CD (ISO9660) Filesystem

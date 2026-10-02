@@ -1,6 +1,6 @@
 ; Drivers/v4net.device - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Renaud
+OWNER=@TuKo
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=Network Interface Driver

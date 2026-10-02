@@ -1,6 +1,6 @@
 ; Drivers/scsi.device - read by ApolloUpdate, see README.md
 OS=AmigaOS
-OWNER=Renaud
-CONTRIBUTORS=Willem
+OWNER=@TuKo
+CONTRIBUTORS=@WillemDrijver
 MINCORE=
 DESCRIPTION=IDE Driver for AmigaOS

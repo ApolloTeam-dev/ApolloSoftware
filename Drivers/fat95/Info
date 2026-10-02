@@ -1,6 +1,6 @@
 ; Drivers/fat95 - read by ApolloUpdate, see README.md
 OS=AmigaOS
 OWNER=Jaroslav Pulchart
-CONTRIBUTORS=Willem
+CONTRIBUTORS=@WillemDrijver
 MINCORE=
 DESCRIPTION=FAT Filesystem

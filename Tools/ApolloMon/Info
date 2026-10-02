@@ -1,6 +1,6 @@
 ; Tools/ApolloMon - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Flype
+OWNER=@flype
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=CPU Monitoring Widget

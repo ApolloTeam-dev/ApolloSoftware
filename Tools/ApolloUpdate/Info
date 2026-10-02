@@ -1,6 +1,6 @@
 ; Tools/ApolloUpdate - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
-OWNER=Willem
+OWNER=@WillemDrijver
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS

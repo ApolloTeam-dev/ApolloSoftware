@@ -1,6 +1,6 @@
 ; Tools/ApolloExpROM - read by ApolloUpdate, see README.md
 OS=AmigaOS
-OWNER=Willem
+OWNER=@WillemDrijver
 CONTRIBUTORS=
 MINCORE=
 DESCRIPTION=Flash/Dump Expansion ROM ($F0)
