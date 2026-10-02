@@ -7,6 +7,9 @@
 ; ApolloSoftware repo. Lines starting with ";" are comments.
 ; Leave the Version empty for a Name that is not installed.
 
+Cores/UniCorn-Beta/
+Cores/UniCorn-Release/
+
 Drivers/AmiTCP/
 Drivers/arne.audio/4.14
 Drivers/Keymaps/1.0

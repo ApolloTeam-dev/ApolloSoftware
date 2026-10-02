@@ -15,14 +15,14 @@ Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1)
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
-### Core, KickROM and ExpROM
+### Cores, KickROM and ExpROM
 
 These three categories hold what is flashed, not copied to SYS:. A release
 folder (Level-3) holds the file(s) directly, no drawers:
 
 | Category | Files | ApolloUpdate copies them to | Flashed by |
 |---|---|---|---|
-| `Core` | exactly one: the core, ready to flash | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
+| `Cores` | exactly one: the core, ready to flash | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
 | `KickROM` | exactly one: the Kickstart ROM, ready to flash | `SYS:ApolloUpdate/KickROM/` | ApolloFlash |
 | `ExpROM` | one or more ROM modules | `SYS:ApolloUpdate/ExpROM/` | ApolloExpROM, which builds them into the Expansion ROM first |
 
@@ -79,6 +79,8 @@ Example (multiple files):
 
 | Category | Name | Latest | Older releases | ApolloOS | AmigaOS | Owner | Contributors | Min. Core | Description |
 |---|---|---|---|:-:|:-:|---|---|---|---|
+| Cores | UniCorn-Beta | **12556E** |  | ✓ | ✓ | @BigGun |  |  | UniCorn-Beta Core |
+| Cores | UniCorn-Release | **12001** |  | ✓ | ✓ | @BigGun |  |  | UniCorn-Release Core |
 | Drivers | AmiTCP | **4.1.7** |  |  | ✓ | MW0MWZ |  |  | TCP/IP Stack |
 | Drivers | arne.audio | **4.23** | 4.18 | ✓ | ✓ | @TuKo |  |  | AHI Audio Driver |
 | Drivers | Keymaps | **1.0** |  | ✓ | ✓ | @TuKo |  |  | Keyboard Configurations |
@@ -109,5 +111,5 @@ Example (multiple files):
 | Tools | i2clock | **0.7** |  | ✓ | ✓ | Unknown |  |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | 0.63R3 | ✓ | ✓ | @RedBug |  |  | SAGA Videoplayer |
 
-29 items: 24 for ApolloOS, 28 for AmigaOS.
+31 items: 26 for ApolloOS, 30 for AmigaOS.
 <!-- releases:end -->

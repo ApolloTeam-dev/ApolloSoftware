@@ -5,6 +5,9 @@
 ; ApolloSoftware repo. Lines starting with ";" are comments.
 ; Leave the Version empty for a Name that is not part of R9.5.
 
+Cores/UniCorn-Beta/
+Cores/UniCorn-Release/
+
 Drivers/arne.audio/4.22
 Drivers/Keymaps/1.0
 Drivers/sagagfx.hidd/0.9

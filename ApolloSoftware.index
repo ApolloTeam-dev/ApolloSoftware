@@ -1,5 +1,7 @@
 ; ApolloSoftware.index - generated from the Info files by .github/scripts/releases.py, do not edit
 ; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>OWNER=...<TAB>CONTRIBUTORS=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
+Cores/UniCorn-Beta	OS=ApolloOS,AmigaOS	OWNER=@BigGun	DESCRIPTION=UniCorn-Beta Core
+Cores/UniCorn-Release	OS=ApolloOS,AmigaOS	OWNER=@BigGun	DESCRIPTION=UniCorn-Release Core
 Drivers/AmiTCP	OS=AmigaOS	OWNER=MW0MWZ	DESCRIPTION=TCP/IP Stack
 Drivers/arne.audio	OS=ApolloOS,AmigaOS	OWNER=@TuKo	DESCRIPTION=AHI Audio Driver
 Drivers/Keymaps	OS=ApolloOS,AmigaOS	OWNER=@TuKo	DESCRIPTION=Keyboard Configurations
