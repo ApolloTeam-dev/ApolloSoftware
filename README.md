@@ -66,7 +66,7 @@ Example (multiple files):
 | Drivers | Keymaps | **1.0** |  | ✓ | ✓ |  | Keyboard Configurations |
 | Drivers | ODFileSystem | **0.8.0** |  | ✓ | ✓ |  | CD (ISO9660) Filesystem |
 | Drivers | sagagfx.hidd | **1.0** |  | ✓ |  |  | CyberGraphics RTG Driver |
-| Drivers | sagasd.device | **2.41** |  | ✓ | ✓ |  | SD-Card Driver |
+| Drivers | sagasd.device | **2.41** |  | ✓ | ✓ | 12500 | SD-Card Driver |
 | Drivers | scsi.device | **48.13** |  |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.99** |  | ✓ | ✓ |  | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.60** |  |  | ✓ |  | Picasso 96 RTG Driver |
