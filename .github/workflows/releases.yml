@@ -2,7 +2,8 @@
 # in README.md up to date and writes ApolloSoftware.index (from the Info
 # files) for ApolloUpdate.
 # A new Name without an Info file gets a template one (both OSes
-# and, in ApolloSoftware-AVL, Bronze) plus empty default table lines. The script: .github/scripts/releases.py
+# and, in ApolloSoftware-AVL, Bronze) plus empty default table lines.
+# The script: .github/scripts/releases.py
 #
 # A push that only changes README.md / the index does not start it, and its own commit
 # (made with GITHUB_TOKEN) never starts another run.
