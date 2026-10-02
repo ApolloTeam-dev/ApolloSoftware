@@ -20,8 +20,8 @@ starts a comment:
 
 ```
 OS=ApolloOS,AmigaOS
-OWNER=Willem
-CONTRIBUTORS=Renaud
+OWNER=@Owner
+CONTRIBUTORS=@Contributor
 MINCORE=11000
 MINCORE.1.0e=10900
 DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
