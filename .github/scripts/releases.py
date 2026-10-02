@@ -16,13 +16,14 @@ repository to find SYS: files installed by both.
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
-    ROM / Name / Release / <tag> + files    not for SYS: but for flashing:
-        tag Core or KickROM           + one ROM file, flashed by ApolloFlash
-        tag ExpROM                    + one or more modules that ApolloExpROM
-                                        builds into the Expansion ROM
-                                      ApolloUpdate keeps the files in
-                                      SYS:ROM/<tag>/ (the collision check
-                                      treats that as their SYS: path)
+    Core    / Name / Release / file      flashed, not copied to SYS::
+    KickROM / Name / Release / file        one ROM file, by ApolloFlash
+    ExpROM  / Name / Release / files       modules, ApolloExpROM builds them
+                                           into the Expansion ROM
+                                      no drawers; ApolloUpdate empties
+                                      SYS:ApolloUpdate/Cores, /KickROM or
+                                      /ExpROM and copies them there (the
+                                      collision check uses that SYS: path)
     Category / Name / Info            KEY=VALUE lines, ";" comments:
         OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
@@ -53,8 +54,9 @@ OSES = ("ApolloOS", "AmigaOS")
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "OWNER", "CONTRIBUTORS", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 INFO = "Info"
-ROM = "ROM"                                           # the category to flash
-ROM_TAGS = ("Core", "KickROM", "ExpROM")              # its tag files
+ROM_CATS = {"Core": "ApolloUpdate/Cores",             # categories to flash, and
+            "KickROM": "ApolloUpdate/KickROM",        # where ApolloUpdate keeps
+            "ExpROM": "ApolloUpdate/ExpROM"}          # their files
 INDEX = "ApolloSoftware.index"
 MAX_DESC = 160                  # what fits in the bubble help ...
 WRAP_DESC = 48                  # ... at this many characters per line
@@ -302,30 +304,24 @@ def scan(root, avl=False):
 
 def release_files(root, cat, name, rel, errors=None):
     """[(path below the release, lower-case SYS path)] of one release, junk
-    left out. A ROM release: its files directly in it, beside one tag file,
-    which is not installed; the SYS path is ROM/<tag>/<file>. With errors,
-    a ROM release that breaks those rules is reported."""
+    left out. A release of Core, KickROM or ExpROM: its files directly in
+    it, kept in SYS:ApolloUpdate/... (ROM_CATS). With errors, one that breaks
+    the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
     out = []
-    if cat == ROM:
+    if cat in ROM_CATS:
         label = f"{cat}/{name}/{rel}"
         ents = sorted(e for e in os.listdir(rpath) if not JUNK.match(e))
-        tags = [e for e in ents if e in ROM_TAGS]
         dirs = [e for e in ents if os.path.isdir(os.path.join(rpath, e))]
-        files = [e for e in ents if e not in tags and e not in dirs]
+        files = [e for e in ents if e not in dirs]
         if errors is not None:
-            if len(tags) != 1:
-                errors.append(f"{label}: needs exactly one tag file, {', '.join(ROM_TAGS)} "
-                              f"(has {', '.join(tags) or 'none'})")
             for d in dirs:
-                errors.append(f"{label}/{d}: no drawers in a ROM release, only the tag "
-                              "and the ROM file(s)")
-            if tags and tags[0] in ("Core", "KickROM") and len(files) != 1:
-                errors.append(f"{label}: a {tags[0]} release holds exactly one ROM file "
+                errors.append(f"{label}/{d}: no drawers in a {cat} release, only the "
+                              "file(s) to flash")
+            if cat in ("Core", "KickROM") and len(files) > 1:
+                errors.append(f"{label}: a {cat} release holds exactly one ROM file "
                               f"(has {len(files)})")
-        if len(tags) == 1:
-            out = [(f, f"rom/{tags[0].lower()}/{f.lower()}") for f in files]
-        return out
+        return [(f, f"{ROM_CATS[cat]}/{f}".lower()) for f in files]
     for dirpath, dirs, fns in os.walk(rpath):
         for fn in fns:
             if not JUNK.match(fn):
@@ -378,7 +374,7 @@ def check_files(root, names, errors, warnings):
                                       "character that AmigaDOS or GitHub cannot take")
             for sub, path in release_files(root, cat, name, rel, errors):
                 files += 1
-                if cat != ROM and os.sep not in sub:
+                if cat not in ROM_CATS and os.sep not in sub:
                     warnings.append(f"{cat}/{name}/{rel}/{sub}: lands in the root of SYS:")
                 for o in tags:
                     key = (o, path)

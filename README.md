@@ -15,25 +15,23 @@ Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1)
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
-### ROM
+### Core, KickROM and ExpROM
 
-The category `ROM` holds what is flashed, not copied to SYS:. Its
-Deployment folder (Level-4) holds one empty tag file - `Core`, `KickROM` or
-`ExpROM` - and beside it:
+These three categories hold what is flashed, not copied to SYS:. A release
+folder (Level-3) holds the file(s) directly, no drawers:
 
-| Tag | Files | Flashed by |
-|---|---|---|
-| `Core` | exactly one: the core, ready to flash | ApolloFlash |
-| `KickROM` | exactly one: the Kickstart ROM, ready to flash | ApolloFlash |
-| `ExpROM` | one or more ROM modules | ApolloExpROM, which builds them into the Expansion ROM first |
+| Category | Files | ApolloUpdate copies them to | Flashed by |
+|---|---|---|---|
+| `Core` | exactly one: the core, ready to flash | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
+| `KickROM` | exactly one: the Kickstart ROM, ready to flash | `SYS:ApolloUpdate/KickROM/` | ApolloFlash |
+| `ExpROM` | one or more ROM modules | `SYS:ApolloUpdate/ExpROM/` | ApolloExpROM, which builds them into the Expansion ROM first |
 
-No drawers. ApolloUpdate keeps the files in `SYS:ROM/<tag>/` (so
-`SYS:ROM/ExpROM/` holds the modules of every ExpROM entry installed) and then
-starts the flash tool. Example:
+ApolloUpdate empties that drawer before it copies (once per update, so the
+ExpROM drawer then holds the modules of every ExpROM entry updated together)
+and then starts the flash tool. Example:
 
-- ROM/sagasd.device/Info
-- ROM/sagasd.device/2.41/ExpROM
-- ROM/sagasd.device/2.41/sagasd.device
+- ExpROM/sagasd.device/Info
+- ExpROM/sagasd.device/2.41/sagasd.device
 
 Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
@@ -87,15 +85,15 @@ Example (multiple files):
 | Drivers | sagagfx.hidd | **1.0** |  | ✓ |  | @WillemDrijver |  |  | CyberGraphics RTG Driver |
 | Drivers | v4net.device | **2.99** |  | ✓ | ✓ | @TuKo |  |  | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.60** |  |  | ✓ | @TuKo |  |  | Picasso 96 RTG Driver |
+| ExpROM | cd.device | **40.29** |  | ✓ | ✓ | @WillemDrijver |  |  | CD32-Driver |
+| ExpROM | exfat-handler | **1.11** |  | ✓ | ✓ | @WillemDrijver |  |  | Ex-FAT Filesystem |
+| ExpROM | fat95 | **4.0** |  |  | ✓ | Jaroslav Pulchart | @WillemDrijver |  | FAT Filesystem |
+| ExpROM | ODFileSystem | **0.8.0** |  | ✓ | ✓ | Stefan Reinauer | @WillemDrijver |  | CD (ISO9660) Filesystem |
+| ExpROM | sagasd.device | **2.41** |  | ✓ | ✓ | @WillemDrijver |  | 12500 | SD-Card Driver |
+| ExpROM | scsi.device | **48.13** |  |  | ✓ | @TuKo | @WillemDrijver |  | IDE Driver for AmigaOS |
 | Icons | def_SDROM | **1.0** |  | ✓ | ✓ | @TuKo |  |  | Default SD-Card Icon |
 | Libraries | i2c.library | **40.0** |  | ✓ | ✓ | Unknown |  |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** |  | ✓ | ✓ | @Morten |  |  | Maggie 3DFX API library |
-| ROM | cd.device | **40.29** |  | ✓ | ✓ | @WillemDrijver |  |  | CD32-Driver |
-| ROM | exfat-handler | **1.11** |  | ✓ | ✓ | @WillemDrijver |  |  | Ex-FAT Filesystem |
-| ROM | fat95 | **4.0** |  |  | ✓ | Jaroslav Pulchart | @WillemDrijver |  | FAT Filesystem |
-| ROM | ODFileSystem | **0.8.0** |  | ✓ | ✓ | Stefan Reinauer | @WillemDrijver |  | CD (ISO9660) Filesystem |
-| ROM | sagasd.device | **2.41** |  | ✓ | ✓ | @WillemDrijver |  | 12500 | SD-Card Driver |
-| ROM | scsi.device | **48.13** |  |  | ✓ | @TuKo | @WillemDrijver |  | IDE Driver for AmigaOS |
 | Tools | AmiPlexAMP | **0.54** |  | ✓ | ✓ | @TuKo |  |  | Plex Audio Client |
 | Tools | ApolloAMP | **26.9R1** |  | ✓ | ✓ | @RedBug |  |  | SAGA Audioplayer |
 | Tools | ApolloControl | **2.21** |  | ✓ | ✓ | @WillemDrijver | @TuKo |  | Apollo V4 Settings |

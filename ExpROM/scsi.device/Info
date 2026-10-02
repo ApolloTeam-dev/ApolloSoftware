@@ -1,4 +1,4 @@
-; ROM/scsi.device - read by ApolloUpdate, see README.md
+; ExpROM/scsi.device - read by ApolloUpdate, see README.md
 OS=AmigaOS
 OWNER=@TuKo
 CONTRIBUTORS=@WillemDrijver

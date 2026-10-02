@@ -1,4 +1,4 @@
-; ROM/fat95 - read by ApolloUpdate, see README.md
+; ExpROM/fat95 - read by ApolloUpdate, see README.md
 OS=AmigaOS
 OWNER=Jaroslav Pulchart
 CONTRIBUTORS=@WillemDrijver

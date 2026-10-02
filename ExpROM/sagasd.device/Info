@@ -1,4 +1,4 @@
-; ROM/sagasd.device - read by ApolloUpdate, see README.md
+; ExpROM/sagasd.device - read by ApolloUpdate, see README.md
 OS=ApolloOS,AmigaOS
 OWNER=@WillemDrijver
 CONTRIBUTORS=
