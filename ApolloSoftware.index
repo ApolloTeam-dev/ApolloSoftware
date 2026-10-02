@@ -23,8 +23,8 @@ Tools/ApolloFlash	OS=ApolloOS,AmigaOS	DESCRIPTION=Flash Core or ROM
 Tools/ApolloFloppy	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo Virtual Floppy Loader
 Tools/ApolloMap	OS=ApolloOS,AmigaOS	DESCRIPTION=Map ROM (SoftKick)
 Tools/ApolloMon	OS=ApolloOS,AmigaOS	DESCRIPTION=CPU Monitoring Widget
-Tools/ApolloUpdate	OS=ApolloOS,AmigaOS
-Tools/ApolloVNC	OS=ApolloOS,AmigaOS
+Tools/ApolloUpdate	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS
+Tools/ApolloVNC	OS=ApolloOS,AmigaOS	DESCRIPTION=Fast & Easy Remote VNC Application
 Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS	DESCRIPTION=Set SAGA Display ToolTypes
 Tools/ApolloWheel	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo MouseWheel Driver
 Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
