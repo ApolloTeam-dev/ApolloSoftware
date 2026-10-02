@@ -60,7 +60,7 @@ Example (multiple files):
 | Tools | ApolloFloppy | **1.2** |  | ✓ | ✓ |
 | Tools | ApolloMap | **2.30** |  | ✓ | ✓ |
 | Tools | ApolloMon | **1.0e** |  | ✓ | ✓ |
-| Tools | ApolloUpdate | **0.19** | 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
+| Tools | ApolloUpdate | **0.20** | 0.19, 0.18, 0.17, 0.16, 0.15, 0.14, 0.13, 0.12, 0.11, 0.10, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 | ✓ | ✓ |
 | Tools | ApolloWHDSet | **0.3.3** |  | ✓ | ✓ |
 | Tools | ApolloWheel | **0.1i** | 0.1b | ✓ | ✓ |
 | Tools | i2clock | **0.7** |  | ✓ | ✓ |
