@@ -1,0 +1,4 @@
+; Drivers/ODFileSystem - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+MINCORE=
+DESCRIPTION=

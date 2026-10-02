@@ -1,7 +1,8 @@
-# Checks the ApolloSoftware layout on every push and keeps the releases table
-# in README.md up to date. The script: .github/scripts/releases.py
+# Checks the ApolloSoftware layout on every push, keeps the releases table
+# in README.md up to date and writes ApolloSoftware.index (from the Info
+# files) for ApolloUpdate. The script: .github/scripts/releases.py
 #
-# A push that only changes README.md does not start it, and its own commit
+# A push that only changes README.md / the index does not start it, and its own commit
 # (made with GITHUB_TOKEN) never starts another run.
 
 name: Releases table
@@ -9,7 +10,7 @@ name: Releases table
 on:
   push:
     branches: [main]
-    paths-ignore: [README.md]
+    paths-ignore: [README.md, ApolloSoftware.index]
   workflow_dispatch:
 
 permissions:
@@ -28,17 +29,18 @@ jobs:
       - name: Release order matches ApolloUpdate
         run: python3 .github/scripts/releases.py --selftest
 
-      - name: Check the layout, update the table
-        run: python3 .github/scripts/releases.py --check --readme README.md
+      - name: Check the layout, update the table and the index
+        run: python3 .github/scripts/releases.py --check --readme README.md --index ApolloSoftware.index
 
-      - name: Commit the table
+      - name: Commit the table and the index
         run: |
-          if git diff --quiet -- README.md; then
-            echo "Releases table unchanged"
+          git add README.md ApolloSoftware.index
+          if git diff --cached --quiet; then
+            echo "Releases table and index unchanged"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "README: update the releases table" -- README.md
+          git commit -m "Update the releases table and ApolloSoftware.index"
           git pull --rebase
           git push
