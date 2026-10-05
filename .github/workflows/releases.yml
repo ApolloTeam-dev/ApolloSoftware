@@ -2,7 +2,7 @@
 # in README.md up to date and writes ApolloSoftware.index (from the Info
 # files) for ApolloUpdate.
 # A new Name without an Info file gets a template one (both OSes
-# and, in ApolloSoftware-AVL, Bronze) plus empty default table lines.
+# and, in ApolloSoftware-AVL, Bronze).
 # ApolloUpdate.lha is the newest ApolloUpdate, at a fixed address for a
 # browser download.
 # The script: .github/scripts/releases.py
@@ -39,7 +39,7 @@ jobs:
 
       - name: Commit the table and the index
         run: |
-          git add README.md ApolloSoftware.index ApolloUpdate.lha ApolloUpdate-*.default ':(glob)*/*/Info'
+          git add README.md ApolloSoftware.index ApolloUpdate.lha ':(glob)*/*/Info'
           if git diff --cached --quiet; then
             echo "Releases table, index and Info files unchanged"
             exit 0

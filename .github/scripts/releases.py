@@ -32,8 +32,6 @@ Layout (the contract with the ApolloUpdate client):
         MINCORE=                      lowest Apollo core it runs on (number)
         MINCORE.<release>=            the same for one release
         DESCRIPTION=                  one line, at most 160 characters
-    ApolloUpdate-ApolloOS.default     lookup table defaults per OS
-    ApolloUpdate-AmigaOS.default
     ApolloSoftware.index              generated from the Info files: what
                                       ApolloUpdate reads (do not edit)
     ApolloUpdate.lha                  generated (--package): the newest
@@ -265,8 +263,6 @@ def scan(root, avl=False):
     for entry in sorted(os.listdir(root)):
         if entry in TOP_FILES or (entry.startswith(".") and is_dir(root, entry)):
             continue        # .git, .github, .public (the workflow's checkout)
-        if re.fullmatch(r"ApolloUpdate-(%s)\.default" % "|".join(OSES), entry):
-            continue
         if not is_dir(root, entry) or entry.startswith("."):
             errors.append(f"{entry}: unexpected file at the top of the repository")
 
@@ -394,9 +390,8 @@ def check_files(root, names, errors, warnings):
 
 def create_info(root, avl, warnings):
     """A new Name (release folders, no Info, no old markers) gets a template
-    Info - for both OSes and, in ApolloSoftware-AVL, the Bronze level - and
-    a line without version in both default tables. A warning asks to check
-    them. Returns the "Cat/Name" made."""
+    Info - for both OSes and, in ApolloSoftware-AVL, the Bronze level. A
+    warning asks to check it. Returns the "Cat/Name" made."""
     made = []
     for cat in sorted(c for c in os.listdir(root) if not c.startswith(".") and is_dir(root, c)):
         for name in sorted(os.listdir(os.path.join(root, cat)), key=str.lower):
@@ -414,54 +409,11 @@ def create_info(root, avl, warnings):
                 lines.append("AVL=" + TIERS[0])
             lines += ["OWNER=", "CONTRIBUTORS=", "MINCORE=", "DESCRIPTION="]
             open(os.path.join(npath, INFO), "w", newline="\n").write("\n".join(lines) + "\n")
-            for o in OSES:
-                add_default(os.path.join(root, f"ApolloUpdate-{o}.default"), cat, name)
             made.append(f"{cat}/{name}")
             warnings.append(f"{cat}/{name}: new Name - made its Info (OS={','.join(OSES)}"
-                            + (f", AVL={TIERS[0]}" if avl else "") + ") and an empty line in the "
-                            "default tables: check them, fill in OWNER and DESCRIPTION")
+                            + (f", AVL={TIERS[0]}" if avl else "") + "): check it, fill in OWNER "
+                            "and DESCRIPTION")
     return made
-
-
-def add_default(path, cat, name):
-    """Cat/Name/ (not installed) after the last line of its category"""
-    if not os.path.isfile(path):
-        return
-    lines = open(path, encoding="latin-1").read().splitlines()
-    at = len(lines)
-    for i, l in enumerate(lines):
-        if l.strip().lower().startswith(cat.lower() + "/"):
-            at = i + 1
-    lines.insert(at, f"{cat}/{name}/")
-    open(path, "w", encoding="latin-1", newline="\n").write("\n".join(lines) + "\n")
-
-
-def check_defaults(root, names, errors):
-    """The default tables list exactly the Names tagged for their OS."""
-    for o in OSES:
-        fn = f"ApolloUpdate-{o}.default"
-        path = os.path.join(root, fn)
-        want = {(c.lower(), n.lower()): f"{c}/{n}" for c, n, t, r, v in names if o in t}
-        if not os.path.isfile(path):
-            errors.append(f"{fn}: missing")
-            continue
-        seen = set()
-        for i, line in enumerate(open(path, encoding="ascii", errors="replace").read().splitlines(), 1):
-            s = line.strip()
-            if not s or s.startswith((";", "#")):
-                continue
-            parts = s.split("/", 2)
-            if len(parts) < 3:
-                errors.append(f"{fn}:{i}: not Category/Name/Version")
-                continue
-            key = (parts[0].lower(), parts[1].lower())
-            if key not in want:
-                errors.append(f"{fn}:{i}: {parts[0]}/{parts[1]} is not a Name for {o}")
-            if key in seen:
-                errors.append(f"{fn}:{i}: {parts[0]}/{parts[1]} listed twice")
-            seen.add(key)
-        for key in sorted(set(want) - seen):
-            errors.append(f"{fn}: no line for {want[key]}")
 
 
 # --------------------------------------------------------------------------
@@ -619,7 +571,7 @@ def main():
     ap.add_argument("--index", help=f"{INDEX} to write")
     ap.add_argument("--package", help=f"{PACKAGE} to write (the newest ApolloUpdate)")
     ap.add_argument("--create-info", action="store_true",
-                    help="give a new Name a template Info and default table lines")
+                    help="give a new Name a template Info file")
     ap.add_argument("--root", default=".", help="top of the repository")
     ap.add_argument("--avl", action="store_true", help="ApolloSoftware-AVL rules (AVL= levels)")
     ap.add_argument("--public", help="AVL: checkout of the public ApolloSoftware to compare with")
@@ -634,7 +586,6 @@ def main():
     names, errors, warnings = scan(args.root, args.avl)
     warnings[:0] = made_warnings
     check_files(args.root, names, errors, warnings)
-    check_defaults(args.root, names, errors)
     if args.avl and args.public:
         check_public(args.root, names, args.public, errors)
 
