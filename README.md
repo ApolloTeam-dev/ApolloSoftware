@@ -86,7 +86,7 @@ Example (multiple files):
 | Drivers | Keymaps | **1.0** |  | ✓ | ✓ |  | Keyboard Configurations |
 | Drivers | sagagfx.hidd | **1.0** |  | ✓ |  |  | CyberGraphics RTG Driver |
 | Drivers | v4net.device | **2.99** |  | ✓ | ✓ |  | Network Interface Driver |
-| Drivers | vampiregfx.card | **1.60** |  |  | ✓ |  | Picasso 96 RTG Driver |
+| Drivers | vampiregfx.card | **1.61** | 1.60 |  | ✓ |  | Picasso 96 RTG Driver |
 | ExpROM | cd.device | **40.29** |  | ✓ | ✓ |  | CD32-Driver |
 | ExpROM | exfat-handler | **1.11** |  | ✓ | ✓ |  | Ex-FAT Filesystem |
 | ExpROM | fat95 | **4.0** |  |  | ✓ |  | FAT Filesystem |
