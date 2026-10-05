@@ -5,7 +5,7 @@ Cores/UniCorn-Release	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn-Release Core
 Drivers/AmiTCP	OS=AmigaOS	DESCRIPTION=TCP/IP Stack
 Drivers/arne.audio	OS=ApolloOS,AmigaOS	DESCRIPTION=AHI Audio Driver
 Drivers/Keymaps	OS=ApolloOS,AmigaOS	DESCRIPTION=Keyboard Configurations
-Drivers/sagagfx.hidd	OS=ApolloOS	DESCRIPTION=CyberGraphics RTG Driver
+Drivers/sagagfx.hidd	OS=ApolloOS	MINCORE.1.0=12000	DESCRIPTION=CyberGraphics RTG Driver
 Drivers/v4net.device	OS=ApolloOS,AmigaOS	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS	DESCRIPTION=Picasso 96 RTG Driver
 ExpROM/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
