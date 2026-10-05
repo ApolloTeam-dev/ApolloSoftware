@@ -3,6 +3,8 @@
 # files) for ApolloUpdate.
 # A new Name without an Info file gets a template one (both OSes
 # and, in ApolloSoftware-AVL, Bronze) plus empty default table lines.
+# ApolloUpdate.lha is the newest ApolloUpdate, at a fixed address for a
+# browser download.
 # The script: .github/scripts/releases.py
 #
 # A push that only changes README.md / the index does not start it, and its own commit
@@ -13,7 +15,7 @@ name: Releases table
 on:
   push:
     branches: [main]
-    paths-ignore: [README.md, ApolloSoftware.index]
+    paths-ignore: [README.md, ApolloSoftware.index, ApolloUpdate.lha]
   workflow_dispatch:
 
 permissions:
@@ -29,15 +31,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: LHa for UNIX (ApolloUpdate.lha)
+        run: sudo apt-get install -y -qq jlha-utils
+
       - name: Release order matches ApolloUpdate
         run: python3 .github/scripts/releases.py --selftest
 
       - name: Check the layout, update the table and the index
-        run: python3 .github/scripts/releases.py --create-info --check --readme README.md --index ApolloSoftware.index
+        run: python3 .github/scripts/releases.py --create-info --check --readme README.md --index ApolloSoftware.index --package ApolloUpdate.lha
 
       - name: Commit the table and the index
         run: |
-          git add README.md ApolloSoftware.index ApolloUpdate-*.default ':(glob)*/*/Info'
+          git add README.md ApolloSoftware.index ApolloUpdate.lha ApolloUpdate-*.default ':(glob)*/*/Info'
           if git diff --cached --quiet; then
             echo "Releases table, index and Info files unchanged"
             exit 0

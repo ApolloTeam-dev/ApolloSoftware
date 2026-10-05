@@ -1,7 +1,13 @@
 # ApolloSoftware
 Master repository for all current and legacy releases of Apollo specific drivers, tools and libraries 
 
-Install and update with **ApolloUpdate** (`Tools/ApolloUpdate`). Software for
+Install and update with **ApolloUpdate** (`Tools/ApolloUpdate`). To get it
+the first time, download the newest one with an Amiga browser (IBrowse,
+AWeb, NetSurf with AmiSSL) from this fixed address, unpack it with LhA and
+start it - from then on it keeps itself up to date:
+
+    https://raw.githubusercontent.com/ApolloTeam-dev/ApolloSoftware/main/ApolloUpdate.lha
+ Software for
 members of [Apollo-Vampire-Lair](https://ko-fi.com/apollovampirelair) is in the
 separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
 

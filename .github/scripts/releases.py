@@ -36,6 +36,9 @@ Layout (the contract with the ApolloUpdate client):
     ApolloUpdate-AmigaOS.default
     ApolloSoftware.index              generated from the Info files: what
                                       ApolloUpdate reads (do not edit)
+    ApolloUpdate.lha                  generated (--package): the newest
+                                      Tools/ApolloUpdate release, a fixed
+                                      download address for a browser
 
 "Latest" must be what ApolloUpdate picks, so version_cmp() below is a
 line-by-line port of Repo_VersionCmp() in ApolloUpdate's repo.c, and the
@@ -46,7 +49,11 @@ import argparse
 import functools
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
+import time
 import textwrap
 import unicodedata
 
@@ -58,12 +65,13 @@ ROM_CATS = {"Cores": "ApolloUpdate/Cores",             # categories to flash, an
             "KickROM": "ApolloUpdate/KickROM",        # where ApolloUpdate keeps
             "ExpROM": "ApolloUpdate/ExpROM"}          # their files
 INDEX = "ApolloSoftware.index"
+PACKAGE = "ApolloUpdate.lha"
 MAX_DESC = 160                  # what fits in the bubble help ...
 WRAP_DESC = 48                  # ... at this many characters per line
 MARK_START = "<!-- releases:start -->"
 MARK_END = "<!-- releases:end -->"
 MAX_NAME = 30                   # FFS file name limit
-TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX}
+TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX, PACKAGE}
 JUNK = re.compile(r"^(\.DS_Store|\._.*|Thumbs\.db|desktop\.ini)$", re.I)
 
 
@@ -534,6 +542,54 @@ def write_index(path, names, avl=False):
     return False
 
 
+def write_package(root, names, path, errors):
+    """ApolloUpdate.lha: the files of the newest Tools/ApolloUpdate release
+    below its Tools drawer (program and icon), at the top of the archive.
+    LHa for UNIX, generic level-0 headers and lh5: what every Amiga LhA
+    reads. Reproducible, so it only changes with a new release: the file
+    date is the date in the program's $VER string, in UTC. True when the
+    archive changed."""
+    hit = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
+    lha = shutil.which("lha")
+    if not hit:
+        errors.append(f"{PACKAGE}: no Tools/ApolloUpdate")
+        return False
+    if not lha:
+        errors.append(f"{PACKAGE}: the lha command (LHa for UNIX, jlha-utils) is missing")
+        return False
+    cat, name, tags, releases, info = hit[0]
+    src = os.path.join(root, cat, name, releases[0], "Tools")
+    files = sorted(f for f in os.listdir(src) if os.path.isfile(os.path.join(src, f))
+                   and not JUNK.match(f)) if os.path.isdir(src) else []
+    if not files:
+        errors.append(f"{PACKAGE}: {cat}/{name}/{releases[0]}/Tools has no files")
+        return False
+
+    stamp = time.mktime((2026, 1, 1, 0, 0, 0, 0, 0, 0))
+    with open(os.path.join(src, name), "rb") as f:
+        m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)", f.read())
+    os.environ["TZ"] = "UTC"
+    time.tzset()
+    if m:
+        d, mo, y = (int(x) for x in m.groups())
+        stamp = time.mktime((2000 + y, mo, d, 12, 0, 0, 0, 0, 0))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        for f in files:
+            shutil.copyfile(os.path.join(src, f), os.path.join(tmp, f))
+            os.chmod(os.path.join(tmp, f), 0o644)
+            os.utime(os.path.join(tmp, f), (stamp, stamp))
+        out = os.path.join(tmp, "out.lha")
+        subprocess.run([lha, "cgo5", out] + files, cwd=tmp, check=True,
+                       stdout=subprocess.DEVNULL, env=dict(os.environ, TZ="UTC"))
+        new = open(out, "rb").read()
+    old = open(path, "rb").read() if os.path.exists(path) else None
+    if new != old:
+        open(path, "wb").write(new)
+        return True
+    return False
+
+
 def write_readme(path, names, avl=False):
     text = open(path, encoding="utf-8").read() if os.path.exists(path) else "# ApolloSoftware\n"
     new = table(names, avl)
@@ -557,6 +613,7 @@ def main():
     ap.add_argument("--check", action="store_true", help="fail on layout errors")
     ap.add_argument("--readme", help="README.md to update")
     ap.add_argument("--index", help=f"{INDEX} to write")
+    ap.add_argument("--package", help=f"{PACKAGE} to write (the newest ApolloUpdate)")
     ap.add_argument("--create-info", action="store_true",
                     help="give a new Name a template Info and default table lines")
     ap.add_argument("--root", default=".", help="top of the repository")
@@ -602,6 +659,15 @@ def main():
     if args.index:
         changed = write_index(args.index, names, args.avl)
         print(f"{args.index}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
+    if args.package:
+        perr = []
+        changed = write_package(args.root, names, args.package, perr)
+        for e in perr:
+            print("ERROR:", e)
+            print(f"::error::{e}")
+        if perr:
+            return 1
+        print(f"{args.package}: {'updated' if changed else 'unchanged'}")
     return 0
 
 
