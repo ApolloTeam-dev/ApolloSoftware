@@ -49,11 +49,8 @@ import argparse
 import functools
 import os
 import re
-import shutil
-import subprocess
+import struct
 import sys
-import tempfile
-import time
 import textwrap
 import unicodedata
 
@@ -542,47 +539,54 @@ def write_index(path, names, avl=False):
     return False
 
 
+def crc16(data):
+    """CRC-16 of LhA (CRC-16/ARC)"""
+    crc = 0
+    for byte in data:
+        crc ^= byte
+        for _ in range(8):
+            crc = (crc >> 1) ^ 0xA001 if crc & 1 else crc >> 1
+    return crc
+
+
+def lha(members):
+    """An LhA archive of [(name, data, (y, m, d))]: level-0 headers, method
+    -lh0- (stored), which every Amiga LhA and unarchiver reads. Written
+    here rather than by a tool, so it is the same on every machine."""
+    out = bytearray()
+    for name, data, (y, mo, d) in members:
+        fn = name.encode("ascii")
+        stamp = (12 << 11) | ((y - 1980) << 25) | (mo << 21) | (d << 16)     # 12:00
+        body = (b"-lh0-" + struct.pack("<IIIBB", len(data), len(data), stamp, 0x20, 0)
+                + bytes([len(fn)]) + fn + struct.pack("<H", crc16(data)))
+        out += bytes([len(body), sum(body) & 0xFF]) + body + data
+    return bytes(out + b"\0")
+
+
 def write_package(root, names, path, errors):
     """ApolloUpdate.lha: the files of the newest Tools/ApolloUpdate release
     below its Tools drawer (program and icon), at the top of the archive.
-    LHa for UNIX, generic level-0 headers and lh5: what every Amiga LhA
-    reads. Reproducible, so it only changes with a new release: the file
-    date is the date in the program's $VER string, in UTC. True when the
-    archive changed."""
+    Reproducible, so it only changes with a new release: the file date is
+    the date in the program's $VER string. True when the archive changed."""
     hit = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
-    lha = shutil.which("lha")
     if not hit:
         errors.append(f"{PACKAGE}: no Tools/ApolloUpdate")
-        return False
-    if not lha:
-        errors.append(f"{PACKAGE}: the lha command (LHa for UNIX, jlha-utils) is missing")
         return False
     cat, name, tags, releases, info = hit[0]
     src = os.path.join(root, cat, name, releases[0], "Tools")
     files = sorted(f for f in os.listdir(src) if os.path.isfile(os.path.join(src, f))
                    and not JUNK.match(f)) if os.path.isdir(src) else []
-    if not files:
-        errors.append(f"{PACKAGE}: {cat}/{name}/{releases[0]}/Tools has no files")
+    if name not in files:
+        errors.append(f"{PACKAGE}: {cat}/{name}/{releases[0]}/Tools/{name} is missing")
         return False
 
-    stamp = time.mktime((2026, 1, 1, 0, 0, 0, 0, 0, 0))
-    with open(os.path.join(src, name), "rb") as f:
-        m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)", f.read())
-    os.environ["TZ"] = "UTC"
-    time.tzset()
+    date = (2026, 1, 1)
+    m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)",
+                  open(os.path.join(src, name), "rb").read())
     if m:
         d, mo, y = (int(x) for x in m.groups())
-        stamp = time.mktime((2000 + y, mo, d, 12, 0, 0, 0, 0, 0))
-
-    with tempfile.TemporaryDirectory() as tmp:
-        for f in files:
-            shutil.copyfile(os.path.join(src, f), os.path.join(tmp, f))
-            os.chmod(os.path.join(tmp, f), 0o644)
-            os.utime(os.path.join(tmp, f), (stamp, stamp))
-        out = os.path.join(tmp, "out.lha")
-        subprocess.run([lha, "cgo5", out] + files, cwd=tmp, check=True,
-                       stdout=subprocess.DEVNULL, env=dict(os.environ, TZ="UTC"))
-        new = open(out, "rb").read()
+        date = (2000 + y, mo, d)
+    new = lha([(f, open(os.path.join(src, f), "rb").read(), date) for f in files])
     old = open(path, "rb").read() if os.path.exists(path) else None
     if new != old:
         open(path, "wb").write(new)
