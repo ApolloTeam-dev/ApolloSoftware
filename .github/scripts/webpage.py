@@ -167,20 +167,29 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                f'<td align="right" valign="middle">{dl}</td></tr></table>')
 
     # filters
-    # filters: OS and Category on one line, the count and release on the right
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr>')
+    # below the band: 10 pixels left and right, and 10 above and below the
+    # filters (spacer cells: HTML 3.2 has no padding on one side only)
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>'
+               '<td width="10"></td><td>')
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
+               '<tr><td height="10"></td></tr></table>')
+
+    # filters: OS and Category on one line, the count on the right
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>')
     out.append('<td valign="middle" nowrap>' + chips("OS:", OSES, os_key, lambda k: link(o=k)) + '</td>')
+    out.append('<td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>')      # gap; an empty cell gets squeezed
     out.append('<td valign="middle" nowrap>'
                + chips("Category:", cat_items, cat_key, lambda k: link(c=k)) + '</td>')
     out.append(f'<td align="right" valign="middle" class="dim small" nowrap width="100%">'
                f'{len(rows)} of {len(names)} items</td>')
     out.append("</tr></table>")
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
+               '<tr><td height="10"></td></tr></table>')
 
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
             ("ApolloOS", None, "center"), ("AmigaOS", None, "center"),
             ("Minimal Core", None, ""), ("Description", None, "")]
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr><td>')
     out.append(f'<table width="100%" border="0" cellspacing="1" cellpadding="6" bgcolor="{LINE}">')
     head = []
     for title, key, align in cols:
@@ -209,7 +218,10 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     if not rows:
         out.append(f'<tr bgcolor="{CARD}"><td colspan="{len(cols)}" class="dim">'
                    "No entries match these filters</td></tr>")
-    out.append("</table></td></tr></table>")
+    out.append("</table>")
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
+               '<tr><td height="10"></td></tr></table>')
+    out.append('</td><td width="10"></td></tr></table>')
 
     out.append("</body></html>")
     return "\n".join(out) + "\n"
