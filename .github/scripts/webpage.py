@@ -9,8 +9,9 @@ screen, and fine in any other:
 
 - no JavaScript: every sort order and filter is a page of its own, made
   here, and the controls are plain links between them
-- the layout is HTML 3.2 tables with bgcolor / cellpadding / width; a
-  little CSS1 refines it where a browser has it, nothing depends on it
+- the layout is HTML 3.2 tables with bgcolor / cellpadding / width, and
+  bold and colours as <b> and <font color>: IBrowse 3.0 has no CSS. The
+  little CSS here only refines it where a browser has it
 - ISO-8859-1, no characters beyond it; the logo and the download icon
   are PNGs on the dark band (no SVG, no transparency)
 - the typeface is Inter (SIL OFL, published beside it) for browsers with
@@ -74,7 +75,8 @@ def chips(label, items, active, link):
     cells = [f'<td nowrap class="dim"><b>{esc(label)}</b>&nbsp;</td>']
     for key, text in items:
         if key == active:
-            cells.append(f'<td nowrap bgcolor="{ACCENT}" class="on">&nbsp;{esc(text)}&nbsp;</td>')
+            cells.append(f'<td nowrap bgcolor="{ACCENT}" class="on">&nbsp;'
+                         f'<font color="#ffffff"><b>{esc(text)}</b></font>&nbsp;</td>')
         else:
             cells.append(f'<td nowrap bgcolor="{CARD}">&nbsp;<a href="{link(key)}">'
                          f'{esc(text)}</a>&nbsp;</td>')
@@ -154,7 +156,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'width="48" height="48" border="0" alt="Download" title="{tip}"></a></td>'
               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
               f'<a href="ApolloUpdate.lha" title="{tip}">'
-              f'<font color="#ffffff">Download, Unpack and Execute</font></a></td>'
+              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td>'
               '</tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
@@ -180,12 +182,14 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     for title, key, align in cols:
         al = f' align="{align}"' if align else ""
         if key and key == sort_key:
-            head.append(f'<td nowrap bgcolor="{ACCENT}" class="on"{al}>{esc(title)}</td>')
+            head.append(f'<td nowrap bgcolor="{ACCENT}" class="on"{al}>'
+                        f'<font color="#ffffff"><b>{esc(title)}</b></font></td>')
         elif key:
             head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>'
-                        f'<a href="{link(s=key)}">{esc(title)}</a></td>')
+                        f'<a href="{link(s=key)}"><b>{esc(title)}</b></a></td>')
         else:
-            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>{esc(title)}</td>')
+            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>'
+                        f'<font color="{DIM}"><b>{esc(title)}</b></font></td>')
     out.append("<tr>" + "".join(head) + "</tr>")
     for i, (cat, name, tags, releases, info) in enumerate(rows):
         bg = CARD if i % 2 == 0 else ALT
