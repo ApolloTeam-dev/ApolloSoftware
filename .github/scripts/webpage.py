@@ -47,8 +47,9 @@ CSS = """
 @font-face { font-family: Inter; font-style: normal; font-weight: 400 700;
              font-display: swap; src: url(Inter-latin.woff2) format("woff2"); }
 body { margin: 0; background: %(PAGE)s; color: %(INK)s;
-       font-family: %(FONTS)s; font-size: 14px; }
-td, th { font-family: %(FONTS)s; font-size: 14px; }
+       font-family: %(FONTS)s; font-size: 14px;
+       font-feature-settings: "calt" 0; }      /* Inter: 680x0 stays x, not a times sign */
+td, th { font-family: %(FONTS)s; font-size: 14px; font-feature-settings: "calt" 0; }
 a { color: %(ACCENT)s; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .dim { color: %(DIM)s; }
@@ -162,12 +163,13 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                f'<td align="right" valign="middle">{dl}</td></tr></table>')
 
     # filters
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr><td>')
-    out.append(chips("OS:", OSES, os_key, lambda k: link(o=k)))
-    out.append(chips("Category:", cat_items, cat_key, lambda k: link(c=k)))
-    out.append("</td>")
-    out.append(f'<td align="right" valign="bottom" class="dim small" nowrap>{len(rows)} of '
-               f'{len(names)} items - click a column title to sort<br>{esc(stamp)}</td>')
+    # filters: OS and Category on one line, the count and release on the right
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr>')
+    out.append('<td valign="middle" nowrap>' + chips("OS:", OSES, os_key, lambda k: link(o=k)) + '</td>')
+    out.append('<td valign="middle" nowrap>'
+               + chips("Category:", cat_items, cat_key, lambda k: link(c=k)) + '</td>')
+    out.append(f'<td align="right" valign="middle" class="dim small" nowrap width="100%">'
+               f'{len(rows)} of {len(names)} items<br>{esc(stamp)}</td>')
     out.append("</tr></table>")
 
     # the table

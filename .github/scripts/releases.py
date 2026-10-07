@@ -689,16 +689,22 @@ def main():
             return 1
         print(f"{args.package}: {'updated' if changed else 'unchanged'}")
     if args.site:
-        import datetime
         au = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
-        sha = os.environ.get("GITHUB_SHA", "")[:7]
-        stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%d-%b-%Y %H:%M UTC")
+        version = au[0][3][0] if au else ""
+        stamp = f"ApolloUpdate Release {version}" if version else ""
+        if au:      # the date of its $VER string: "(07.10.26)" -> 7-Oct-2026
+            prog = os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools", "ApolloUpdate")
+            m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)",
+                          open(prog, "rb").read()) if os.path.isfile(prog) else None
+            if m:
+                d, mo, y = (int(x) for x in m.groups())
+                stamp += " (%d-%s-%d)" % (d, ("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+                                               .split()[mo - 1]), 2000 + y)
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
             package=args.package or os.path.join(args.root, PACKAGE),
-            version=au[0][3][0] if au else "",
-            stamp=f"Updated {stamp}" + (f" (commit {sha})" if sha else ""))
+            version=version, stamp=stamp)
         print(f"{args.site}: {pages} pages")
     return 0
 
