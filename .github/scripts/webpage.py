@@ -118,6 +118,25 @@ def chips(label, items, active, link):
             + "".join(cells) + "</tr></table>")
 
 
+def release_beta(releases):
+    """(newest release, newest beta newer than it) of releases newest first;
+    "-" for none. A release folder ending in -beta is a beta."""
+    rel = next((r for r in releases if not r.endswith("-beta")), "-")
+    beta = "-"
+    for r in releases:
+        if not r.endswith("-beta"):
+            break                       # the release comes first: no newer beta
+        beta = r
+        break
+    return rel, beta
+
+
+def shown(releases):
+    """the version the overviews describe: the newest release, else the beta"""
+    rel, beta = release_beta(releases)
+    return rel if rel != "-" else beta
+
+
 def min_core(info, latest):
     """The minimal core of the latest release: its own MINCORE.<release>,
     else the Name's MINCORE; empty when neither applies."""
@@ -223,7 +242,8 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     out.append("</tr></table>")
 
     # the table
-    cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
+    cols = [("Category", "category", ""), ("Name", "name", ""), ("Release", None, ""),
+            ("Beta", None, ""),
             ("ApolloOS", None, "center"), ("AmigaOS", None, "center"),
             ("Minimal Core", None, ""), ("Description", None, "")]
     out.append(f'<table class="grid" width="100%" border="0" cellspacing="1" cellpadding="3" '
@@ -246,10 +266,11 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
         out.append(f'<tr bgcolor="{bg}">'
                    f'<td nowrap class="dim">{esc(cat)}</td>'
                    f'<td nowrap><b>{esc(name)}</b></td>'
-                   f'<td nowrap><b>{esc(releases[0])}</b></td>'
+                   f'<td nowrap><b>{esc(release_beta(releases)[0])}</b></td>'
+                   f'<td nowrap>{esc(release_beta(releases)[1])}</td>'
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
-                   f'<td nowrap>{esc(min_core(info, releases[0]))}</td>'
+                   f'<td nowrap>{esc(min_core(info, shown(releases)))}</td>'
                    f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
                    "</tr>")
     if not rows:

@@ -20,7 +20,13 @@ Level-1 = Category (Drivers, FileSystems, Libraries, Resources, Tools, Icons, Co
 
 Level-2 = Name (Official name of the Apollo Software title)
 
-Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1) 
+Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1).
+A version ending in `-beta` (lower case, e.g. `12556E-beta`) is a **beta**;
+any other is a **release**. ApolloUpdate shows betas only with its Beta
+switch on. The version decides what is newest - the `-beta` suffix is left
+out of the comparison, and of two equal versions the release wins
+(`1.2` is newer than `1.2-beta`). The overviews show the newest **Release**
+and the newest **Beta** (when it is newer than that release, else "-").
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
