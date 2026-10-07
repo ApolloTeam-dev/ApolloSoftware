@@ -16,7 +16,7 @@ is in the separate ApolloSoftware-AVL repository; ApolloUpdate shows it to membe
 
 ## Folder Convention
 
-Level-1 = Category (Drivers, Libraries, Tools, Icons, Cores, ApolloROM, AmigaROM, ...)
+Level-1 = Category (Drivers, FileSystems, Libraries, Resources, Tools, Icons, Cores, ROM, ...)
 
 Level-2 = Name (Official name of the Apollo Software title)
 
@@ -60,44 +60,47 @@ layout and the `Info` files, and writes the table below and
 A new Name without an `Info` gets one from the workflow, for both OSes.
 Check it and fill in the rest.
 
-### Cores and ROMs
+### Cores and ROM
 
-These categories are flashed or built into a ROM, not copied to SYS:. A
-release folder (Level-3) holds the file(s) directly, no drawers.
+Two kinds of image are flashed, not copied to SYS:
 
-| Category | OS | Release holds | ApolloUpdate keeps it in | Flashed by |
+| Category / Name | OS | Release holds | ApolloUpdate keeps it in | Flashed by |
 |---|---|---|---|---|
-| `Cores` | both | the core, one file | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
-| `ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
-| `ApolloMOD` | ApolloOS | a module of the ApolloROM | `SYS:ApolloUpdate/ApolloMOD/` | (built into the ApolloROM) |
-| `AmigaROM` | AmigaOS | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Coffin) and `Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
-| `AmigaMOD` | AmigaOS | a module of the AmigaROM | `SYS:ApolloUpdate/AmigaMOD/` | (built into the AmigaROM) |
+| `Cores/<core>` | both | the core (FPGA logic), one file | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
+| `ROM/ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
+| `ROM/AmigaROM` | AmigaOS | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Coffin) and `Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
 
-There is one ApolloROM and one AmigaROM, so their Name is the category
-again: `ApolloROM/ApolloROM/9.55/ApolloROM`, `AmigaROM/AmigaROM/48.00/AmigaROM`.
-Each module (`ApolloMOD`, `AmigaMOD`) is a Name of its own with its own
-versions, like any other software.
-
-`Modules` in a ROM release says which modules, in which version, are in that
-ROM - **in ROM order**, one per line:
+`Modules` in a ROM release says which modules, in which version, make up
+that ROM - **in ROM order**, one `Category/Name/Version` per line:
 
 ```
 ; AmigaROM 48.00 - its modules in ROM order
-AmigaMOD/os3x_expromheader/48.00
-AmigaMOD/68040.library/40.2
+Libraries/68040.library/40.2
+Libraries/680x0.library/40.1
 ...
-AmigaMOD/sagasd.device/2.41
+Drivers/sagasd.device/2.41
 ```
 
-The workflow checks that every line names an existing release of the ROM's
-module category (ApolloROM: ApolloMOD, AmigaROM: AmigaMOD), each module
-once; that Apollo* entries are `OS=ApolloOS` and Amiga* entries
-`OS=AmigaOS`; and the image sizes (ApolloROM 1MB, AmigaROM at most 192KB).
-A new ROM (new version) gets a new release with its own `Modules`.
+The modules themselves are ordinary entries in their own category
+(Drivers, FileSystems, Libraries, Resources, ...) with their own versions.
+A module's file sits in an `AmigaROM/` (or `ApolloROM/`) drawer of its
+release, e.g. `Drivers/sagasd.device/2.41/AmigaROM/sagasd.device`: such
+files are only built into the ROM, never copied to SYS:. The AmigaROM's
+header (ROM id and version) is made from the ROM's version, not listed.
+Where an ApolloOS and an AmigaOS module would have the same Name, they get
+the suffix `-ApolloOS` / `-AmigaOS`.
 
-Before it copies, ApolloUpdate deletes whatever is already in that drawer,
-so the drawer only holds what was just installed. Then it starts the flash
-tool (for now, a requester shows what would be flashed).
+For now each ROM release also holds the compiled image; once ApolloUpdate
+builds ROMs itself, `Modules` alone will do.
+
+The workflow checks that every `Modules` line names an existing release
+with its file in the ROM's drawer and for the ROM's OS, each module once;
+that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS`; and
+the image sizes (ApolloROM 1MB, AmigaROM at most 192KB).
+
+Before it copies, ApolloUpdate deletes whatever is already in its drawer in
+`SYS:ApolloUpdate`, so the drawer only holds what was just installed. Then
+it starts the flash tool (for now, a requester shows what would be flashed).
 
 ## Releases
 

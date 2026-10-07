@@ -1,0 +1,4 @@
+; Libraries/680x0.library - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=680x0.library, Apollo AC68080 support

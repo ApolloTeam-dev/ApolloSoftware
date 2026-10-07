@@ -16,21 +16,22 @@ repository to find SYS: files installed by both.
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
-    Cores     / Name / Release / file      the FPGA core (both OSes)
-    ApolloROM / ApolloROM / Release / ApolloROM + Modules
-                                    the 1MB ApolloOS Kickstart (ApolloOS)
-    ApolloMOD / Name / Release / file(s)   its modules (ApolloOS)
-    AmigaROM  / AmigaROM / Release / AmigaROM + Modules
-                                    the 192KB Expansion ROM (AmigaOS)
-    AmigaMOD  / Name / Release / file(s)   its modules (AmigaOS)
-                                      flashed or built into a ROM, not
-                                      copied to SYS:; no drawers.
-                                      ApolloUpdate keeps them in
-                                      SYS:ApolloUpdate/<category> (the
-                                      collision check uses that SYS: path).
-                                      Modules: the ROM's modules in ROM
-                                      order, one Category/Name/Version per
-                                      line - each must exist here.
+    Cores / Name / Release / file          the FPGA core (both OSes),
+                                           flashed by ApolloFlash
+    ROM / ApolloROM / Release / ApolloROM + Modules
+                                           the 1MB ApolloOS Kickstart
+    ROM / AmigaROM / Release / AmigaROM + Modules
+                                           the 192KB AmigaOS Expansion ROM
+        Modules: the ROM's modules in ROM order, one Category/Name/Version
+        per line - each an existing release whose file(s) are in its
+        ApolloROM/ resp. AmigaROM/ drawer. (The AmigaROM header with the
+        ROM id and version is made from the version, not listed.)
+    Category / Name / Release / AmigaROM/<module>
+    Category / Name / Release / ApolloROM/<module>
+                                           a ROM module: never copied to
+                                           SYS:, only built into the ROM
+    Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ApolloROM,
+    /AmigaROM (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
         OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
@@ -65,17 +66,14 @@ TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 MOVED = ("OWNER", "CONTRIBUTORS")   # team only: ApolloSoftware-Sources (Owners)
 INFO = "Info"
-ROM_CATS = {"Cores": "ApolloUpdate/Cores",             # categories flashed or built
-            "ApolloROM": "ApolloUpdate/ApolloROM",    # into a ROM, and where
-            "ApolloMOD": "ApolloUpdate/ApolloMOD",    # ApolloUpdate keeps their
-            "AmigaROM": "ApolloUpdate/AmigaROM",      # files
-            "AmigaMOD": "ApolloUpdate/AmigaMOD"}
-ROM_OS = {"ApolloROM": "ApolloOS", "ApolloMOD": "ApolloOS",   # the one OS of each
-          "AmigaROM": "AmigaOS", "AmigaMOD": "AmigaOS"}       # (Cores: both)
-ROM_MODS = {"ApolloROM": "ApolloMOD", "AmigaROM": "AmigaMOD"} # a ROM and its modules
-ROM_SIZE = {"ApolloROM": (1048576, 1048576), "AmigaROM": (1, 196608)}  # bytes: min, max
+ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
+ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS and
+        "AmigaROM": ("AmigaOS", (1, 196608))}           # image size min, max (bytes)
 MODULES = "Modules"
-RENAMED = {"KickROM": "ApolloROM", "ExpROM": "AmigaROM / AmigaMOD", "ROM": "AmigaROM / AmigaMOD"}
+RENAMED = {"KickROM": "ROM/ApolloROM", "ExpROM": "ROM/AmigaROM and its modules",
+           "ApolloROM": "ROM/ApolloROM", "AmigaROM": "ROM/AmigaROM",
+           "ApolloMOD": "a normal category, the module in an ApolloROM/ drawer",
+           "AmigaMOD": "a normal category, the module in an AmigaROM/ drawer"}
 INDEX = "ApolloSoftware.index"
 PACKAGE = "ApolloUpdate.lha"
 MAX_DESC = 160                  # what fits in the bubble help ...
@@ -318,9 +316,11 @@ def scan(root, avl=False):
                               + (" and AVL=Bronze" if avl else "") + ")")
                 info = {"OS": [], "AVL": None, "MINCORE": "",
                         "DESCRIPTION": ""}
-            if cat in ROM_OS and info["OS"] != [ROM_OS[cat]]:
-                errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {cat} is "
-                              f"for {ROM_OS[cat]} only (OS={ROM_OS[cat]})")
+            if cat == "ROM" and name not in ROMS:
+                errors.append(f"{cat}/{name}: ROM holds {' and '.join(ROMS)} only")
+            elif cat == "ROM" and info["OS"] != [ROMS[name][0]]:
+                errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {name} is "
+                              f"for {ROMS[name][0]} only (OS={ROMS[name][0]})")
             if cat in RENAMED:
                 errors.append(f"{cat}/{name}: the category {cat} is now {RENAMED[cat]}")
             names.append((cat, name, set(info["OS"]), newest_first(releases), info))
@@ -328,10 +328,10 @@ def scan(root, avl=False):
 
 
 def release_files(root, cat, name, rel, errors=None):
-    """[(path below the release, lower-case SYS path)] of one release, junk
-    left out. A release of a ROM_CATS category: its files directly in it,
-    kept in SYS:ApolloUpdate/<category>; an ApolloROM / AmigaROM release
-    holds the image (named as the category) and Modules, which is read, not
+    """[(path below the release, lower-case path key)] of one release, junk
+    left out. The key is the SYS: path - for Cores and ROM the place in
+    SYS:ApolloUpdate, for a module in an ApolloROM/ or AmigaROM/ drawer
+    "<drawer>:<file>" (never SYS:). A ROM release's Modules is read, not
     installed. With errors, one that breaks the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
     out = []
@@ -347,24 +347,28 @@ def release_files(root, cat, name, rel, errors=None):
             if cat == "Cores" and len(files) > 1:
                 errors.append(f"{label}: a {cat} release holds exactly one core file "
                               f"(has {len(files)})")
-            if cat in ROM_MODS:
-                if sorted(files) != sorted([cat, MODULES]):
-                    errors.append(f"{label}: an {cat} release holds the image '{cat}' and "
+            if cat == "ROM" and name in ROMS:
+                if sorted(files) != sorted([name, MODULES]):
+                    errors.append(f"{label}: a {name} release holds the image '{name}' and "
                                   f"'{MODULES}', nothing else (has {', '.join(files) or 'nothing'})")
-                if cat in files:
-                    size = os.path.getsize(os.path.join(rpath, cat))
-                    lo, hi = ROM_SIZE[cat]
+                if name in files:
+                    size = os.path.getsize(os.path.join(rpath, name))
+                    lo, hi = ROMS[name][1]
                     if not lo <= size <= hi:
-                        errors.append(f"{label}/{cat}: {size} bytes - an {cat} is "
+                        errors.append(f"{label}/{name}: {size} bytes - an {name} is "
                                       + (f"{hi} bytes" if lo == hi else f"at most {hi} bytes"))
-        if cat in ROM_MODS:
-            files = [f for f in files if f != MODULES]
+        if cat == "ROM":
+            return [(f, f"apolloupdate/{name}/{f}".lower()) for f in files if f != MODULES]
         return [(f, f"{ROM_CATS[cat]}/{f}".lower()) for f in files]
     for dirpath, dirs, fns in os.walk(rpath):
         for fn in fns:
             if not JUNK.match(fn):
                 sub = os.path.relpath(os.path.join(dirpath, fn), rpath)
-                out.append((sub, sub.lower()))
+                top = sub.split(os.sep)[0]
+                if top in ROMS and os.sep in sub:            # a ROM module
+                    out.append((sub, f"{top}:{sub[len(top) + 1:]}".lower()))
+                else:
+                    out.append((sub, sub.lower()))
     return out
 
 
@@ -380,7 +384,7 @@ def sys_paths(root, names):
 
 
 def read_modules(root, cat, name, rel):
-    """The Modules file of an ApolloROM / AmigaROM release: [(line, entry)]"""
+    """The Modules file of a ROM release: [(line, entry)]"""
     path = os.path.join(root, cat, name, rel, MODULES)
     if not os.path.isfile(path):
         return []
@@ -393,13 +397,14 @@ def read_modules(root, cat, name, rel):
 
 
 def check_modules(root, names, errors):
-    """Every line of a Modules file: Category/Name/Version of an existing
-    release of the ROM's module category, each once; order as written."""
-    have = {(c.lower(), n.lower(), r) for c, n, t, rels, i in names for r in rels}
-    for cat, name, tags, rels, info in names:
-        if cat not in ROM_MODS:
+    """Every line of a ROM's Modules file: Category/Name/Version of an
+    existing release, its file(s) in the drawer of this ROM (ApolloROM/ or
+    AmigaROM/), for this ROM's OS; each module once; order as written."""
+    rels = {(c.lower(), n.lower()): (c, n, t, r) for c, n, t, r, i in names}
+    for cat, name, tags, releases, info in names:
+        if cat != "ROM" or name not in ROMS:
             continue
-        for rel in rels:
+        for rel in releases:
             seen = set()
             for i, entry in read_modules(root, cat, name, rel):
                 label = f"{cat}/{name}/{rel}/{MODULES}:{i}"
@@ -407,13 +412,19 @@ def check_modules(root, names, errors):
                 if len(parts) != 3 or not all(parts):
                     errors.append(f"{label}: not Category/Name/Version")
                     continue
-                if parts[0] != ROM_MODS[cat]:
-                    errors.append(f"{label}: {entry} - an {cat} holds {ROM_MODS[cat]} modules only")
-                elif (parts[0].lower(), parts[1].lower(), parts[2]) not in have:
-                    errors.append(f"{label}: {entry} is not a release in this repository")
-                if (parts[0].lower(), parts[1].lower()) in seen:
+                key = (parts[0].lower(), parts[1].lower())
+                if key in seen:
                     errors.append(f"{label}: {parts[0]}/{parts[1]} is listed twice")
-                seen.add((parts[0].lower(), parts[1].lower()))
+                seen.add(key)
+                if parts[0] == "ROM" or key not in rels or parts[2] not in rels[key][3]:
+                    errors.append(f"{label}: {entry} is not a release in this repository")
+                    continue
+                mc, mn, mt, mr = rels[key]
+                if ROMS[name][0] not in mt:
+                    errors.append(f"{label}: {entry} is not for {ROMS[name][0]}")
+                drawer = os.path.join(root, mc, mn, parts[2], name)
+                if not os.path.isdir(drawer) or not any(not JUNK.match(f) for f in os.listdir(drawer)):
+                    errors.append(f"{label}: {entry} has no {name}/ drawer with the module")
 
 
 def check_public(root, names, public, errors):
@@ -449,7 +460,7 @@ def check_files(root, names, errors, warnings):
                                       "character that AmigaDOS or GitHub cannot take")
             for sub, path in release_files(root, cat, name, rel, errors):
                 files += 1
-                if cat not in ROM_CATS and os.sep not in sub:
+                if cat not in ROM_CATS and os.sep not in sub and ":" not in path:
                     warnings.append(f"{cat}/{name}/{rel}/{sub}: lands in the root of SYS:")
                 for o in tags:
                     key = (o, path)
@@ -534,7 +545,7 @@ def index(names, avl=False, root="."):
         for r in releases:
             if info.get("MINCORE." + r):
                 f.append(f"MINCORE.{r}=" + info["MINCORE." + r])
-        if cat in ROM_MODS:
+        if cat == "ROM":
             for rel in releases:
                 mods = [e for i, e in read_modules(root, cat, name, rel)]
                 if mods:

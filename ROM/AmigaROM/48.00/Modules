@@ -1,0 +1,11 @@
+; AmigaROM 48.00 - its modules in ROM order (from the Remus build list
+; Apollo_AOS3x_EXPROM_192KB_8-8-2026.rpf). The ROM header (ROM id and
+; version 48.00) comes first and is made from the version, not listed.
+Libraries/68040.library/40.2
+Libraries/680x0.library/40.1
+Resources/processor.resource/44.3
+Resources/vampire.resource/45.3
+Libraries/VampireSupport/40.49
+FileSystems/exfat-handler/1.11
+Drivers/scsi.device/48.13
+Drivers/sagasd.device/2.41
