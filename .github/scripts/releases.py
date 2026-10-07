@@ -64,16 +64,11 @@ import unicodedata
 OSES = ("ApolloOS", "AmigaOS")
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
-MOVED = ("OWNER", "CONTRIBUTORS")   # team only: ApolloSoftware-Sources (Owners)
 INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
 ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS and
         "AmigaROM": ("AmigaOS", (1, 196608))}           # image size min, max (bytes)
 MODULES = "Modules"
-RENAMED = {"KickROM": "ROM/ApolloROM", "ExpROM": "ROM/AmigaROM and its modules",
-           "ApolloROM": "ROM/ApolloROM", "AmigaROM": "ROM/AmigaROM",
-           "ApolloMOD": "a normal category, the module in an ApolloROM/ drawer",
-           "AmigaMOD": "a normal category, the module in an AmigaROM/ drawer"}
 INDEX = "ApolloSoftware.index"
 PACKAGE = "ApolloUpdate.lha"
 MAX_DESC = 160                  # what fits in the bubble help ...
@@ -214,10 +209,6 @@ def read_info(path, label, releases, avl, errors, warnings):
                 errors.append(f"{label}:{i}: MINCORE.{rel}: there is no release {rel}")
                 continue
             key = "MINCORE." + rel
-        elif key in MOVED:
-            errors.append(f"{label}:{i}: {key} is no longer kept here - owners and "
-                          "contributors are in the private ApolloSoftware-Sources (Owners)")
-            continue
         elif key not in KEYS:
             errors.append(f"{label}:{i}: unknown key {key} (known: {', '.join(KEYS)}, MINCORE.<release>)")
             continue
@@ -299,9 +290,6 @@ def scan(root, avl=False):
                     releases.append(e)
                 elif JUNK.match(e):
                     errors.append(f"{cat}/{name}/{e}: macOS/Windows metadata")
-                elif e in OSES or e.startswith("AVL-"):
-                    errors.append(f"{cat}/{name}/{e}: marker files are replaced by the "
-                                  f"Info file - remove it")
                 else:
                     errors.append(f"{cat}/{name}/{e}: only the Info file and release "
                                   "folders belong in a Name folder")
@@ -321,8 +309,6 @@ def scan(root, avl=False):
             elif cat == "ROM" and info["OS"] != [ROMS[name][0]]:
                 errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {name} is "
                               f"for {ROMS[name][0]} only (OS={ROMS[name][0]})")
-            if cat in RENAMED:
-                errors.append(f"{cat}/{name}: the category {cat} is now {RENAMED[cat]}")
             names.append((cat, name, set(info["OS"]), newest_first(releases), info))
     return names, errors, warnings
 
@@ -474,7 +460,7 @@ def check_files(root, names, errors, warnings):
 
 
 def create_info(root, avl, warnings):
-    """A new Name (release folders, no Info, no old markers) gets a template
+    """A new Name (release folders, no Info) gets a template
     Info - for both OSes and, in ApolloSoftware-AVL, the Bronze level. A
     warning asks to check it. Returns the "Cat/Name" made."""
     made = []
@@ -484,7 +470,7 @@ def create_info(root, avl, warnings):
             if not os.path.isdir(npath):
                 continue
             ents = os.listdir(npath)
-            if INFO in ents or any(e in OSES or e.startswith("AVL-") for e in ents):
+            if INFO in ents:
                 continue
             if not any(os.path.isdir(os.path.join(npath, e)) for e in ents):
                 continue
