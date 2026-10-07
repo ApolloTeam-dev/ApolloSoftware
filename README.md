@@ -131,8 +131,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Libraries | VampireSupport | **40.49** |  | ✓ |  | Vampire support: V4 chip/fast RAM, FPU |
 | Resources | processor.resource | **44.3** |  | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** |  | ✓ |  | vampire.resource |
-| ROM | AmigaROM | **48.00** |  | ✓ |  | AmigaOS Expansion ROM ($F00000): the Apollo drivers, filesystems and resources for all AmigaOS releases |
-| ROM | ApolloROM | **R9.55** | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F80000) and extended ($E00000) ROM |
+| ROM | AmigaROM | **48.00** |  | ✓ |  | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
+| ROM | ApolloROM | **R9.55** | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Tools | AmiPlexAMP | **0.54** | ✓ | ✓ |  | Plex Audio Client |
 | Tools | ApolloAMP | **26.9R1** | ✓ | ✓ |  | SAGA Audioplayer |
 | Tools | ApolloControl | **2.21** | ✓ | ✓ |  | Apollo V4 Settings |

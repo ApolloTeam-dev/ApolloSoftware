@@ -22,8 +22,8 @@ Libraries/maggie.library	OS=ApolloOS,AmigaOS	DESCRIPTION=Maggie 3DFX API library
 Libraries/VampireSupport	OS=AmigaOS	DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU
 Resources/processor.resource	OS=AmigaOS	DESCRIPTION=processor.resource
 Resources/vampire.resource	OS=AmigaOS	DESCRIPTION=vampire.resource
-ROM/AmigaROM	OS=AmigaOS	MODULES.48.00=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.3,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.49,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	DESCRIPTION=AmigaOS Expansion ROM ($F00000): the Apollo\ndrivers, filesystems and resources for all\nAmigaOS releases
-ROM/ApolloROM	OS=ApolloOS	DESCRIPTION=ApolloOS Kickstart ROM, 1MB: main ($F80000) and\nextended ($E00000) ROM
+ROM/AmigaROM	OS=AmigaOS	MODULES.48.00=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.3,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.49,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	DESCRIPTION=AmigaOS Expansion ROM ($F0): the Apollo drivers,\nfilesystems and resources for all AmigaOS\nreleases
+ROM/ApolloROM	OS=ApolloOS	DESCRIPTION=ApolloOS Kickstart ROM, 1MB: main ($F8) and\nextended ($E0) ROM
 Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=Plex Audio Client
 Tools/ApolloAMP	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Audioplayer
 Tools/ApolloControl	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo V4 Settings
