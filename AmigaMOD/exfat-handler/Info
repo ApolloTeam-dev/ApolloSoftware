@@ -1,0 +1,4 @@
+; AmigaMOD/exfat-handler - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=Ex-FAT Filesystem

@@ -1,0 +1,4 @@
+; AmigaMOD/VampireSupport - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU

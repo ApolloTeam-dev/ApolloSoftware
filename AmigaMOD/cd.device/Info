@@ -1,0 +1,4 @@
+; AmigaMOD/cd.device - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=CD32-Driver

@@ -16,14 +16,21 @@ repository to find SYS: files installed by both.
 Layout (the contract with the ApolloUpdate client):
 
     Category / Name / Release / <copied 1:1 to SYS:>
-    Cores   / Name / Release / file      flashed, not copied to SYS::
-    KickROM / Name / Release / file        one ROM file, by ApolloFlash
-    ExpROM  / Name / Release / files       modules, ApolloExpROM builds them
-                                           into the Expansion ROM
-                                      no drawers; ApolloUpdate empties
-                                      SYS:ApolloUpdate/Cores, /KickROM or
-                                      /ExpROM and copies them there (the
-                                      collision check uses that SYS: path)
+    Cores     / Name / Release / file      the FPGA core (both OSes)
+    ApolloROM / ApolloROM / Release / ApolloROM + Modules
+                                    the 1MB ApolloOS Kickstart (ApolloOS)
+    ApolloMOD / Name / Release / file(s)   its modules (ApolloOS)
+    AmigaROM  / AmigaROM / Release / AmigaROM + Modules
+                                    the 192KB Expansion ROM (AmigaOS)
+    AmigaMOD  / Name / Release / file(s)   its modules (AmigaOS)
+                                      flashed or built into a ROM, not
+                                      copied to SYS:; no drawers.
+                                      ApolloUpdate keeps them in
+                                      SYS:ApolloUpdate/<category> (the
+                                      collision check uses that SYS: path).
+                                      Modules: the ROM's modules in ROM
+                                      order, one Category/Name/Version per
+                                      line - each must exist here.
     Category / Name / Info            KEY=VALUE lines, ";" comments:
         OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
@@ -58,9 +65,17 @@ TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 MOVED = ("OWNER", "CONTRIBUTORS")   # team only: ApolloSoftware-Sources (Owners)
 INFO = "Info"
-ROM_CATS = {"Cores": "ApolloUpdate/Cores",             # categories to flash, and
-            "KickROM": "ApolloUpdate/KickROM",        # where ApolloUpdate keeps
-            "ExpROM": "ApolloUpdate/ExpROM"}          # their files
+ROM_CATS = {"Cores": "ApolloUpdate/Cores",             # categories flashed or built
+            "ApolloROM": "ApolloUpdate/ApolloROM",    # into a ROM, and where
+            "ApolloMOD": "ApolloUpdate/ApolloMOD",    # ApolloUpdate keeps their
+            "AmigaROM": "ApolloUpdate/AmigaROM",      # files
+            "AmigaMOD": "ApolloUpdate/AmigaMOD"}
+ROM_OS = {"ApolloROM": "ApolloOS", "ApolloMOD": "ApolloOS",   # the one OS of each
+          "AmigaROM": "AmigaOS", "AmigaMOD": "AmigaOS"}       # (Cores: both)
+ROM_MODS = {"ApolloROM": "ApolloMOD", "AmigaROM": "AmigaMOD"} # a ROM and its modules
+ROM_SIZE = {"ApolloROM": (1048576, 1048576), "AmigaROM": (1, 196608)}  # bytes: min, max
+MODULES = "Modules"
+RENAMED = {"KickROM": "ApolloROM", "ExpROM": "AmigaROM / AmigaMOD", "ROM": "AmigaROM / AmigaMOD"}
 INDEX = "ApolloSoftware.index"
 PACKAGE = "ApolloUpdate.lha"
 MAX_DESC = 160                  # what fits in the bubble help ...
@@ -303,15 +318,21 @@ def scan(root, avl=False):
                               + (" and AVL=Bronze" if avl else "") + ")")
                 info = {"OS": [], "AVL": None, "MINCORE": "",
                         "DESCRIPTION": ""}
+            if cat in ROM_OS and info["OS"] != [ROM_OS[cat]]:
+                errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {cat} is "
+                              f"for {ROM_OS[cat]} only (OS={ROM_OS[cat]})")
+            if cat in RENAMED:
+                errors.append(f"{cat}/{name}: the category {cat} is now {RENAMED[cat]}")
             names.append((cat, name, set(info["OS"]), newest_first(releases), info))
     return names, errors, warnings
 
 
 def release_files(root, cat, name, rel, errors=None):
     """[(path below the release, lower-case SYS path)] of one release, junk
-    left out. A release of Cores, KickROM or ExpROM: its files directly in
-    it, kept in SYS:ApolloUpdate/... (ROM_CATS). With errors, one that breaks
-    the rules is reported."""
+    left out. A release of a ROM_CATS category: its files directly in it,
+    kept in SYS:ApolloUpdate/<category>; an ApolloROM / AmigaROM release
+    holds the image (named as the category) and Modules, which is read, not
+    installed. With errors, one that breaks the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
     out = []
     if cat in ROM_CATS:
@@ -323,9 +344,21 @@ def release_files(root, cat, name, rel, errors=None):
             for d in dirs:
                 errors.append(f"{label}/{d}: no drawers in a {cat} release, only the "
                               "file(s) to flash")
-            if cat in ("Cores", "KickROM") and len(files) > 1:
-                errors.append(f"{label}: a {cat} release holds exactly one ROM file "
+            if cat == "Cores" and len(files) > 1:
+                errors.append(f"{label}: a {cat} release holds exactly one core file "
                               f"(has {len(files)})")
+            if cat in ROM_MODS:
+                if sorted(files) != sorted([cat, MODULES]):
+                    errors.append(f"{label}: an {cat} release holds the image '{cat}' and "
+                                  f"'{MODULES}', nothing else (has {', '.join(files) or 'nothing'})")
+                if cat in files:
+                    size = os.path.getsize(os.path.join(rpath, cat))
+                    lo, hi = ROM_SIZE[cat]
+                    if not lo <= size <= hi:
+                        errors.append(f"{label}/{cat}: {size} bytes - an {cat} is "
+                                      + (f"{hi} bytes" if lo == hi else f"at most {hi} bytes"))
+        if cat in ROM_MODS:
+            files = [f for f in files if f != MODULES]
         return [(f, f"{ROM_CATS[cat]}/{f}".lower()) for f in files]
     for dirpath, dirs, fns in os.walk(rpath):
         for fn in fns:
@@ -344,6 +377,43 @@ def sys_paths(root, names):
                 for o in tags:
                     owner.setdefault((o, key), f"{cat}/{name}")
     return owner
+
+
+def read_modules(root, cat, name, rel):
+    """The Modules file of an ApolloROM / AmigaROM release: [(line, entry)]"""
+    path = os.path.join(root, cat, name, rel, MODULES)
+    if not os.path.isfile(path):
+        return []
+    out = []
+    for i, line in enumerate(open(path, encoding="latin-1").read().splitlines(), 1):
+        s = line.strip()
+        if s and not s.startswith((";", "#")):
+            out.append((i, s))
+    return out
+
+
+def check_modules(root, names, errors):
+    """Every line of a Modules file: Category/Name/Version of an existing
+    release of the ROM's module category, each once; order as written."""
+    have = {(c.lower(), n.lower(), r) for c, n, t, rels, i in names for r in rels}
+    for cat, name, tags, rels, info in names:
+        if cat not in ROM_MODS:
+            continue
+        for rel in rels:
+            seen = set()
+            for i, entry in read_modules(root, cat, name, rel):
+                label = f"{cat}/{name}/{rel}/{MODULES}:{i}"
+                parts = entry.split("/")
+                if len(parts) != 3 or not all(parts):
+                    errors.append(f"{label}: not Category/Name/Version")
+                    continue
+                if parts[0] != ROM_MODS[cat]:
+                    errors.append(f"{label}: {entry} - an {cat} holds {ROM_MODS[cat]} modules only")
+                elif (parts[0].lower(), parts[1].lower(), parts[2]) not in have:
+                    errors.append(f"{label}: {entry} is not a release in this repository")
+                if (parts[0].lower(), parts[1].lower()) in seen:
+                    errors.append(f"{label}: {parts[0]}/{parts[1]} is listed twice")
+                seen.add((parts[0].lower(), parts[1].lower()))
 
 
 def check_public(root, names, public, errors):
@@ -448,7 +518,7 @@ def table(names, avl=False):
     return "\n".join(rows)
 
 
-def index(names, avl=False):
+def index(names, avl=False, root="."):
     """ApolloSoftware.index: one line per Name, Cat/Name then TAB separated
     KEY=VALUE fields; the description wrapped, its line breaks as "\\n"."""
     out = [f"; {INDEX} - generated from the Info files by "
@@ -464,14 +534,19 @@ def index(names, avl=False):
         for r in releases:
             if info.get("MINCORE." + r):
                 f.append(f"MINCORE.{r}=" + info["MINCORE." + r])
+        if cat in ROM_MODS:
+            for rel in releases:
+                mods = [e for i, e in read_modules(root, cat, name, rel)]
+                if mods:
+                    f.append(f"MODULES.{rel}=" + ",".join(mods))
         if info["DESCRIPTION"]:
             f.append("DESCRIPTION=" + "\\n".join(wrap(info["DESCRIPTION"])))
         out.append("\t".join(f))
     return "\n".join(out) + "\n"
 
 
-def write_index(path, names, avl=False):
-    new = index(names, avl)
+def write_index(path, names, avl=False, root="."):
+    new = index(names, avl, root)
     old = open(path, encoding="ascii").read() if os.path.exists(path) else None
     if new != old:
         open(path, "w", encoding="ascii", newline="\n").write(new)
@@ -575,6 +650,7 @@ def main():
     names, errors, warnings = scan(args.root, args.avl)
     warnings[:0] = made_warnings
     check_files(args.root, names, errors, warnings)
+    check_modules(args.root, names, errors)
     if args.avl and args.public:
         check_public(args.root, names, args.public, errors)
 
@@ -601,7 +677,7 @@ def main():
         changed = write_readme(args.readme, names, args.avl)
         print(f"{args.readme}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
     if args.index:
-        changed = write_index(args.index, names, args.avl)
+        changed = write_index(args.index, names, args.avl, args.root)
         print(f"{args.index}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
     if args.package:
         perr = []

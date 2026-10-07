@@ -1,0 +1,4 @@
+; AmigaMOD/ODFileSystem - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=CD (ISO9660) Filesystem

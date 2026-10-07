@@ -1,4 +1,0 @@
-; ExpROM/sagasd.device - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS
-MINCORE=12500
-DESCRIPTION=SD-Card Driver

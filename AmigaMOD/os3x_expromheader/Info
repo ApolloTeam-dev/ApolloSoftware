@@ -1,0 +1,4 @@
+; AmigaMOD/os3x_expromheader - read by ApolloUpdate, see README.md
+OS=AmigaOS
+MINCORE=
+DESCRIPTION=AmigaROM header: ROM identifier and version (first module)
