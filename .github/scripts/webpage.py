@@ -36,7 +36,7 @@ INK = "#1c1c1e"
 HEAD = "#131417"            # the logo band, as in the ApolloUpdate window
 
 OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"))
-SORTS = (("category", "Category"), ("name", "Name"), ("owner", "Owner"))
+SORTS = (("category", "Category"), ("name", "Name"))
 
 FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
          '"Helvetica Neue", "DejaVu Sans", Helvetica, Arial, sans-serif')
@@ -121,8 +121,6 @@ def build(names, outdir, assets, package, version, stamp):
                         and (cat_key == "all" or n[0] == cat_key)]
                 if sort_key == "name":
                     rows.sort(key=lambda n: (n[1].lower(), n[0].lower()))
-                elif sort_key == "owner":
-                    rows.sort(key=lambda n: ((n[4].get("OWNER") or "~").lower(), n[1].lower()))
                 else:
                     rows.sort(key=lambda n: (n[0].lower(), n[1].lower()))
                 text = one_page(names, rows, os_key, cat_key, sort_key, cat_items,
@@ -174,8 +172,8 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
 
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
-            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"), ("Owner", "owner", ""),
-            ("Contributors", None, ""), ("Minimal Core", None, ""), ("Description", None, "")]
+            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"),
+            ("Minimal Core", None, ""), ("Description", None, "")]
     out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr><td>')
     out.append(f'<table width="100%" border="0" cellspacing="1" cellpadding="6" bgcolor="{LINE}">')
     head = []
@@ -199,8 +197,6 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                    f'<td nowrap><b>{esc(releases[0])}</b></td>'
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
-                   f'<td nowrap>{esc(info.get("OWNER") or "")}</td>'
-                   f'<td>{esc(info.get("CONTRIBUTORS") or "")}</td>'
                    f'<td nowrap>{esc(min_core(info, releases[0]))}</td>'
                    f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
                    "</tr>")

@@ -47,8 +47,6 @@ starts a comment:
 
 ```
 OS=ApolloOS,AmigaOS
-OWNER=@Owner
-CONTRIBUTORS=@Contributor
 MINCORE=11000
 MINCORE.1.0e=10900
 DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
@@ -57,8 +55,6 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 | Key | |
 |---|---|
 | `OS` | required: `ApolloOS`, `AmigaOS` or both, comma separated |
-| `OWNER` | who maintains it |
-| `CONTRIBUTORS` | who else worked on it |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 160 characters (longer is cut with "..."); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
