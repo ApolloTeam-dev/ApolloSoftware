@@ -139,7 +139,7 @@ tool (for now, a requester shows what would be flashed).
 | Tools | ApolloFloppy | **1.2** | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.30** | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMon | **1.0e** | ✓ | ✓ |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.46** | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloUpdate | **0.47** | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** | ✓ | ✓ |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | ✓ | ✓ |  | Apollo MouseWheel Driver |
