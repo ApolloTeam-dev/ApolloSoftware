@@ -691,7 +691,7 @@ def main():
     if args.site:
         au = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
         version = au[0][3][0] if au else ""
-        stamp = f"ApolloUpdate Release {version}" if version else ""
+        stamp = f"ApolloUpdate {version}" if version else ""
         if au:      # the date of its $VER string: "(07.10.26)" -> 7-Oct-2026
             prog = os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools", "ApolloUpdate")
             m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)",

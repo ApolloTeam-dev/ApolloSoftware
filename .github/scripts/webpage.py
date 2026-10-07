@@ -155,7 +155,8 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'width="48" height="48" border="0" alt="Download" title="{tip}"></a></td>'
               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
               f'<a href="ApolloUpdate.lha" title="{tip}">'
-              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td>'
+              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a>'
+              f'<br><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td>'
               '</tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
@@ -169,7 +170,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     out.append('<td valign="middle" nowrap>'
                + chips("Category:", cat_items, cat_key, lambda k: link(c=k)) + '</td>')
     out.append(f'<td align="right" valign="middle" class="dim small" nowrap width="100%">'
-               f'{len(rows)} of {len(names)} items<br>{esc(stamp)}</td>')
+               f'{len(rows)} of {len(names)} items</td>')
     out.append("</tr></table>")
 
     # the table
