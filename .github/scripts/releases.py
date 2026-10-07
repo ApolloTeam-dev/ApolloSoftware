@@ -632,7 +632,7 @@ def main():
         stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%d-%b-%Y %H:%M UTC")
         pages = webpage.build(
             names, args.site,
-            logo=os.path.join(args.root, ".github", "site", "ApolloUpdate-logo.png"),
+            assets=os.path.join(args.root, ".github", "site"),
             package=args.package or os.path.join(args.root, PACKAGE),
             cores=cores, version=au[0][3][0] if au else "",
             stamp=f"Updated {stamp}" + (f" (commit {sha})" if sha else ""))

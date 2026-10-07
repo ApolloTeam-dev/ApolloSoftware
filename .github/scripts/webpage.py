@@ -11,8 +11,11 @@ screen, and fine in any other:
   here, and the controls are plain links between them
 - the layout is HTML 3.2 tables with bgcolor / cellpadding / width; a
   little CSS1 refines it where a browser has it, nothing depends on it
-- ISO-8859-1, no characters beyond it; the logo is a PNG on its own dark
-  band (no SVG)
+- ISO-8859-1, no characters beyond it; the logo and the download icon
+  are PNGs on the dark band (no SVG, no transparency)
+- the typeface is Inter (SIL OFL, published beside it) for browsers with
+  web fonts; the others take the first of the modern fonts listed, or
+  their own
 - the colours of the ApolloCD32 game list: #f6f6f4 page, white rows,
   #7a5cff accent
 """
@@ -34,10 +37,17 @@ OLDER = 3                   # older releases shown before "... (n more)"
 OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"))
 SORTS = (("category", "Category"), ("name", "Name"), ("owner", "Owner"))
 
+FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
+         '"Helvetica Neue", "DejaVu Sans", Helvetica, Arial, sans-serif')
+SITE_FILES = ("ApolloUpdate-logo.png", "ApolloUpdate-icon.png", "Inter-latin.woff2",
+              "Inter-LICENSE.txt")
+
 CSS = """
+@font-face { font-family: Inter; font-style: normal; font-weight: 400 700;
+             font-display: swap; src: url(Inter-latin.woff2) format("woff2"); }
 body { margin: 0; background: %(PAGE)s; color: %(INK)s;
-       font-family: Helvetica, Arial, sans-serif; font-size: 13px; }
-td, th { font-family: Helvetica, Arial, sans-serif; font-size: 13px; }
+       font-family: %(FONTS)s; font-size: 14px; }
+td, th { font-family: %(FONTS)s; font-size: 14px; }
 a { color: %(ACCENT)s; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .dim { color: %(DIM)s; }
@@ -46,9 +56,8 @@ a:hover { text-decoration: underline; }
       letter-spacing: 1px; }
 .th a { color: %(DIM)s; }
 .on, .on a { color: #ffffff; font-weight: bold; }
-.dl, .dl a { color: #ffffff; font-weight: bold; font-size: 14px; }
-h1 { font-size: 20px; margin: 0; }
-""" % dict(PAGE=PAGE, INK=INK, ACCENT=ACCENT, DIM=DIM)
+.dl, .dl a { color: #ffffff; font-weight: 600; font-size: 15px; }
+""" % dict(PAGE=PAGE, INK=INK, ACCENT=ACCENT, DIM=DIM, FONTS=FONTS)
 
 
 def esc(s):
@@ -83,13 +92,15 @@ def older(releases):
             + f' <span class="dim">... ({len(rest) - OLDER} more)</span>')
 
 
-def build(names, outdir, logo, package, cores, version, stamp):
+def build(names, outdir, assets, package, cores, version, stamp):
     """names: [(cat, name, {os}, [releases newest first], info)] as releases.py
-    reads them; logo, package: files copied next to the pages (package may
-    be None); cores(info, releases) -> the Min. Core text; version: of the
-    ApolloUpdate in the package. Returns the number of pages written."""
+    reads them; assets: the folder with SITE_FILES (.github/site), copied
+    next to the pages, as is package (may be None); cores(info, releases)
+    -> the Min. Core text; version: of the ApolloUpdate in the package.
+    Returns the number of pages written."""
     os.makedirs(outdir, exist_ok=True)
-    shutil.copyfile(logo, os.path.join(outdir, "ApolloUpdate-logo.png"))
+    for f in SITE_FILES:
+        shutil.copyfile(os.path.join(assets, f), os.path.join(outdir, f))
     size = 0
     if package and os.path.exists(package):
         shutil.copyfile(package, os.path.join(outdir, "ApolloUpdate.lha"))
@@ -134,34 +145,30 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
            f'<body bgcolor="{PAGE}" text="{INK}" link="{ACCENT}" vlink="{ACCENT}" '
            'leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">']
 
-    # the logo band, the download on its right
+    # the logo band, the download (icon and words) on its right
     dl = ""
     if size:
-        dl = (f'<table border="0" cellspacing="0" cellpadding="8"><tr>'
-              f'<td bgcolor="{ACCENT}" class="dl" nowrap>'
-              f'<a href="ApolloUpdate.lha">Download ApolloUpdate {esc(version)}</a></td></tr></table>'
-              f'<font color="#a9a9a8" class="small">ApolloUpdate.lha, {(size + 1023) // 1024} KB'
-              f' - unpack with LhA, start ApolloUpdate</font>')
+        tip = f"ApolloUpdate {esc(version)}, ApolloUpdate.lha, {(size + 1023) // 1024} KB"
+        dl = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
+              f'<td valign="middle"><a href="ApolloUpdate.lha"><img src="ApolloUpdate-icon.png" '
+              f'width="48" height="48" border="0" alt="Download" title="{tip}"></a></td>'
+              f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
+              f'<a href="ApolloUpdate.lha" title="{tip}">'
+              f'<font color="#ffffff">Download, Unpack and Execute</font></a></td>'
+              '</tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
                f'alt="ApolloUpdate" border="0"></td>'
                f'<td align="right" valign="middle">{dl}</td></tr></table>')
 
-    # welcome
-    out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{CARD}">'
-               '<tr><td><h1>Welcome to ApolloUpdate</h1>'
-               '<span class="dim">Current status for ApolloSoftware Library</span></td>'
-               f'<td align="right" valign="bottom" class="dim small">{esc(stamp)}</td></tr></table>')
-    out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-               f'<tr><td bgcolor="{LINE}" height="1"></td></tr></table>')
-
     # filters
     out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr><td>')
     out.append(chips("OS:", OSES, os_key, lambda k: link(o=k)))
     out.append(chips("Category:", cat_items, cat_key, lambda k: link(c=k)))
-    out.append(f'<span class="dim small">{len(rows)} of {len(names)} items'
-               f' - click a column title to sort</span>')
-    out.append("</td></tr></table>")
+    out.append("</td>")
+    out.append(f'<td align="right" valign="bottom" class="dim small" nowrap>{len(rows)} of '
+               f'{len(names)} items - click a column title to sort<br>{esc(stamp)}</td>')
+    out.append("</tr></table>")
 
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
@@ -192,7 +199,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
                    f'<td nowrap>{esc(info.get("OWNER") or "")}</td>'
                    f'<td>{esc(info.get("CONTRIBUTORS") or "")}</td>'
-                   f'<td>{esc(cores(info, releases))}</td>'
+                   f'<td nowrap>{esc(cores(info, releases))}</td>'
                    f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
                    "</tr>")
     if not rows:
@@ -200,10 +207,5 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
                    "No entries match these filters</td></tr>")
     out.append("</table></td></tr></table>")
 
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr>'
-               '<td class="dim small">Generated from the '
-               '<a href="https://github.com/ApolloTeam-dev/ApolloSoftware">ApolloSoftware</a>'
-               ' repository on every change. Members of Apollo Vampire Lair see more in '
-               'ApolloUpdate itself.</td></tr></table>')
     out.append("</body></html>")
     return "\n".join(out) + "\n"
