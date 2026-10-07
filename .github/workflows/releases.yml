@@ -78,3 +78,35 @@ jobs:
 
       - id: deploy
         uses: actions/deploy-pages@v4
+
+  # Tell ApolloSoftware-Sources (team only) that this repository changed: a
+  # commit into its .github/built-from/ starts its workflow, which rebuilds
+  # ApolloSoftware-Overview.pdf. Pushed with a write deploy key of that
+  # repository (secret SOURCES_DEPLOY_KEY); skipped without it.
+  notify:
+    needs: table
+    runs-on: ubuntu-latest
+    if: ${{ always() && needs.table.result == 'success' }}
+    env:
+      KEY: ${{ secrets.SOURCES_DEPLOY_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.KEY != ''
+        with:
+          repository: ApolloTeam-dev/ApolloSoftware-Sources
+          ssh-key: ${{ secrets.SOURCES_DEPLOY_KEY }}
+          path: sources
+
+      - name: Notify ApolloSoftware-Sources
+        if: env.KEY != ''
+        run: |
+          cd sources
+          mkdir -p .github/built-from
+          echo "${{ github.sha }}" > .github/built-from/ApolloSoftware
+          git add .github/built-from/ApolloSoftware
+          git diff --cached --quiet && exit 0
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "ApolloSoftware changed: ${{ github.sha }}"
+          for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && exit 0; sleep 10; done
+          exit 1
