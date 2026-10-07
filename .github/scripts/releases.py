@@ -570,6 +570,7 @@ def main():
     ap.add_argument("--readme", help="README.md to update")
     ap.add_argument("--index", help=f"{INDEX} to write")
     ap.add_argument("--package", help=f"{PACKAGE} to write (the newest ApolloUpdate)")
+    ap.add_argument("--site", help="write the web page (GitHub Pages) into this folder")
     ap.add_argument("--create-info", action="store_true",
                     help="give a new Name a template Info file")
     ap.add_argument("--root", default=".", help="top of the repository")
@@ -623,6 +624,19 @@ def main():
         if perr:
             return 1
         print(f"{args.package}: {'updated' if changed else 'unchanged'}")
+    if args.site:
+        import datetime
+        import webpage                   # .github/scripts/webpage.py
+        au = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
+        sha = os.environ.get("GITHUB_SHA", "")[:7]
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%d-%b-%Y %H:%M UTC")
+        pages = webpage.build(
+            names, args.site,
+            logo=os.path.join(args.root, ".github", "site", "ApolloUpdate-logo.png"),
+            package=args.package or os.path.join(args.root, PACKAGE),
+            cores=cores, version=au[0][3][0] if au else "",
+            stamp=f"Updated {stamp}" + (f" (commit {sha})" if sha else ""))
+        print(f"{args.site}: {pages} pages")
     return 0
 
 

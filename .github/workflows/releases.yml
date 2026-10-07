@@ -5,6 +5,8 @@
 # and, in ApolloSoftware-AVL, Bronze).
 # ApolloUpdate.lha is the newest ApolloUpdate, at a fixed address for a
 # browser download.
+# A second job publishes the web page (releases.py --site, webpage.py) with
+# ApolloUpdate.lha to https://apolloteam-dev.github.io/ApolloSoftware/
 # The script: .github/scripts/releases.py
 #
 # A push that only changes README.md / the index does not start it, and its own commit
@@ -49,3 +51,30 @@ jobs:
           git commit -m "Update the releases table and ApolloSoftware.index"
           git pull --rebase
           git push
+
+  # The web page for Amiga browsers, with ApolloUpdate.lha beside it, on
+  # GitHub Pages. From main as the job above left it (its commit included).
+  pages:
+    needs: table
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Make the web page
+        run: python3 .github/scripts/releases.py --site _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

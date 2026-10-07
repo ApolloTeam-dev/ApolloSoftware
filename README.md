@@ -7,6 +7,9 @@ AWeb, NetSurf with AmiSSL) from this fixed address, unpack it with LhA and
 start it - from then on it keeps itself up to date:
 
     https://raw.githubusercontent.com/ApolloTeam-dev/ApolloSoftware/main/ApolloUpdate.lha
+
+The library as a web page for Amiga browsers (IBrowse, AWeb, NetSurf), with
+the same download: https://apolloteam-dev.github.io/ApolloSoftware/
  Software for
 members of [Apollo-Vampire-Lair](https://ko-fi.com/apollovampirelair) is in the
 separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
