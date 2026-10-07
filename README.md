@@ -25,8 +25,8 @@ Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1)
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
 Example (single file):
-- Drivers/ApolloMap/Info
-- Drivers/ApolloMap/2.30/C/ApolloMap
+- Tools/ApolloMap/Info
+- Tools/ApolloMap/2.30/C/ApolloMap
 
 Example (multiple files):
 - Tools/ApolloExplorer/Info
