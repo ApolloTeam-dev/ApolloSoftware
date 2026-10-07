@@ -53,6 +53,7 @@ td, th { font-family: %(FONTS)s; font-size: 14px; font-feature-settings: "calt" 
 a { color: %(ACCENT)s; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .dim { color: %(DIM)s; }
+.grid td { padding: 3px 8px; }          /* compact rows; more room at the sides */
 .small { font-size: 11px; }
 .th { color: #ffffff; font-weight: bold; }
 .th a { color: #ffffff; text-decoration: underline; }
@@ -167,15 +168,14 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                f'<td align="right" valign="middle">{dl}</td></tr></table>')
 
     # filters
-    # below the band: 10 pixels left and right, and 10 above and below the
-    # filters (spacer cells: HTML 3.2 has no padding on one side only)
+    # below the band: 10 pixels left and right. No empty spacer rows: IBrowse
+    # gives an empty cell a whole text line, whatever its height says.
     out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>'
                '<td width="10"></td><td>')
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-               '<tr><td height="10"></td></tr></table>')
 
-    # filters: OS and Category on one line, the count on the right
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>')
+    # filters: OS and Category on one line, the count on the right; the
+    # padding gives the same small space above and below in every browser
+    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="3"><tr>')
     out.append('<td valign="middle" nowrap>' + chips("OS:", OSES, os_key, lambda k: link(o=k)) + '</td>')
     out.append('<td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>')      # gap; an empty cell gets squeezed
     out.append('<td valign="middle" nowrap>'
@@ -183,14 +183,13 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     out.append(f'<td align="right" valign="middle" class="dim small" nowrap width="100%">'
                f'{len(rows)} of {len(names)} items</td>')
     out.append("</tr></table>")
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-               '<tr><td height="10"></td></tr></table>')
 
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
             ("ApolloOS", None, "center"), ("AmigaOS", None, "center"),
             ("Minimal Core", None, ""), ("Description", None, "")]
-    out.append(f'<table width="100%" border="0" cellspacing="1" cellpadding="6" bgcolor="{LINE}">')
+    out.append(f'<table class="grid" width="100%" border="0" cellspacing="1" cellpadding="3" '
+               f'bgcolor="{LINE}">')
     head = []
     for title, key, align in cols:
         al = f' align="{align}"' if align else ""
@@ -218,9 +217,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     if not rows:
         out.append(f'<tr bgcolor="{CARD}"><td colspan="{len(cols)}" class="dim">'
                    "No entries match these filters</td></tr>")
-    out.append("</table>")
-    out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-               '<tr><td height="10"></td></tr></table>')
+    out.append("</table><br>")
     out.append('</td><td width="10"></td></tr></table>')
 
     out.append("</body></html>")
