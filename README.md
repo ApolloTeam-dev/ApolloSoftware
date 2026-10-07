@@ -106,6 +106,20 @@ tool (for now, a requester shows what would be flashed).
 
 | Category | Name | Latest | ApolloOS | AmigaOS | Minimal Core | Description |
 |---|---|---|:-:|:-:|---|---|
+| AmigaMOD | 68040.library | **40.2** |  | ✓ |  | 68040.library for the AC68080 |
+| AmigaMOD | 680x0.library | **40.1** |  | ✓ |  | 680x0.library, Apollo AC68080 support |
+| AmigaMOD | cd.device | **40.29** |  | ✓ |  | CD32-Driver |
+| AmigaMOD | exfat-handler | **1.11** |  | ✓ |  | Ex-FAT Filesystem |
+| AmigaMOD | fat95 | **4.0** |  | ✓ |  | FAT Filesystem |
+| AmigaMOD | ODFileSystem | **0.8.0** |  | ✓ |  | CD (ISO9660) Filesystem |
+| AmigaMOD | os3x_expromheader | **48.00** |  | ✓ |  | AmigaROM header: ROM identifier and version (first module) |
+| AmigaMOD | processor.resource | **44.3** |  | ✓ |  | processor.resource |
+| AmigaMOD | sagasd.device | **2.41** |  | ✓ | 12500 | SD-Card Driver |
+| AmigaMOD | scsi.device | **48.13** |  | ✓ |  | IDE Driver for AmigaOS |
+| AmigaMOD | vampire.resource | **45.3** |  | ✓ |  | vampire.resource |
+| AmigaMOD | VampireSupport | **40.49** |  | ✓ |  | Vampire support: V4 chip/fast RAM, FPU |
+| AmigaROM | AmigaROM | **48.00** |  | ✓ |  | AmigaOS Expansion ROM ($F00000): the Apollo drivers, filesystems and resources for all AmigaOS releases |
+| ApolloROM | ApolloROM | **9.55** | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F80000) and extended ($E00000) ROM |
 | Cores | UniCorn-Beta | **12556E** | ✓ | ✓ |  | UniCorn-Beta Core |
 | Cores | UniCorn-Release | **12001** | ✓ | ✓ |  | UniCorn-Release Core |
 | Drivers | AmiTCP | **4.1.7** |  | ✓ |  | TCP/IP Stack |
@@ -114,12 +128,6 @@ tool (for now, a requester shows what would be flashed).
 | Drivers | sagagfx.hidd | **1.0** | ✓ |  | 12000 | CyberGraphics RTG Driver |
 | Drivers | v4net.device | **2.99** | ✓ | ✓ |  | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** |  | ✓ |  | Picasso 96 RTG Driver |
-| ExpROM | cd.device | **40.29** | ✓ | ✓ |  | CD32-Driver |
-| ExpROM | exfat-handler | **1.11** | ✓ | ✓ |  | Ex-FAT Filesystem |
-| ExpROM | fat95 | **4.0** |  | ✓ |  | FAT Filesystem |
-| ExpROM | ODFileSystem | **0.8.0** | ✓ | ✓ |  | CD (ISO9660) Filesystem |
-| ExpROM | sagasd.device | **2.41** | ✓ | ✓ | 12500 | SD-Card Driver |
-| ExpROM | scsi.device | **48.13** |  | ✓ |  | IDE Driver for AmigaOS |
 | Icons | def_SDROM | **1.0** | ✓ | ✓ |  | Default SD-Card Icon |
 | Libraries | i2c.library | **40.0** | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** | ✓ | ✓ |  | Maggie 3DFX API library |
@@ -138,5 +146,5 @@ tool (for now, a requester shows what would be flashed).
 | Tools | i2clock | **0.7** | ✓ | ✓ |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | ✓ | ✓ |  | SAGA Videoplayer |
 
-31 items: 26 for ApolloOS, 30 for AmigaOS.
+39 items: 23 for ApolloOS, 37 for AmigaOS.
 <!-- releases:end -->

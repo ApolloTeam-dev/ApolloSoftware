@@ -1,5 +1,19 @@
 ; ApolloSoftware.index - generated from the Info files by .github/scripts/releases.py, do not edit
 ; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
+AmigaMOD/68040.library	OS=AmigaOS	DESCRIPTION=68040.library for the AC68080
+AmigaMOD/680x0.library	OS=AmigaOS	DESCRIPTION=680x0.library, Apollo AC68080 support
+AmigaMOD/cd.device	OS=AmigaOS	DESCRIPTION=CD32-Driver
+AmigaMOD/exfat-handler	OS=AmigaOS	DESCRIPTION=Ex-FAT Filesystem
+AmigaMOD/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
+AmigaMOD/ODFileSystem	OS=AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
+AmigaMOD/os3x_expromheader	OS=AmigaOS	DESCRIPTION=AmigaROM header: ROM identifier and version\n(first module)
+AmigaMOD/processor.resource	OS=AmigaOS	DESCRIPTION=processor.resource
+AmigaMOD/sagasd.device	OS=AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
+AmigaMOD/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
+AmigaMOD/vampire.resource	OS=AmigaOS	DESCRIPTION=vampire.resource
+AmigaMOD/VampireSupport	OS=AmigaOS	DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU
+AmigaROM/AmigaROM	OS=AmigaOS	MODULES.48.00=AmigaMOD/os3x_expromheader/48.00,AmigaMOD/68040.library/40.2,AmigaMOD/680x0.library/40.1,AmigaMOD/processor.resource/44.3,AmigaMOD/vampire.resource/45.3,AmigaMOD/VampireSupport/40.49,AmigaMOD/exfat-handler/1.11,AmigaMOD/scsi.device/48.13,AmigaMOD/sagasd.device/2.41	DESCRIPTION=AmigaOS Expansion ROM ($F00000): the Apollo\ndrivers, filesystems and resources for all\nAmigaOS releases
+ApolloROM/ApolloROM	OS=ApolloOS	DESCRIPTION=ApolloOS Kickstart ROM, 1MB: main ($F80000) and\nextended ($E00000) ROM
 Cores/UniCorn-Beta	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn-Beta Core
 Cores/UniCorn-Release	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn-Release Core
 Drivers/AmiTCP	OS=AmigaOS	DESCRIPTION=TCP/IP Stack
@@ -8,12 +22,6 @@ Drivers/Keymaps	OS=ApolloOS,AmigaOS	DESCRIPTION=Keyboard Configurations
 Drivers/sagagfx.hidd	OS=ApolloOS	MINCORE.1.0=12000	DESCRIPTION=CyberGraphics RTG Driver
 Drivers/v4net.device	OS=ApolloOS,AmigaOS	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS	DESCRIPTION=Picasso 96 RTG Driver
-ExpROM/cd.device	OS=ApolloOS,AmigaOS	DESCRIPTION=CD32-Driver
-ExpROM/exfat-handler	OS=ApolloOS,AmigaOS	DESCRIPTION=Ex-FAT Filesystem
-ExpROM/fat95	OS=AmigaOS	DESCRIPTION=FAT Filesystem
-ExpROM/ODFileSystem	OS=ApolloOS,AmigaOS	DESCRIPTION=CD (ISO9660) Filesystem
-ExpROM/sagasd.device	OS=ApolloOS,AmigaOS	MINCORE=12500	DESCRIPTION=SD-Card Driver
-ExpROM/scsi.device	OS=AmigaOS	DESCRIPTION=IDE Driver for AmigaOS
 Icons/def_SDROM	OS=ApolloOS,AmigaOS	DESCRIPTION=Default SD-Card Icon
 Libraries/i2c.library	OS=ApolloOS,AmigaOS	DESCRIPTION=I2C Chip Library
 Libraries/maggie.library	OS=ApolloOS,AmigaOS	DESCRIPTION=Maggie 3DFX API library
