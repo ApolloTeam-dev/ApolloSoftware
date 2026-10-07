@@ -634,7 +634,7 @@ def main():
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
             package=args.package or os.path.join(args.root, PACKAGE),
-            cores=cores, version=au[0][3][0] if au else "",
+            version=au[0][3][0] if au else "",
             stamp=f"Updated {stamp}" + (f" (commit {sha})" if sha else ""))
         print(f"{args.site}: {pages} pages")
     return 0

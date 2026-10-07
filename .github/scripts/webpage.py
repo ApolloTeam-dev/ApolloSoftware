@@ -33,7 +33,6 @@ LINE = "#e2e2df"
 DIM = "#6b6b70"
 INK = "#1c1c1e"
 HEAD = "#131417"            # the logo band, as in the ApolloUpdate window
-OLDER = 3                   # older releases shown before "... (n more)"
 
 OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"))
 SORTS = (("category", "Category"), ("name", "Name"), ("owner", "Owner"))
@@ -53,8 +52,7 @@ a { color: %(ACCENT)s; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .dim { color: %(DIM)s; }
 .small { font-size: 11px; }
-.th { color: %(DIM)s; font-size: 11px; font-weight: bold; text-transform: uppercase;
-      letter-spacing: 1px; }
+.th { color: %(DIM)s; font-weight: bold; }
 .th a { color: %(DIM)s; }
 .on, .on a { color: #ffffff; font-weight: bold; }
 .dl, .dl a { color: #ffffff; font-weight: 600; font-size: 15px; }
@@ -85,19 +83,17 @@ def chips(label, items, active, link):
             + "".join(cells) + "</tr></table>")
 
 
-def older(releases):
-    rest = releases[1:]
-    if len(rest) <= OLDER:
-        return esc(", ".join(rest))
-    return (esc(", ".join(rest[:OLDER]))
-            + f' <span class="dim">... ({len(rest) - OLDER} more)</span>')
+def min_core(info, latest):
+    """The minimal core of the latest release: its own MINCORE.<release>,
+    else the Name's MINCORE; empty when neither applies."""
+    return info.get("MINCORE." + latest) or info.get("MINCORE") or ""
 
 
-def build(names, outdir, assets, package, cores, version, stamp):
+def build(names, outdir, assets, package, version, stamp):
     """names: [(cat, name, {os}, [releases newest first], info)] as releases.py
     reads them; assets: the folder with SITE_FILES (.github/site), copied
-    next to the pages, as is package (may be None); cores(info, releases)
-    -> the Min. Core text; version: of the ApolloUpdate in the package.
+    next to the pages, as is package (may be None); version: of the
+    ApolloUpdate in the package.
     Returns the number of pages written."""
     os.makedirs(outdir, exist_ok=True)
     for f in SITE_FILES:
@@ -128,7 +124,7 @@ def build(names, outdir, assets, package, cores, version, stamp):
                 else:
                     rows.sort(key=lambda n: (n[0].lower(), n[1].lower()))
                 text = one_page(names, rows, os_key, cat_key, sort_key, cat_items,
-                                size, cores, version, stamp)
+                                size, version, stamp)
                 with open(os.path.join(outdir, page_name(os_key, cat_key, sort_key)), "w",
                           encoding="latin-1", newline="\n") as f:
                     f.write(text)
@@ -136,7 +132,7 @@ def build(names, outdir, assets, package, cores, version, stamp):
     return written
 
 
-def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, version, stamp):
+def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, stamp):
     def link(o=os_key, c=cat_key, s=sort_key):
         return page_name(o, c, s)
 
@@ -176,21 +172,20 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
 
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Latest", None, ""),
-            ("Older releases", None, ""), ("ApolloOS", None, "center"),
-            ("AmigaOS", None, "center"), ("Owner", "owner", ""),
-            ("Contributors", None, ""), ("Min. Core", None, ""), ("Description", None, "")]
+            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"), ("Owner", "owner", ""),
+            ("Contributors", None, ""), ("Minimal Core", None, ""), ("Description", None, "")]
     out.append('<table width="100%" border="0" cellspacing="0" cellpadding="10"><tr><td>')
     out.append(f'<table width="100%" border="0" cellspacing="1" cellpadding="6" bgcolor="{LINE}">')
     head = []
     for title, key, align in cols:
         al = f' align="{align}"' if align else ""
         if key and key == sort_key:
-            head.append(f'<td nowrap bgcolor="{ACCENT}" class="on"{al}>{esc(title.upper())}</td>')
+            head.append(f'<td nowrap bgcolor="{ACCENT}" class="on"{al}>{esc(title)}</td>')
         elif key:
             head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>'
-                        f'<a href="{link(s=key)}">{esc(title.upper())}</a></td>')
+                        f'<a href="{link(s=key)}">{esc(title)}</a></td>')
         else:
-            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>{esc(title.upper())}</td>')
+            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>{esc(title)}</td>')
     out.append("<tr>" + "".join(head) + "</tr>")
     for i, (cat, name, tags, releases, info) in enumerate(rows):
         bg = CARD if i % 2 == 0 else ALT
@@ -198,12 +193,11 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
                    f'<td nowrap class="dim">{esc(cat)}</td>'
                    f'<td nowrap><b>{esc(name)}</b></td>'
                    f'<td nowrap><b>{esc(releases[0])}</b></td>'
-                   f'<td>{older(releases)}</td>'
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
                    f'<td nowrap>{esc(info.get("OWNER") or "")}</td>'
                    f'<td>{esc(info.get("CONTRIBUTORS") or "")}</td>'
-                   f'<td nowrap>{esc(cores(info, releases))}</td>'
+                   f'<td nowrap>{esc(min_core(info, releases[0]))}</td>'
                    f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
                    "</tr>")
     if not rows:
