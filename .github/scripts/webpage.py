@@ -54,8 +54,8 @@ a { color: %(ACCENT)s; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .dim { color: %(DIM)s; }
 .small { font-size: 11px; }
-.th { color: %(DIM)s; font-weight: bold; }
-.th a { color: %(DIM)s; }
+.th { color: #ffffff; font-weight: bold; }
+.th a { color: #ffffff; text-decoration: underline; }
 .on, .on a { color: #ffffff; font-weight: bold; }
 .dl, .dl a { color: #ffffff; font-weight: 600; font-size: 15px; }
 """ % dict(PAGE=PAGE, INK=INK, ACCENT=ACCENT, DIM=DIM, FONTS=FONTS)
@@ -182,15 +182,15 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     head = []
     for title, key, align in cols:
         al = f' align="{align}"' if align else ""
-        if key and key == sort_key:
-            head.append(f'<td nowrap bgcolor="{ACCENT}" class="on"{al}>'
-                        f'<font color="#ffffff"><b>{esc(title)}</b></font></td>')
-        elif key:
-            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>'
-                        f'<a href="{link(s=key)}"><b>{esc(title)}</b></a></td>')
+        # all white on black; a title to sort by is an underlined link,
+        # the one sorted by now is not (clicking it would change nothing)
+        if key and key != sort_key:
+            head.append(f'<td nowrap bgcolor="{HEAD}" class="th"{al}>'
+                        f'<a href="{link(s=key)}"><font color="#ffffff"><b><u>{esc(title)}'
+                        f'</u></b></font></a></td>')
         else:
-            head.append(f'<td nowrap bgcolor="{PAGE}" class="th"{al}>'
-                        f'<font color="{DIM}"><b>{esc(title)}</b></font></td>')
+            head.append(f'<td nowrap bgcolor="{HEAD}" class="th"{al}>'
+                        f'<font color="#ffffff"><b>{esc(title)}</b></font></td>')
     out.append("<tr>" + "".join(head) + "</tr>")
     for i, (cat, name, tags, releases, info) in enumerate(rows):
         bg = CARD if i % 2 == 0 else ALT
