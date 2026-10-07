@@ -125,6 +125,9 @@ def build(names, outdir, assets, package, cores, version, stamp):
     with open(os.path.join(outdir, "style.css"), "w", encoding="latin-1") as f:
         f.write(CSS)
 
+    with open(os.path.join(outdir, "fonttest.html"), "w", encoding="latin-1", newline="\n") as f:
+        f.write(font_test())
+
     cats = sorted({n[0] for n in names}, key=str.lower)
     cat_items = [("all", "All")] + [(c, c) for c in cats]
     written = 0
@@ -226,3 +229,27 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
 
     out.append("</body></html>")
     return faced("\n".join(out) + "\n")
+
+
+# fonttest.html (not linked): which <font face> names a browser resolves -
+# each row asks for one name; a row in the default serif font is a name
+# the browser did not find
+FONT_TESTS = ("Inter", "Work Sans Regular", "Work Sans", "WorkSans", "Vera Sans",
+              "Vera Sans.font", "Barlow Regular", "Barlow", "DejaVu Sans", "CGTriumvirate",
+              "helvetica", "Helvetica", "Arial", "XHelvetica", "sans-serif", "Sans")
+
+
+def font_test():
+    rows = "".join(f'<tr><td nowrap><tt>{esc(face)}</tt></td>'
+                   f'<td><font face="{esc(face)}">Apollo Update 0123456789 '
+                   f'<b>Bold sagasd.device</b></font></td></tr>\n' for face in FONT_TESTS)
+    return ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n'
+            '<html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">'
+            '<title>Font test</title></head><body bgcolor="#ffffff">\n'
+            '<p>Each row asks for the font named on the left. A row shown in the '
+            'default (serif) font is a name this browser did not find.</p>\n'
+            '<table border="1" cellspacing="0" cellpadding="6">\n'
+            '<tr><td><b>face=</b></td><td><b>Sample</b></td></tr>\n'
+            f'<tr><td nowrap><tt>(none)</tt></td><td>Apollo Update 0123456789 '
+            '<b>Bold sagasd.device</b></td></tr>\n' + rows +
+            '</table></body></html>\n')
