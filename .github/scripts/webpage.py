@@ -14,14 +14,17 @@ screen, and fine in any other:
 - ISO-8859-1, no characters beyond it; the logo and the download icon
   are PNGs on the dark band (no SVG, no transparency)
 - the typeface is Inter (SIL OFL, published beside it) for browsers with
-  web fonts; the others take the first of the modern fonts listed, or
-  their own
+  web fonts; IBrowse and co. ignore CSS fonts, so every table cell also
+  says <font face=...> with the sans fonts of ApolloOS (Work Sans, Vera
+  Sans) and AmigaOS (CGTriumvirate, helvetica): the first one installed
+  is used
 - the colours of the ApolloCD32 game list: #f6f6f4 page, white rows,
   #7a5cff accent
 """
 
 import html
 import os
+import re
 import shutil
 
 ACCENT = "#7a5cff"
@@ -39,6 +42,9 @@ SORTS = (("category", "Category"), ("name", "Name"), ("owner", "Owner"))
 
 FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
          '"Helvetica Neue", "DejaVu Sans", Helvetica, Arial, sans-serif')
+# <font face>: Amiga font names are the .font file names
+FACE = "Inter,Work Sans Regular,Vera Sans,CGTriumvirate,helvetica,sans-serif"
+
 SITE_FILES = ("ApolloUpdate-logo.png", "ApolloUpdate-icon.png", "Inter-latin.woff2",
               "Inter-LICENSE.txt")
 
@@ -58,6 +64,17 @@ a:hover { text-decoration: underline; }
 .on, .on a { color: #ffffff; font-weight: bold; }
 .dl, .dl a { color: #ffffff; font-weight: 600; font-size: 15px; }
 """ % dict(PAGE=PAGE, INK=INK, ACCENT=ACCENT, DIM=DIM, FONTS=FONTS)
+
+
+def faced(page):
+    """Every innermost table cell's content inside <font face=FACE>: old
+    browsers do not carry a font from outside a table into its cells."""
+    def wrap(m):
+        inner = m.group(2)
+        if not inner.strip():
+            return m.group(0)
+        return f'{m.group(1)}<font face="{FACE}">{inner}</font>{m.group(3)}'
+    return re.sub(r"(<td[^>]*>)((?:(?!<td|<table|</td>).)*?)(</td>)", wrap, page, flags=re.S)
 
 
 def esc(s):
@@ -208,4 +225,4 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, cores, ver
     out.append("</table></td></tr></table>")
 
     out.append("</body></html>")
-    return "\n".join(out) + "\n"
+    return faced("\n".join(out) + "\n")
