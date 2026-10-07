@@ -503,7 +503,9 @@ def table(names, avl=False):
             "| Category | Name | Latest | ApolloOS | AmigaOS |"
             + (" Level |" if avl else "") + " Minimal Core | Description |",
             "|---|---|---|:-:|:-:|" + ("---|" if avl else "") + "---|---|"]
-    for cat, name, tags, releases, info in names:
+    # by category in the priority order of the web page, then by name
+    for cat, name, tags, releases, info in sorted(names, key=lambda n: (webpage.cat_rank(n[0]),
+                                                                         n[1].lower())):
         rows.append("| %s | %s | **%s** | %s | %s |" % (
             cat, name, releases[0],
             "✓" if "ApolloOS" in tags else "", "✓" if "AmigaOS" in tags else "")
