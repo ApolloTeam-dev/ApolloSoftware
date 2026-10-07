@@ -154,9 +154,12 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'<td valign="middle"><a href="ApolloUpdate.lha"><img src="ApolloUpdate-icon.png" '
               f'width="48" height="48" border="0" alt="Download" title="{tip}"></a></td>'
               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
-              f'<a href="ApolloUpdate.lha" title="{tip}">'
-              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a>'
-              f'<br><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td>'
+              '<table border="0" cellspacing="0" cellpadding="0">'
+              f'<tr><td nowrap><a href="ApolloUpdate.lha" title="{tip}">'
+              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td></tr>'
+              '<tr><td height="6"></td></tr>'                  # a little air between the lines
+              f'<tr><td nowrap><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td></tr>'
+              '</table></td>'
               '</tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
