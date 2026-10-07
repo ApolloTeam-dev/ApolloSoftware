@@ -31,6 +31,7 @@ PAGE = "#f6f6f4"
 CARD = "#ffffff"
 ALT = "#fbfaff"
 LINE = "#e2e2df"
+CHIPLINE = "#c4c4c0"        # the hairline around a filter box
 DIM = "#6b6b70"
 INK = "#1c1c1e"
 HEAD = "#131417"            # the logo band, as in the ApolloUpdate window
@@ -62,6 +63,16 @@ a:hover { text-decoration: underline; }
 """ % dict(PAGE=PAGE, INK=INK, ACCENT=ACCENT, DIM=DIM, FONTS=FONTS)
 
 
+def pixel(colour):
+    """A 1x1 PNG of that colour, a spacer IBrowse keeps at its size"""
+    import struct, zlib
+    rgb = bytes(int(colour[i:i + 2], 16) for i in (1, 3, 5))
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 1, 1, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(b"\0" + rgb)) + chunk(b"IEND", b""))
+
+
 def esc(s):
     return html.escape(s or "", quote=True).encode("latin-1", "replace").decode("latin-1")
 
@@ -72,18 +83,24 @@ def page_name(os_key, cat_key, sort_key):
     return f"{os_key}-{cat_key.lower()}-{sort_key}.html"
 
 
+def chip(content, bg):
+    """A filter box with a 1 pixel hairline: a table whose 1 pixel cell
+    spacing shows its grey background around the one cell"""
+    return (f'<table border="0" cellspacing="1" cellpadding="2" bgcolor="{CHIPLINE}"><tr>'
+            f'<td nowrap bgcolor="{bg}">&nbsp;{content}&nbsp;</td></tr></table>')
+
+
 def chips(label, items, active, link):
-    """One row of filter choices: the chosen one a purple cell, the others links."""
+    """One row of filter choices: the chosen one a purple box, the others links."""
     cells = [f'<td nowrap class="dim"><b>{esc(label)}</b>&nbsp;</td>']
     for key, text in items:
         if key == active:
-            cells.append(f'<td nowrap bgcolor="{ACCENT}" class="on">&nbsp;'
-                         f'<font color="#ffffff"><b>{esc(text)}</b></font>&nbsp;</td>')
+            cells.append('<td class="on">' + chip(f'<font color="#ffffff"><b>{esc(text)}</b></font>',
+                                                  ACCENT) + '</td>')
         else:
-            cells.append(f'<td nowrap bgcolor="{CARD}">&nbsp;<a href="{link(key)}">'
-                         f'{esc(text)}</a>&nbsp;</td>')
-        cells.append('<td width="4"></td>')
-    return ('<table border="0" cellspacing="0" cellpadding="3"><tr>'
+            cells.append('<td>' + chip(f'<a href="{link(key)}">{esc(text)}</a>', CARD) + '</td>')
+        cells.append('<td nowrap>&nbsp;</td>')
+    return ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
             + "".join(cells) + "</tr></table>")
 
 
@@ -108,6 +125,8 @@ def build(names, outdir, assets, package, version, stamp):
         size = os.path.getsize(package)
     with open(os.path.join(outdir, "style.css"), "w", encoding="latin-1") as f:
         f.write(CSS)
+    with open(os.path.join(outdir, "px.png"), "wb") as f:
+        f.write(pixel(PAGE))
 
     with open(os.path.join(outdir, "fonttest.html"), "w", encoding="latin-1", newline="\n") as f:
         f.write(font_test())
@@ -172,6 +191,11 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     # gives an empty cell a whole text line, whatever its height says.
     out.append('<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>'
                '<td width="10"></td><td>')
+
+    # one pixel more above the filters than the padding gives: an image, as
+    # IBrowse makes an empty cell a whole text line high
+    out.append('<table border="0" cellspacing="0" cellpadding="0"><tr><td>'
+               '<img src="px.png" width="1" height="1" alt="" border="0"></td></tr></table>')
 
     # filters: OS and Category on one line, the count on the right; the
     # padding gives the same small space above and below in every browser
