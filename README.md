@@ -24,6 +24,42 @@ Level-3 = Version (Official version -no spaces- example: 1.0e or 26.9R1)
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
+Example (single file):
+- Drivers/ApolloMap/Info
+- Drivers/ApolloMap/2.30/C/ApolloMap
+
+Example (multiple files):
+- Tools/ApolloExplorer/Info
+- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerSrv
+- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerTool
+- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
+- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
+
+### The Info file
+
+Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
+starts a comment:
+
+```
+OS=ApolloOS,AmigaOS
+MINCORE=11000
+MINCORE.1.0e=10900
+DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
+```
+
+| Key | |
+|---|---|
+| `OS` | required: `ApolloOS`, `AmigaOS` or both, comma separated |
+| `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
+| `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
+| `DESCRIPTION` | one line, at most 160 characters (longer is cut with "..."); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
+
+Leave a value empty when unknown. On every push a GitHub workflow checks the
+layout and the `Info` files, and writes the table below and
+`ApolloSoftware.index`, the file ApolloUpdate reads (do not edit it).
+A new Name without an `Info` gets one from the workflow, for both OSes.
+Check it and fill in the rest.
+
 ### Cores, KickROM and ExpROM
 
 These three categories hold what is flashed, not copied to SYS:. A release
@@ -50,40 +86,6 @@ ApolloUpdate puts it:
 |---|---|
 | `ExpROM/sagasd.device/Info` | (read by ApolloUpdate, not copied) |
 | `ExpROM/sagasd.device/2.41/sagasd.device` | `SYS:ApolloUpdate/ExpROM/sagasd.device` |
-
-Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
-starts a comment:
-
-```
-OS=ApolloOS,AmigaOS
-MINCORE=11000
-MINCORE.1.0e=10900
-DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
-```
-
-| Key | |
-|---|---|
-| `OS` | required: `ApolloOS`, `AmigaOS` or both, comma separated |
-| `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
-| `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
-| `DESCRIPTION` | one line, at most 160 characters (longer is cut with "..."); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
-
-Leave a value empty when unknown. On every push a GitHub workflow checks the
-layout and the `Info` files, and writes the table below and
-`ApolloSoftware.index`, the file ApolloUpdate reads (do not edit it).
-A new Name without an `Info` gets one from the workflow, for both OSes.
-Check it and fill in the rest.
-
-Example (single file):
-- Drivers/ApolloMap/Info
-- Drivers/ApolloMap/2.30/C/ApolloMap
-
-Example (multiple files):
-- Tools/ApolloExplorer/Info
-- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerSrv
-- Tools/ApolloExplorer/1.4.0/C/ApolloExplorerTool
-- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
-- Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
 
 ## Releases
 
