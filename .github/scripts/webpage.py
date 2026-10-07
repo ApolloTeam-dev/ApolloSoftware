@@ -36,6 +36,20 @@ DIM = "#6b6b70"
 INK = "#1c1c1e"
 HEAD = "#131417"            # the logo band, as in the ApolloUpdate window
 
+# the categories by priority: the filter and the "by category" order
+CATEGORY_ORDER = ("Cores", "ROM", "Resources", "Drivers", "Libraries", "FileSystems",
+                  "Tools", "Icons")
+
+
+def cat_rank(cat):
+    """Sort key of a category: its place in CATEGORY_ORDER, any other after
+    them by name"""
+    for i, c in enumerate(CATEGORY_ORDER):
+        if c.lower() == cat.lower():
+            return (i, "")
+    return (len(CATEGORY_ORDER), cat.lower())
+
+
 OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"))
 SORTS = (("category", "Category"), ("name", "Name"))
 
@@ -131,7 +145,7 @@ def build(names, outdir, assets, package, version, stamp):
     with open(os.path.join(outdir, "fonttest.html"), "w", encoding="latin-1", newline="\n") as f:
         f.write(font_test())
 
-    cats = sorted({n[0] for n in names}, key=str.lower)
+    cats = sorted({n[0] for n in names}, key=cat_rank)
     cat_items = [("all", "All")] + [(c, c) for c in cats]
     written = 0
     for os_key, os_text in OSES:
@@ -143,7 +157,7 @@ def build(names, outdir, assets, package, version, stamp):
                 if sort_key == "name":
                     rows.sort(key=lambda n: (n[1].lower(), n[0].lower()))
                 else:
-                    rows.sort(key=lambda n: (n[0].lower(), n[1].lower()))
+                    rows.sort(key=lambda n: (cat_rank(n[0]), n[1].lower()))
                 text = one_page(names, rows, os_key, cat_key, sort_key, cat_items,
                                 size, version, stamp)
                 with open(os.path.join(outdir, page_name(os_key, cat_key, sort_key)), "w",
