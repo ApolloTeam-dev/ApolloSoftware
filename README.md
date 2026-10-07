@@ -10,9 +10,9 @@ start it - from then on it keeps itself up to date:
 
 The library as a web page for Amiga browsers (IBrowse, AWeb, NetSurf), with
 the same download: https://apolloteam-dev.github.io/ApolloSoftware/
- Software for
-members of [Apollo-Vampire-Lair](https://ko-fi.com/apollovampirelair) is in the
-separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
+
+Software for members of [Apollo-Vampire-Lair](https://ko-fi.com/apollovampirelair)
+is in the separate ApolloSoftware-AVL repository; ApolloUpdate shows it to members.
 
 ## Folder Convention
 
@@ -35,12 +35,21 @@ folder (Level-3) holds the file(s) directly, no drawers:
 | `KickROM` | exactly one: the Kickstart ROM, ready to flash | `SYS:ApolloUpdate/KickROM/` | ApolloFlash |
 | `ExpROM` | one or more ROM modules | `SYS:ApolloUpdate/ExpROM/` | ApolloExpROM, which builds them into the Expansion ROM first |
 
-ApolloUpdate empties that drawer before it copies (once per update, so the
-ExpROM drawer then holds the modules of every ExpROM entry updated together)
-and then starts the flash tool. Example:
+Before it copies, ApolloUpdate deletes whatever is already in that drawer,
+so the drawer only holds what was just installed. Then it starts the flash
+tool (for now, a requester shows what would be flashed).
 
-- ExpROM/sagasd.device/Info
-- ExpROM/sagasd.device/2.41/sagasd.device
+For ExpROM this means: update all the ExpROM entries you want in the
+Expansion ROM in one go. ApolloExpROM builds the Expansion ROM from every
+module in `SYS:ApolloUpdate/ExpROM/`.
+
+Example - release 2.41 of sagasd.device in the repository, and where
+ApolloUpdate puts it:
+
+| In the repository | On the Amiga |
+|---|---|
+| `ExpROM/sagasd.device/Info` | (read by ApolloUpdate, not copied) |
+| `ExpROM/sagasd.device/2.41/sagasd.device` | `SYS:ApolloUpdate/ExpROM/sagasd.device` |
 
 Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
