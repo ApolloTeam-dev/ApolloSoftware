@@ -1,7 +1,6 @@
 ; ApolloSoftware.index - generated from the Info files by .github/scripts/releases.py, do not edit
 ; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
-Cores/UniCorn-Beta	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn-Beta Core
-Cores/UniCorn-Release	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn-Release Core
+Cores/UniCorn	OS=ApolloOS,AmigaOS	DESCRIPTION=UniCorn Core
 Drivers/AmiTCP	OS=AmigaOS	DESCRIPTION=TCP/IP Stack
 Drivers/arne.audio	OS=ApolloOS,AmigaOS	DESCRIPTION=AHI Audio Driver
 Drivers/cd.device	OS=AmigaOS	DESCRIPTION=CD32-Driver
