@@ -350,6 +350,12 @@ def scan(root, avl=False):
                               + (" and AVL=Bronze" if avl else "") + ")")
                 info = {"OS": [], "AVL": None, "MINCORE": "",
                         "DESCRIPTION": ""}
+            if cat == "Cores":         # the core itself: for both systems, no minimal core
+                if info["OS"] != list(OSES):
+                    errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - a core is for both "
+                                  f"systems (OS={','.join(OSES)})")
+                for key in [k for k in info if k.startswith("MINCORE") and info[k]]:
+                    errors.append(f"{cat}/{name}/{INFO}: {key}={info[key]} - a core has no minimal core")
             if cat == "ROM" and name not in ROMS:
                 errors.append(f"{cat}/{name}: ROM holds {' and '.join(ROMS)} only")
             elif cat == "ROM" and info["OS"] != [ROMS[name][0]]:
