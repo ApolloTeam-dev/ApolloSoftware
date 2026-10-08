@@ -100,11 +100,32 @@ def is_beta(rel):
     return rel.endswith(BETA)
 
 
+RC = re.compile(r"-RC(\d+)$", re.I)     # a release candidate: R9.6-RC06
+
+
+def split_rc(rel):
+    """(rest, candidate number or -1): R9.6-RC06 -> (R9.6, 6)"""
+    m = RC.search(rel)
+    return (rel[:m.start()], int(m.group(1))) if m else (rel, -1)
+
+
 def version_cmp(a, b):
     """<0, 0, >0 like strcmp. The -beta suffix is left out, and of two equal
-    versions the release is newer than the beta (1.2 > 1.2-beta)."""
-    c = base_cmp(a[:-len(BETA)] if is_beta(a) else a, b[:-len(BETA)] if is_beta(b) else b)
-    return c if c else (1 if is_beta(b) else 0) - (1 if is_beta(a) else 0)
+    versions the release is newer than the beta (1.2 > 1.2-beta). A release
+    candidate is older than its release, the candidates go by number:
+    R9.6-RC05 < R9.6-RC06 < R9.6 (ApolloROM: Rx.y-RCz)."""
+    ra, rc_a = split_rc(a[:-len(BETA)] if is_beta(a) else a)
+    rb, rc_b = split_rc(b[:-len(BETA)] if is_beta(b) else b)
+    c = base_cmp(ra, rb)
+    if c:
+        return c
+    if rc_a != rc_b:
+        if rc_a < 0:
+            return 1
+        if rc_b < 0:
+            return -1
+        return -1 if rc_a < rc_b else 1
+    return (1 if is_beta(b) else 0) - (1 if is_beta(a) else 0)
 
 
 def base_cmp(a, b):
@@ -163,7 +184,11 @@ def selftest():
              ("0.63R3", "0.63R10", -1), ("2.30", "2.3", 1), ("01.2", "1.2", 0),
              ("1.4.0", "1.4.0", 0), ("0.1i", "0.1b", 1), ("2.36", "2.99", -1),
              ("12556E-beta", "12001", 1), ("1.2", "1.2-beta", 1), ("1.3-beta", "1.2", 1),
-             ("1.2-beta", "1.2-beta", 0), ("R9.56-beta", "R9.55", 1)]
+             ("1.2-beta", "1.2-beta", 0), ("R9.56-beta", "R9.55", 1),
+             ("R9.6-RC06", "R9.6-RC05", 1), ("R9.6-RC10", "R9.6-RC9", 1), ("R9.6", "R9.6-RC06", 1),
+             ("R9.7-RC01", "R9.6", 1), ("R9.6-rc06", "R9.6-RC06", 0),
+             ("R9.6-RC06-beta", "R9.6-RC06", -1), ("R9.6-RC07-beta", "R9.6-RC06", 1),
+             ("1.2RC", "1.2", 1)]
     bad = 0
     for a, b, want in cases:
         got = version_cmp(a, b)
