@@ -27,6 +27,9 @@ switch on. The version decides what is newest - the `-beta` suffix is left
 out of the comparison, and of two equal versions the release wins
 (`1.2` is newer than `1.2-beta`). The overviews show the newest **Release**
 and the newest **Beta** (when it is newer than that release, else "-").
+The ApolloROM uses `Rx.y-RCz` (major, minor, release candidate): numbers
+compare as numbers, and a release candidate `-RC<n>` is older than its
+release (`R9.6-RC05` < `R9.6-RC06` < `R9.6` < `R9.7-RC01`).
 
 Level-4 = Deployment (Folder structure for copy to SYS: by ApolloUpdate)
 
