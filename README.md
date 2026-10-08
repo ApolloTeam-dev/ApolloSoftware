@@ -115,7 +115,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 
 | Category | Name | Release | Beta | ApolloOS | AmigaOS | Minimal Core | Description |
 |---|---|---|---|:-:|:-:|---|---|
-| Cores | UniCorn | **12001** | 12556E-beta | ✓ | ✓ |  | UniCorn Core |
+| Cores | UniCorn-Core | **12001** | 12556E-beta | ✓ | ✓ |  | UniCorn Core |
 | ROM | AmigaROM | **48.00** | - |  | ✓ |  | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.55** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.3** | - |  | ✓ |  | processor.resource |
@@ -145,7 +145,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloFloppy | **1.2** | - | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.30** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.64** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloUpdate | **0.65** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** | - | ✓ | ✓ |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | - | ✓ | ✓ |  | Apollo MouseWheel Driver |
