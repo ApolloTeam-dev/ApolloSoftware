@@ -69,6 +69,7 @@ INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
 ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS and
         "AmigaROM": ("AmigaOS", (1, 196608))}           # image size min, max (bytes)
+CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
 MODULES = "Modules"
 INDEX = "ApolloSoftware.index"
 PACKAGE = "ApolloUpdate.lha"
@@ -384,6 +385,14 @@ def release_files(root, cat, name, rel, errors=None):
             if cat == "Cores" and len(files) > 1:
                 errors.append(f"{label}: a {cat} release holds exactly one core file "
                               f"(has {len(files)})")
+            if cat == "Cores":
+                for f in files:
+                    size = os.path.getsize(os.path.join(rpath, f))
+                    if not f.lower().endswith(".jic"):
+                        errors.append(f"{label}/{f}: a core is a .jic file")
+                    if not CORE_JIC[0] <= size <= CORE_JIC[1]:
+                        errors.append(f"{label}/{f}: {size} bytes - a V4 core has "
+                                      f"{CORE_JIC[0]} to {CORE_JIC[1]} bytes")
             if cat == "ROM" and name in ROMS:
                 if sorted(files) != sorted([name, MODULES]):
                     errors.append(f"{label}: a {name} release holds the image '{name}' and "
