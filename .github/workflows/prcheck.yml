@@ -1,0 +1,35 @@
+# Checks every Pull Request on ApolloSoftware: changes come as Pull Requests
+# (from the ApolloSoftware-Manager or by hand) and only a Maintainer merges
+# them. The check is .github/scripts/prcheck.py: the layout rules of
+# releases.py on the proposed tree, then what a comparison with the base
+# shows (generated files edited, version names, SYS: drawers, file sizes,
+# removals). Its result is the job summary; an error blocks the merge.
+#
+# The scripts run as they are on main (in .base), so a Pull Request cannot
+# loosen its own check.
+
+name: Pull Request check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The base of the Pull Request
+        run: |
+          git fetch -q --depth=1 origin ${{ github.event.pull_request.base.sha }}
+          git worktree add -q .base ${{ github.event.pull_request.base.sha }}
+
+      - name: Release order matches ApolloUpdate
+        run: python3 .base/.github/scripts/releases.py --selftest
+
+      - name: Check the proposed changes
+        run: python3 .base/.github/scripts/prcheck.py --root . --base .base
