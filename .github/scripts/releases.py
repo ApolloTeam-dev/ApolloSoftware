@@ -37,7 +37,7 @@ Layout (the contract with the ApolloUpdate client):
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
         MINCORE=                      lowest Apollo core it runs on (number)
         MINCORE.<release>=            the same for one release
-        DESCRIPTION=                  one line, at most 160 characters
+        DESCRIPTION=                  one line, at most 100 characters
     ApolloSoftware.index              generated from the Info files: what
                                       ApolloUpdate reads (do not edit)
     ApolloUpdate.lha                  generated (--package): the newest
@@ -72,7 +72,7 @@ ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS 
 MODULES = "Modules"
 INDEX = "ApolloSoftware.index"
 PACKAGE = "ApolloUpdate.lha"
-MAX_DESC = 160                  # what fits in the bubble help ...
+MAX_DESC = 100                  # at most (also the Manager's limit) ...
 WRAP_DESC = 48                  # ... at this many characters per line
 MARK_START = "<!-- releases:start -->"
 MARK_END = "<!-- releases:end -->"
@@ -290,8 +290,7 @@ def read_info(path, label, releases, avl, errors, warnings):
         warnings.append(f"{label}: DESCRIPTION has characters the Amiga lacks - changed to ASCII")
     desc = desc.replace("\t", " ")
     if len(desc) > MAX_DESC:
-        warnings.append(f"{label}: DESCRIPTION is {len(desc)} characters - cut to {MAX_DESC}")
-        desc = desc[:MAX_DESC - 3].rstrip() + "..."
+        errors.append(f"{label}: DESCRIPTION is {len(desc)} characters - at most {MAX_DESC}")
     if not desc:
         warnings.append(f"{label}: no DESCRIPTION")
     info["DESCRIPTION"] = desc
