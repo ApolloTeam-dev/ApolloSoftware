@@ -143,11 +143,12 @@ def min_core(info, latest):
     return info.get("MINCORE." + latest) or info.get("MINCORE") or ""
 
 
-def build(names, outdir, assets, package, version, stamp):
+def build(names, outdir, assets, package, version, stamp, downloads=None):
     """names: [(cat, name, {os}, [releases newest first], info)] as releases.py
     reads them; assets: the folder with SITE_FILES (.github/site), copied
     next to the pages, as is package (may be None); version: of the
-    ApolloUpdate in the package.
+    ApolloUpdate in the package; downloads: {(cat, name, release): link}
+    for the Release and Beta cells (releases.py write_downloads).
     Returns the number of pages written."""
     os.makedirs(outdir, exist_ok=True)
     for f in SITE_FILES:
@@ -178,7 +179,7 @@ def build(names, outdir, assets, package, version, stamp):
                 else:
                     rows.sort(key=lambda n: (cat_rank(n[0]), n[1].lower()))
                 text = one_page(names, rows, os_key, cat_key, sort_key, cat_items,
-                                size, version, stamp)
+                                size, version, stamp, downloads or {})
                 with open(os.path.join(outdir, page_name(os_key, cat_key, sort_key)), "w",
                           encoding="latin-1", newline="\n") as f:
                     f.write(text)
@@ -186,7 +187,7 @@ def build(names, outdir, assets, package, version, stamp):
     return written
 
 
-def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, stamp):
+def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, stamp, downloads):
     def link(o=os_key, c=cat_key, s=sort_key):
         return page_name(o, c, s)
 
@@ -261,13 +262,21 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
             head.append(f'<td nowrap bgcolor="{HEAD}" class="th"{al}>'
                         f'<font color="#ffffff"><b>{esc(title)}</b></font></td>')
     out.append("<tr>" + "".join(head) + "</tr>")
+    def version_cell(cat, name, rel, bold):
+        # a version links to its download (an .lha, or the core / ROM file)
+        text = f"<b>{esc(rel)}</b>" if bold else esc(rel)
+        href = downloads.get((cat, name, rel))
+        if href:
+            text = f'<a href="{esc(href)}" title="Download {esc(name)} {esc(rel)}">{text}</a>'
+        return f"<td nowrap>{text}</td>"
+
     for i, (cat, name, tags, releases, info) in enumerate(rows):
         bg = CARD if i % 2 == 0 else ALT
+        rel, beta = release_beta(releases)
         out.append(f'<tr bgcolor="{bg}">'
                    f'<td nowrap class="dim">{esc(cat)}</td>'
                    f'<td nowrap><b>{esc(name)}</b></td>'
-                   f'<td nowrap><b>{esc(release_beta(releases)[0])}</b></td>'
-                   f'<td nowrap>{esc(release_beta(releases)[1])}</td>'
+                   + version_cell(cat, name, rel, True) + version_cell(cat, name, beta, False) +
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
                    f'<td nowrap>{esc(min_core(info, shown(releases)))}</td>'

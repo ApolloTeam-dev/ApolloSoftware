@@ -54,8 +54,10 @@ import argparse
 import functools
 import os
 import re
+import shutil
 import struct
 import sys
+import time
 
 import webpage                          # .github/scripts/webpage.py
 from webpage import min_core, release_beta, shown
@@ -629,8 +631,9 @@ def crc16(data):
 
 def lha(members):
     """An LhA archive of [(name, data, (y, m, d))]: level-0 headers, method
-    -lh0- (stored), which every Amiga LhA and unarchiver reads. Written
-    here rather than by a tool, so it is the same on every machine."""
+    -lh0- (stored), which every Amiga LhA and unarchiver reads. A name may
+    hold drawers, "/" separated (Devs/Networks/v4net.device). Written here
+    rather than by a tool, so it is the same on every machine."""
     out = bytearray()
     for name, data, (y, mo, d) in members:
         fn = name.encode("ascii")
@@ -674,6 +677,38 @@ def write_package(root, names, path, errors):
         open(path, "wb").write(new)
         return True
     return False
+
+
+def write_downloads(root, names, outdir, date):
+    """The downloads of the web page (ApolloSoftware only: the AVL
+    repository has no web page): for the Release and the Beta of every
+    Name an .lha of its files as they go to SYS: (download/<Category>/
+    <Name>-<version>.lha); for Cores and ROM the file itself (the core,
+    the ROM image). ROM modules - files in an ApolloROM/ or AmigaROM/
+    drawer - are left out, so a Name that is only that gets no link.
+    Returns {(cat, name, release): link below outdir}."""
+    links = {}
+    for cat, name, tags, releases, info in names:
+        for rel in [r for r in release_beta(releases) if r != "-"]:
+            files = [(sub, key) for sub, key in release_files(root, cat, name, rel) if ":" not in key]
+            if not files:
+                continue
+            if cat in ROM_CATS:
+                image = name if cat == "ROM" else files[0][0]       # the core / the ROM image
+                if not os.path.isfile(os.path.join(root, cat, name, rel, image)):
+                    continue
+                link = "/".join(["download", cat, name, rel, image])
+                os.makedirs(os.path.join(outdir, os.path.dirname(link)), exist_ok=True)
+                shutil.copyfile(os.path.join(root, cat, name, rel, image), os.path.join(outdir, link))
+            else:
+                link = "/".join(["download", cat, f"{name}-{rel}.lha"])
+                os.makedirs(os.path.join(outdir, os.path.dirname(link)), exist_ok=True)
+                members = [(sub.replace(os.sep, "/"), open(os.path.join(root, cat, name, rel, sub), "rb").read(), date)
+                           for sub, key in sorted(files)]
+                with open(os.path.join(outdir, link), "wb") as f:
+                    f.write(lha(members))
+            links[(cat, name, rel)] = link
+    return links
 
 
 def write_readme(path, names, avl=False):
@@ -768,11 +803,14 @@ def main():
                 d, mo, y = (int(x) for x in m.groups())
                 stamp += " (%d-%s-%d)" % (d, ("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
                                                .split()[mo - 1]), 2000 + y)
+        today = time.gmtime()
+        downloads = {} if args.avl else write_downloads(args.root, names, args.site,
+                                                        (today.tm_year, today.tm_mon, today.tm_mday))
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
             package=args.package or os.path.join(args.root, PACKAGE),
-            version=version, stamp=stamp)
+            version=version, stamp=stamp, downloads=downloads)
         print(f"{args.site}: {pages} pages")
     return 0
 
