@@ -143,12 +143,13 @@ def min_core(info, latest):
     return info.get("MINCORE." + latest) or info.get("MINCORE") or ""
 
 
-def build(names, outdir, assets, package, version, stamp, downloads=None):
+def build(names, outdir, assets, package, version, stamp, downloads=None, offline=0):
     """names: [(cat, name, {os}, [releases newest first], info)] as releases.py
     reads them; assets: the folder with SITE_FILES (.github/site), copied
     next to the pages, as is package (may be None); version: of the
     ApolloUpdate in the package; downloads: {(cat, name, release): link}
-    for the Release and Beta cells (releases.py write_downloads).
+    for the Release and Beta cells (releases.py write_downloads); offline:
+    the size of ApolloSoftware-Offline.lha beside the pages, 0 for none.
     Returns the number of pages written."""
     os.makedirs(outdir, exist_ok=True)
     for f in SITE_FILES:
@@ -179,7 +180,7 @@ def build(names, outdir, assets, package, version, stamp, downloads=None):
                 else:
                     rows.sort(key=lambda n: (cat_rank(n[0]), n[1].lower()))
                 text = one_page(names, rows, os_key, cat_key, sort_key, cat_items,
-                                size, version, stamp, downloads or {})
+                                size, version, stamp, downloads or {}, offline)
                 with open(os.path.join(outdir, page_name(os_key, cat_key, sort_key)), "w",
                           encoding="latin-1", newline="\n") as f:
                     f.write(text)
@@ -187,7 +188,7 @@ def build(names, outdir, assets, package, version, stamp, downloads=None):
     return written
 
 
-def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, stamp, downloads):
+def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, stamp, downloads, offline=0):
     def link(o=os_key, c=cat_key, s=sort_key):
         return page_name(o, c, s)
 
@@ -213,6 +214,10 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td></tr>'
               '<tr><td height="6"></td></tr>'                  # a little air between the lines
               f'<tr><td nowrap><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td></tr>'
+              + (f'<tr><td height="6"></td></tr><tr><td nowrap class="small">'
+                 f'<a href="ApolloSoftware-Offline.lha" title="Every Release and Beta, for ApolloUpdate without internet">'
+                 f'<font color="#ffffff">Offline: ApolloSoftware-Offline.lha ({(offline + 524288) // 1048576} MB)</font></a></td></tr>'
+                 if offline else "") +
               '</table></td>'
               '</tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'

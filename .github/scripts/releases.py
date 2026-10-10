@@ -637,6 +637,8 @@ def lha(members):
     out = bytearray()
     for name, data, (y, mo, d) in members:
         fn = name.encode("ascii")
+        if len(fn) > 230:
+            raise ValueError(f"{name}: too long for an LhA level-0 header")
         stamp = (12 << 11) | ((y - 1980) << 25) | (mo << 21) | (d << 16)     # 12:00
         body = (b"-lh0-" + struct.pack("<IIIBB", len(data), len(data), stamp, 0x20, 0)
                 + bytes([len(fn)]) + fn + struct.pack("<H", crc16(data)))
@@ -709,6 +711,39 @@ def write_downloads(root, names, outdir, date):
                     f.write(lha(members))
             links[(cat, name, rel)] = link
     return links
+
+
+OFFLINE = "ApolloSoftware-Offline.lha"
+OFFLINE_INFO = "ApolloSoftware.offline"
+
+
+def write_offline(root, names, outdir, date, commit):
+    """ApolloSoftware-Offline.lha for ApolloUpdate without internet: the
+    Release and the Beta of every Name in the repository's own layout
+    (Category/Name/Release/..., the Info files), ApolloSoftware.index and
+    ApolloSoftware.offline (date, commit). Stored, not packed, so ApolloUpdate
+    reads it as it is. Returns its size."""
+    members = []
+    for cat, name, tags, releases, info in names:
+        npath = os.path.join(root, cat, name)
+        if os.path.isfile(os.path.join(npath, INFO)):
+            members.append((f"{cat}/{name}/{INFO}", open(os.path.join(npath, INFO), "rb").read(), date))
+        for rel in [r for r in release_beta(releases) if r != "-"]:
+            rpath = os.path.join(npath, rel)
+            for dirpath, dirs, fns in os.walk(rpath):
+                dirs.sort()
+                for fn in sorted(fns):
+                    if JUNK.match(fn):
+                        continue
+                    full = os.path.join(dirpath, fn)
+                    sub = os.path.relpath(full, root).replace(os.sep, "/")
+                    members.append((sub, open(full, "rb").read(), date))
+    members.append((INDEX, open(os.path.join(root, INDEX), "rb").read(), date))
+    members.append((OFFLINE_INFO, ("date=%04d-%02d-%02d\ncommit=%s\n" % (date + (commit,))).encode("ascii"), date))
+    data = lha(members)
+    with open(os.path.join(outdir, OFFLINE), "wb") as f:
+        f.write(data)
+    return len(data)
 
 
 def write_readme(path, names, avl=False):
@@ -804,13 +839,17 @@ def main():
                 stamp += " (%d-%s-%d)" % (d, ("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
                                                .split()[mo - 1]), 2000 + y)
         today = time.gmtime()
-        downloads = {} if args.avl else write_downloads(args.root, names, args.site,
-                                                        (today.tm_year, today.tm_mon, today.tm_mday))
+        day = (today.tm_year, today.tm_mon, today.tm_mday)
+        downloads = {} if args.avl else write_downloads(args.root, names, args.site, day)
+        offline = 0
+        if not args.avl:
+            offline = write_offline(args.root, names, args.site, day, os.environ.get("GITHUB_SHA", "local")[:12])
+            print(f"{OFFLINE}: {offline // 1024} KB")
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
             package=args.package or os.path.join(args.root, PACKAGE),
-            version=version, stamp=stamp, downloads=downloads)
+            version=version, stamp=stamp, downloads=downloads, offline=offline)
         print(f"{args.site}: {pages} pages")
     return 0
 
