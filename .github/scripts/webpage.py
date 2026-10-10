@@ -230,7 +230,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                '<tr><td nowrap><font color="#a9a9a8"><b>(Only if you have NO network)</b></font></td></tr>'
                '</table></td></tr></table>')
         dl = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
-              f'<td valign="middle">{off}</td><td width="24"></td><td valign="middle">{dl}</td></tr></table>')
+              f'<td valign="middle">{dl}</td><td width="24"></td><td valign="middle">{off}</td></tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
                f'alt="ApolloUpdate" border="0"></td>'
