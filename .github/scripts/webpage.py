@@ -55,7 +55,7 @@ SORTS = (("category", "Category"), ("name", "Name"))
 
 FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
          '"Helvetica Neue", "DejaVu Sans", Helvetica, Arial, sans-serif')
-SITE_FILES = ("ApolloUpdate-logo.png", "ApolloUpdate-icon.png", "Inter-latin.woff2",
+SITE_FILES = ("ApolloUpdate-logo.png", "ApolloUpdate-icon.png", "Offline-icon.png", "Inter-latin.woff2",
               "Inter-LICENSE.txt")
 
 CSS = """
@@ -214,12 +214,23 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td></tr>'
               '<tr><td height="6"></td></tr>'                  # a little air between the lines
               f'<tr><td nowrap><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td></tr>'
-              + (f'<tr><td height="6"></td></tr><tr><td nowrap class="small">'
-                 f'<a href="ApolloSoftware-Offline.lha" title="Every Release and Beta, for ApolloUpdate without internet">'
-                 f'<font color="#ffffff">Offline: ApolloSoftware-Offline.lha ({(offline + 524288) // 1048576} MB)</font></a></td></tr>'
-                 if offline else "") +
               '</table></td>'
               '</tr></table>')
+    if offline:
+        otip = (f"ApolloSoftware-Offline.lha, {(offline + 524288) // 1048576} MB: every Release and Beta, "
+                "for ApolloUpdate without a network")
+        off = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
+               f'<td valign="middle"><a href="ApolloSoftware-Offline.lha"><img src="Offline-icon.png" '
+               f'width="48" height="48" border="0" alt="Offline Archive" title="{otip}"></a></td>'
+               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
+               '<table border="0" cellspacing="0" cellpadding="0">'
+               f'<tr><td nowrap><a href="ApolloSoftware-Offline.lha" title="{otip}">'
+               f'<font color="#ffffff"><b>Offline Archive</b></font></a></td></tr>'
+               '<tr><td height="6"></td></tr>'
+               '<tr><td nowrap><font color="#a9a9a8"><b>(Only if you have NO network)</b></font></td></tr>'
+               '</table></td></tr></table>')
+        dl = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
+              f'<td valign="middle">{off}</td><td width="24"></td><td valign="middle">{dl}</td></tr></table>')
     out.append(f'<table width="100%" border="0" cellspacing="0" cellpadding="12" bgcolor="{HEAD}">'
                f'<tr><td valign="middle"><img src="ApolloUpdate-logo.png" width="545" height="44" '
                f'alt="ApolloUpdate" border="0"></td>'
