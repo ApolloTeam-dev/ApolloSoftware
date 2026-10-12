@@ -1,0 +1,4 @@
+; Tools/VaMP3 - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+MINCORE=
+DESCRIPTION=MUI MP3 Player
