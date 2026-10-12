@@ -1,0 +1,10 @@
+v1.1 - 12. September 2026
+- New buttons: Gipsy by HANsolo
+- Command line arguments for playing specified song
+- Implemented manual ID3 tag skipping for better handling when using bad mpega.library version
+- Fixed bug where first and last buffer of a song may not be played
+- Corrected many minor issues
+
+V1.0 - 31. May 2026
+- Initial release
+
