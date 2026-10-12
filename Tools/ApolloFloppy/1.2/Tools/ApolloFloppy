@@ -1,0 +1,48 @@
+;ApolloBoot ApolloFloppy
+;9-3-2023
+
+If NOT $ABHOSTSERIES EQ "V4-SA"
+  RequestChoice >NIL: "ApolloFloppy" "*nApolloFloppy is only supported on V4 Stand Alone*n" "Understood"
+  Quit  
+Endif
+
+RequestChoice >ENV:DISKS "ApolloFloppy" "*nSelect Number of Disks*n" "1|2|Cancel"
+
+If NOT $DISKS EQ "0"
+
+  RequestChoice >ENV:CHOICE "ApolloFloppy" "*nSelect Display Mode*n" "PAL|NTSC"
+  ApolloControl >NIL: DM=$CHOICE
+
+  RequestChoice >ENV:CHOICE "ApolloFloppy" "*nSelect Zoom Mode*n" "320x200|320x240|320x256|NoZoom"
+  ApolloControl >NIL: ZO=$CHOICE
+
+  RequestChoice >ENV:CHOICE "ApolloFloppy" "*nSelect Scanlines*n" "ON|OFF"
+  ApolloControl >NIL: SC=$CHOICE
+
+  If $DISKS EQ "1"
+    RequestFile >ENV:FLOPPY SD0: PATTERN=#? NOICONS
+    If NOT WARN
+      C:ApolloFloppy unit 0 eject
+      C:ApolloFloppy unit 0 $FLOPPY 
+      Reboot >NIL:
+    Endif  
+  Endif
+
+  If $DISKS EQ "2"
+    RequestFile >ENV:FLOPPYA SD0: PATTERN=#?
+    If NOT WARN
+      PathPart DIR=$FLOPPYA >ENV:FLOPPYDIR 
+      RequestFile >ENV:FLOPPYB $FLOPPYDIR PATTERN=#? FILE=""
+      If NOT WARN
+        C:ApolloFloppy unit 0 eject
+        C:ApolloFloppy unit 0 $FLOPPYA
+        ApolloControl TU=0
+        C:ApolloFloppy unit 1 eject
+        C:ApolloFloppy unit 1 $FLOPPYB
+        Reboot >NIL:
+      Endif
+    Endif  
+  Endif
+
+Endif
+
