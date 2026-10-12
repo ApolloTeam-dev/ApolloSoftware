@@ -144,7 +144,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloAMP | **26.9R1** | - | ✓ | ✓ |  | SAGA Audioplayer |
 | Tools | ApolloControl | **2.21** | - | ✓ | ✓ |  | Apollo V4 Settings |
 | Tools | ApolloExpROM | **1.1** | - |  | ✓ |  | Flash/Dump Expansion ROM ($F0) |
-| Tools | ApolloFlash | **2.30** | - | ✓ | ✓ |  | Flash Core or ROM |
+| Tools | ApolloFlash | **2.31** | - | ✓ | ✓ |  | Flash Core or ROM |
 | Tools | ApolloFloppy | **1.2** | - | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.31** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ |  | CPU Monitoring Widget |
