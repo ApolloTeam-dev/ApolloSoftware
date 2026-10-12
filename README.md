@@ -146,7 +146,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloExpROM | **1.1** | - |  | ✓ |  | Flash/Dump Expansion ROM ($F0) |
 | Tools | ApolloFlash | **2.30** | - | ✓ | ✓ |  | Flash Core or ROM |
 | Tools | ApolloFloppy | **1.2** | - | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
-| Tools | ApolloMap | **2.30** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
+| Tools | ApolloMap | **2.31** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ |  | CPU Monitoring Widget |
 | Tools | ApolloUpdate | **0.74** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
