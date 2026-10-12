@@ -1,0 +1,40 @@
+; ApolloBoot - ApolloMax
+; 28-8-2025
+
+Failat 21
+
+IF $ABHOST EQ "UAE"
+  RequestChoice >NIL: "ApolloMax" "*nApolloMax is for use on V2 and V4 devices only*n" "Understood"
+  Quit
+Endif
+
+RequestChoice >ENV:FixHDD "ApolloMax - Fix Harddisk Size" "Click OK to resize*nCF-Card to maximum Size" "OK|Cancel"
+
+If $FixHDD EQ "1"
+  If $CURRENTROM EQ "ApolloROM"
+    SetEnv SCSIDEVICE "ata.device"
+  Else
+    If $ABHOST EQ "V4-SA" 
+      SetEnv SCSIDEVICE "scsi.device"
+    Endif
+    If $ABHOST EQ "V4-A500" 
+      SetEnv SCSIDEVICE "scsi.device"
+    Endif
+    If $ABHOST EQ "V4-A6000" 
+      SetEnv SCSIDEVICE "scsi.device"
+    Endif
+    If $ABHOST EQ "V4-A600" 
+      SetEnv SCSIDEVICE "scs2.device"
+    Endif
+    If $ABHOST EQ "V4-A1200" 
+      SetEnv SCSIDEVICE "scs2.device"
+    Endif
+  Endif
+Endif
+    
+C:FixHDDSize device=$SCSIDEVICE unit=0 SETMAX FORCE
+
+Echo " "
+Ask "Press ENTER to continue"
+
+    
