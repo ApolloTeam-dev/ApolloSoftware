@@ -40,9 +40,6 @@ Layout (the contract with the ApolloUpdate client):
         DESCRIPTION=                  one line, at most 100 characters
     ApolloSoftware.index              generated from the Info files: what
                                       ApolloUpdate reads (do not edit)
-    ApolloUpdate.lha                  generated (--package): the newest
-                                      Tools/ApolloUpdate release, a fixed
-                                      download address for a browser
 
 "Release" (and with Beta on, the newest version) must be what ApolloUpdate
 picks, so version_cmp() below is a
@@ -74,13 +71,12 @@ ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS 
 CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
 MODULES = "Modules"
 INDEX = "ApolloSoftware.index"
-PACKAGE = "ApolloUpdate.lha"
 MAX_DESC = 100                  # at most (also the Manager's limit) ...
 WRAP_DESC = 48                  # ... at this many characters per line
 MARK_START = "<!-- releases:start -->"
 MARK_END = "<!-- releases:end -->"
 MAX_NAME = 30                   # FFS file name limit
-TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX, PACKAGE}
+TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX}
 JUNK = re.compile(r"^(\.DS_Store|\._.*|Thumbs\.db|desktop\.ini)$", re.I)
 
 
@@ -646,41 +642,6 @@ def lha(members):
     return bytes(out + b"\0")
 
 
-def write_package(root, names, path, errors):
-    """ApolloUpdate.lha: the files of the newest Tools/ApolloUpdate release
-    below its Tools drawer (program and icon), at the top of the archive.
-    Reproducible, so it only changes with a new release: the file date is
-    the date in the program's $VER string. True when the archive changed."""
-    hit = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
-    if not hit:
-        errors.append(f"{PACKAGE}: no Tools/ApolloUpdate")
-        return False
-    cat, name, tags, releases, info = hit[0]
-    newest = release_beta(releases)[0]                  # a release, never a beta
-    if newest == "-":
-        errors.append(f"{PACKAGE}: Tools/ApolloUpdate has no release (only betas)")
-        return False
-    src = os.path.join(root, cat, name, newest, "Tools")
-    files = sorted(f for f in os.listdir(src) if os.path.isfile(os.path.join(src, f))
-                   and not JUNK.match(f)) if os.path.isdir(src) else []
-    if name not in files:
-        errors.append(f"{PACKAGE}: {cat}/{name}/{newest}/Tools/{name} is missing")
-        return False
-
-    date = (2026, 1, 1)
-    m = re.search(rb"\$VER: \S+ \S+ \((\d\d)\.(\d\d)\.(\d\d)\)",
-                  open(os.path.join(src, name), "rb").read())
-    if m:
-        d, mo, y = (int(x) for x in m.groups())
-        date = (2000 + y, mo, d)
-    new = lha([(f, open(os.path.join(src, f), "rb").read(), date) for f in files])
-    old = open(path, "rb").read() if os.path.exists(path) else None
-    if new != old:
-        open(path, "wb").write(new)
-        return True
-    return False
-
-
 def write_downloads(root, names, outdir, date):
     """The downloads of the web page (ApolloSoftware only: the AVL
     repository has no web page): for the Release and the Beta of every
@@ -769,7 +730,6 @@ def main():
     ap.add_argument("--check", action="store_true", help="fail on layout errors")
     ap.add_argument("--readme", help="README.md to update")
     ap.add_argument("--index", help=f"{INDEX} to write")
-    ap.add_argument("--package", help=f"{PACKAGE} to write (the newest ApolloUpdate)")
     ap.add_argument("--site", help="write the web page (GitHub Pages) into this folder")
     ap.add_argument("--create-info", action="store_true",
                     help="give a new Name a template Info file")
@@ -816,15 +776,6 @@ def main():
     if args.index:
         changed = write_index(args.index, names, args.avl, args.root)
         print(f"{args.index}: {'updated' if changed else 'unchanged'} ({len(names)} items)")
-    if args.package:
-        perr = []
-        changed = write_package(args.root, names, args.package, perr)
-        for e in perr:
-            print("ERROR:", e)
-            print(f"::error::{e}")
-        if perr:
-            return 1
-        print(f"{args.package}: {'updated' if changed else 'unchanged'}")
     if args.site:
         au = [n for n in names if (n[0], n[1]) == ("Tools", "ApolloUpdate")]
         version = release_beta(au[0][3])[0] if au else ""
@@ -848,7 +799,8 @@ def main():
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
-            package=args.package or os.path.join(args.root, PACKAGE),
+            program=os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools", "ApolloUpdate")
+                    if version else None,
             version=version, stamp=stamp, downloads=downloads, offline=offline)
         print(f"{args.site}: {pages} pages")
     return 0

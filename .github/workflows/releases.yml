@@ -3,10 +3,8 @@
 # files) for ApolloUpdate.
 # A new Name without an Info file gets a template one (both OSes
 # and, in ApolloSoftware-AVL, Bronze).
-# ApolloUpdate.lha is the newest ApolloUpdate, at a fixed address for a
-# browser download.
 # A second job publishes the web page (releases.py --site, webpage.py) with
-# ApolloUpdate.lha to https://apolloteam-dev.github.io/ApolloSoftware/
+# the newest ApolloUpdate program to https://apolloteam-dev.github.io/ApolloSoftware/
 # The script: .github/scripts/releases.py
 #
 # A push that only changes README.md / the index does not start it, and its own commit
@@ -17,7 +15,7 @@ name: Releases table
 on:
   push:
     branches: [main]
-    paths-ignore: [README.md, ApolloSoftware.index, ApolloUpdate.lha]
+    paths-ignore: [README.md, ApolloSoftware.index]
   workflow_dispatch:
 
 permissions:
@@ -37,11 +35,11 @@ jobs:
         run: python3 .github/scripts/releases.py --selftest
 
       - name: Check the layout, update the table and the index
-        run: python3 .github/scripts/releases.py --create-info --check --readme README.md --index ApolloSoftware.index --package ApolloUpdate.lha
+        run: python3 .github/scripts/releases.py --create-info --check --readme README.md --index ApolloSoftware.index
 
       - name: Commit the table and the index
         run: |
-          git add README.md ApolloSoftware.index ApolloUpdate.lha ':(glob)*/*/Info'
+          git add README.md ApolloSoftware.index ':(glob)*/*/Info'
           if git diff --cached --quiet; then
             echo "Releases table, index and Info files unchanged"
             exit 0
@@ -52,7 +50,7 @@ jobs:
           git pull --rebase
           git push
 
-  # The web page for Amiga browsers, with ApolloUpdate.lha beside it, on
+  # The web page for Amiga browsers, with the ApolloUpdate program beside it, on
   # GitHub Pages. From main as the job above left it (its commit included).
   pages:
     needs: table

@@ -2,11 +2,12 @@
 Master repository for all current and legacy releases of Apollo specific drivers, tools and libraries 
 
 Install and update with **ApolloUpdate** (`Tools/ApolloUpdate`). To get it
-the first time, download the newest one with an Amiga browser (IBrowse,
-AWeb, NetSurf with AmiSSL) from this fixed address, unpack it with LhA and
-start it - from then on it keeps itself up to date:
+the first time, download the program with an Amiga browser (IBrowse, AWeb,
+NetSurf with AmiSSL) from this fixed address and start it - no LhA needed:
+its first start installs it into SYS:Tools, icon and all, and from then on
+it keeps itself up to date:
 
-    https://raw.githubusercontent.com/ApolloTeam-dev/ApolloSoftware/main/ApolloUpdate.lha
+    https://apolloteam-dev.github.io/ApolloSoftware/ApolloUpdate
 
 The library as a web page for Amiga browsers (IBrowse, AWeb, NetSurf), with
 the same download: https://apolloteam-dev.github.io/ApolloSoftware/

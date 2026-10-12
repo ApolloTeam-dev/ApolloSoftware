@@ -13,8 +13,8 @@ push workflow does after the merge, but without making a missing Info file:
 a Pull Request brings its own). Then what only a comparison with the base
 shows:
 
-  errors     generated files edited (README.md, ApolloSoftware.index,
-             ApolloUpdate.lha: the workflow writes them after the merge);
+  errors     generated files edited (README.md, ApolloSoftware.index: the
+             workflow writes them after the merge);
              a version folder with a space; an ApolloROM version that is
              not Rx.y-RCz (optionally -beta); a file over 95 MB (GitHub
              takes 100 MB at most)
@@ -38,7 +38,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import releases as R                    # noqa: E402
 
-GENERATED = {"README.md", R.INDEX, R.PACKAGE}
+GENERATED = {"README.md", R.INDEX}
 WARN_SIZE = 50 * 1024 * 1024
 MAX_SIZE = 95 * 1024 * 1024
 APOLLOROM_VER = re.compile(r"^R\d+\.\d+(-RC\d+)?(-beta)?$")

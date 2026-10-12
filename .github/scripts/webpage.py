@@ -143,11 +143,11 @@ def min_core(info, latest):
     return info.get("MINCORE." + latest) or info.get("MINCORE") or ""
 
 
-def build(names, outdir, assets, package, version, stamp, downloads=None, offline=0):
+def build(names, outdir, assets, program, version, stamp, downloads=None, offline=0):
     """names: [(cat, name, {os}, [releases newest first], info)] as releases.py
     reads them; assets: the folder with SITE_FILES (.github/site), copied
-    next to the pages, as is package (may be None); version: of the
-    ApolloUpdate in the package; downloads: {(cat, name, release): link}
+    next to the pages; program: the newest ApolloUpdate program, copied beside
+    them as "ApolloUpdate" (may be None); version: its version; downloads: {(cat, name, release): link}
     for the Release and Beta cells (releases.py write_downloads); offline:
     the size of ApolloSoftware-Offline.lha beside the pages, 0 for none.
     Returns the number of pages written."""
@@ -155,9 +155,9 @@ def build(names, outdir, assets, package, version, stamp, downloads=None, offlin
     for f in SITE_FILES:
         shutil.copyfile(os.path.join(assets, f), os.path.join(outdir, f))
     size = 0
-    if package and os.path.exists(package):
-        shutil.copyfile(package, os.path.join(outdir, "ApolloUpdate.lha"))
-        size = os.path.getsize(package)
+    if program and os.path.exists(program):         # the program itself: no LhA needed
+        shutil.copyfile(program, os.path.join(outdir, "ApolloUpdate"))
+        size = os.path.getsize(program)
     with open(os.path.join(outdir, "style.css"), "w", encoding="latin-1") as f:
         f.write(CSS)
     with open(os.path.join(outdir, "px.png"), "wb") as f:
@@ -204,14 +204,15 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     # the logo band, the download (icon and words) on its right
     dl = ""
     if size:
-        tip = f"ApolloUpdate {esc(version)}, ApolloUpdate.lha, {(size + 1023) // 1024} KB"
+        tip = (f"ApolloUpdate {esc(version)}, {(size + 1023) // 1024} KB: start it - "
+               "its first start installs it into SYS:Tools, icon and all")
         dl = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
-              f'<td valign="middle"><a href="ApolloUpdate.lha"><img src="ApolloUpdate-icon.png" '
+              f'<td valign="middle"><a href="ApolloUpdate"><img src="ApolloUpdate-icon.png" '
               f'width="48" height="48" border="0" alt="Download" title="{tip}"></a></td>'
               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
               '<table border="0" cellspacing="0" cellpadding="0">'
-              f'<tr><td nowrap><a href="ApolloUpdate.lha" title="{tip}">'
-              f'<font color="#ffffff"><b>Download, Unpack and Execute</b></font></a></td></tr>'
+              f'<tr><td nowrap><a href="ApolloUpdate" title="{tip}">'
+              f'<font color="#ffffff"><b>Download and Execute</b></font></a></td></tr>'
               '<tr><td height="6"></td></tr>'                  # a little air between the lines
               f'<tr><td nowrap><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td></tr>'
               '</table></td>'
