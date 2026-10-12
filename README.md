@@ -157,9 +157,10 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** | - | ✓ | ✓ |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | - | ✓ | ✓ |  | Apollo MouseWheel Driver |
+| Tools | GiggleDisk | **1.23** | - | ✓ | ✓ |  | RDB Mountlist Creator |
 | Tools | i2clock | **0.7** | - | ✓ | ✓ |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | - | ✓ | ✓ |  | SAGA Videoplayer |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ |  | Default SD-Card Icon |
 
-37 items: 22 for ApolloOS, 35 for AmigaOS.
+38 items: 23 for ApolloOS, 36 for AmigaOS.
 <!-- releases:end -->

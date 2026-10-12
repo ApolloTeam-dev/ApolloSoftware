@@ -35,5 +35,6 @@ Tools/ApolloUpdate	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo Update Manager for Apo
 Tools/ApolloVNC	OS=ApolloOS,AmigaOS	DESCRIPTION=Fast & Easy Remote VNC Application
 Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS	DESCRIPTION=Set SAGA Display ToolTypes
 Tools/ApolloWheel	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo MouseWheel Driver
+Tools/GiggleDisk	OS=ApolloOS,AmigaOS	DESCRIPTION=RDB Mountlist Creator
 Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
 Tools/RiVA	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Videoplayer
