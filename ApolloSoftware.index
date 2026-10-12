@@ -30,6 +30,7 @@ Tools/ApolloExpROM	OS=AmigaOS	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
 Tools/ApolloFlash	OS=ApolloOS,AmigaOS	DESCRIPTION=Flash Core or ROM
 Tools/ApolloFloppy	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo Virtual Floppy Loader
 Tools/ApolloMap	OS=ApolloOS,AmigaOS	DESCRIPTION=Map ROM (SoftKick)
+Tools/ApolloMax	OS=ApolloOS,AmigaOS	DESCRIPTION=Resize CF-Card to maximum size
 Tools/ApolloMon	OS=ApolloOS,AmigaOS	DESCRIPTION=CPU Monitoring Widget
 Tools/ApolloUpdate	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS
 Tools/ApolloVNC	OS=ApolloOS,AmigaOS	DESCRIPTION=Fast & Easy Remote VNC Application
@@ -38,3 +39,4 @@ Tools/ApolloWheel	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo MouseWheel Driver
 Tools/GiggleDisk	OS=ApolloOS,AmigaOS	DESCRIPTION=RDB Mountlist Creator
 Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
 Tools/RiVA	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Videoplayer
+Tools/VaMP3	OS=ApolloOS,AmigaOS	DESCRIPTION=MUI MP3 Player

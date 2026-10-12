@@ -152,6 +152,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloFlash | **2.31** | - | ✓ | ✓ |  | Flash Core or ROM |
 | Tools | ApolloFloppy | **1.2** | - | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.31** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
+| Tools | ApolloMax | **1.0** | - | ✓ | ✓ |  | Resize CF-Card to maximum size |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ |  | CPU Monitoring Widget |
 | Tools | ApolloUpdate | **0.75** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
@@ -160,7 +161,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | GiggleDisk | **1.23** | - | ✓ | ✓ |  | RDB Mountlist Creator |
 | Tools | i2clock | **0.7** | - | ✓ | ✓ |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | - | ✓ | ✓ |  | SAGA Videoplayer |
+| Tools | VaMP3 | **1.1** | - | ✓ | ✓ |  | MUI MP3 Player |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ |  | Default SD-Card Icon |
 
-38 items: 23 for ApolloOS, 36 for AmigaOS.
+40 items: 25 for ApolloOS, 38 for AmigaOS.
 <!-- releases:end -->
