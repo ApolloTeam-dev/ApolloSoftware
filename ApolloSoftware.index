@@ -40,4 +40,5 @@ Tools/ApolloWheel	OS=ApolloOS,AmigaOS	DESCRIPTION=Apollo MouseWheel Driver
 Tools/GiggleDisk	OS=ApolloOS,AmigaOS	DESCRIPTION=RDB Mountlist Creator
 Tools/i2clock	OS=ApolloOS,AmigaOS	DESCRIPTION=Load/Save date & time to RTC
 Tools/RiVA	OS=ApolloOS,AmigaOS	DESCRIPTION=SAGA Videoplayer
+Tools/UAEMap	OS=ApolloOS,AmigaOS	DESCRIPTION=Map ROM on UAE (counterpart of ApolloMap)
 Tools/VaMP3	OS=ApolloOS,AmigaOS	DESCRIPTION=MUI MP3 Player
