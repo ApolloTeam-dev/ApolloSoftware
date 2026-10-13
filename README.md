@@ -118,8 +118,11 @@ the Files step of a new AmigaROM version it links the modules of the list,
 in that order, and shows the result (each module's address and size, the
 room left, a test image to download). The version given in the wizard goes
 into the ROM header, so an AmigaROM version is `<number>.<number>` (48.01:
-version 48, revision 1). The builder, `.github/scripts/romlink.py` (and its
-JavaScript twin in the Manager), gives byte for byte what Remus 1.81 gives;
+version 48, revision 1). The header jumps back with `JMP (A5)` (`$4ED5`),
+which Remus does not accept: Remus images had `JMP $F80152`, patched before
+flashing. The builder, `.github/scripts/romlink.py` (and its JavaScript
+twin in the Manager), gives byte for byte what Remus 1.81 gives, but for
+that jump and so the checksum;
 on every push the check rebuilds each AmigaROM release from its
 `ROM-Modules` and refuses an image that differs.
 

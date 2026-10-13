@@ -2,7 +2,11 @@
 """
 romlink.py - builds the AmigaROM (the 192KB Expansion ROM at $F00000) from
 its modules, as Remus does: byte-identical to Remus 1.81 (checked against
-the 48.00 build and two test compiles, 13-10-2026).
+the 48.00 build and two test compiles, 13-10-2026) but for the header's
+jump, which is JMP (A5) - the jump back to the ROM that called the
+Expansion ROM. Remus does not take that header, so its images had
+JMP $F80152 and were patched before flashing ($4EF9 -> $4ED5); built here,
+the image is right as it is, and so is its checksum.
 
 The ApolloSoftware-Manager has the same builder in JavaScript (romBuild()
 in public/manager/app.js): change both together. releases.py uses this one
@@ -12,7 +16,8 @@ to check that an AmigaROM image is exactly what its ROM-Modules builds.
     e.g. romlink.py AmigaROM 48.01 68040.library 680x0.library ...
 
 The image:
-    $000  header, 16 bytes: $1111, JMP $F80152, $0000FFFF, version.w,
+    $000  header, 16 bytes: $1111, JMP (A5) ($4ED5, then $00F80152 as in
+          Remus' JMP $F80152, never reached), $0000FFFF, version.w,
           revision.w (48.01: 48, 1)
     $010  the modules in ROM order: of each its hunks back to back, every
           hunk on a 4-byte boundary, relocated to its ROM address
@@ -28,7 +33,7 @@ import sys
 BASE = 0xF00000                 # where the AmigaROM sits
 SIZE = 0x30000                  # 192KB
 ALIGN = 4
-HEADER = bytes.fromhex("11114ef900f801520000ffff")      # + version.w revision.w
+HEADER = bytes.fromhex("11114ed500f801520000ffff")      # + version.w revision.w
 END = 24                        # the end block
 
 HUNK_HEADER, HUNK_CODE, HUNK_DATA, HUNK_BSS = 0x3F3, 0x3E9, 0x3EA, 0x3EB
@@ -170,7 +175,7 @@ def selftest():
            + struct.pack(">4I", HUNK_DATA, 2, 0x12345678, 8)             # -> code+8
            + struct.pack(">5I", HUNK_RELOC32, 1, 0, 4, 0) + struct.pack(">I", HUNK_END))
     rom, placed = build("48.01", [("test", exe)])
-    assert rom[12:16] == bytes.fromhex("00300001")
+    assert rom[:16] == bytes.fromhex("11114ed500f801520000ffff00300001")
     assert struct.unpack_from(">I", rom, 16 + 4)[0] == BASE + 32 + 4            # code -> data + 4
     assert struct.unpack_from(">I", rom, 32 + 4)[0] == BASE + 16 + 8            # data -> code + 8
     assert placed == [("test", BASE + 16, 24)]
