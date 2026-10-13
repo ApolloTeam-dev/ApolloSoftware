@@ -1,0 +1,4 @@
+; Libraries/MUI - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+MINCORE=
+DESCRIPTION=MUI 5.0 - Magic User Interface, the GUI system ApolloUpdate and many programs use

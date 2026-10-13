@@ -1,0 +1,36 @@
+------------------------------------------------------------------------
+                        MUI - MagicUserInterface
+
+                              Version 5.0
+
+                (c) Copyright 1992-2006, Stefan Stuntz
+         (c) Copyright 2006-2020, Thore Böckelmann & Jens Maus
+
+------------------------------------------------------------------------
+
+What you find here is a fully 68020 optimized version of the Magic User
+Interface (MUI) version 5.0. It is the direct successor of the well known
+MUI 3.8 being developed with full permission by the original author
+Stefan Stuntz.
+
+MUI still requires a valid keyfile like its old 3.8 version. Fortunately,
+if you have been registered to MUI 3.8 already in the past, all you have
+to do is copy over your old "mui.key" file to e.g. 'S:' and reboot your
+machine. Afterwards, MUI 5.0 should perfectly recognize your keyfile and
+will allow you to change all possible configuration.
+
+If you haven't purchased a MUI keyfile yet, but want to do it now, please
+go to http://www.sasg.com/ and/or contact Stefan Stuntz directly as he is
+the only officially representative for accepting registrations and
+generating valid keyfiles. Please hold back from contacting Hyperion
+Entertainment and/or Jens Maus/Stefan Burström directly for asking
+on how to register your copy of MUI.
+
+If you should find any bugs in MUI 5.0 which do not occur with earlier
+MUI releases then please report them in the MUI bugtracker at
+http://muidev.de/newticket. Please provide any detail that might be
+important and try to give a step by step instruction how to reproduce the
+issue.
+
+June 2016
+Thore Böckelmann, Jens Maus
