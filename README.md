@@ -129,7 +129,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 
 | Category | Name | Release | Beta | ApolloOS | AmigaOS | Minimal Core | Description |
 |---|---|---|---|:-:|:-:|---|---|
-| Cores | FireBird-Core | **11350** | - | ✓ | ✓ |  | FireBird Core |
+| Cores | FireBird-Core | **11350** | 12205-beta | ✓ | ✓ |  | FireBird Core |
 | Cores | IceDrake-Core | **11385** | - | ✓ | ✓ |  | IceDrake Core |
 | Cores | MantiCore-Core | **11350** | - | ✓ | ✓ |  | MantiCore Core |
 | Cores | StandAlone-Core | **11350** | - | ✓ | ✓ |  | StandAlone Core |
