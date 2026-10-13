@@ -1,0 +1,4 @@
+; Tools/UAEMap - read by ApolloUpdate, see README.md
+OS=ApolloOS,AmigaOS
+MINCORE=
+DESCRIPTION=Map ROM on UAE (counterpart of ApolloMap)
