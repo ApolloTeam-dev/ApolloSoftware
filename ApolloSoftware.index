@@ -18,6 +18,7 @@ Libraries/68040.library	OS=AmigaOS	DESCRIPTION=68040.library for the AC68080
 Libraries/680x0.library	OS=AmigaOS	DESCRIPTION=680x0.library, Apollo AC68080 support
 Libraries/i2c.library	OS=ApolloOS,AmigaOS	DESCRIPTION=I2C Chip Library
 Libraries/maggie.library	OS=ApolloOS,AmigaOS	DESCRIPTION=Maggie 3DFX API library
+Libraries/MUI	OS=ApolloOS,AmigaOS	DESCRIPTION=MUI 5.0 - Magic User Interface, the GUI system\nApolloUpdate and many programs use
 Libraries/VampireSupport	OS=AmigaOS	DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU
 Resources/processor.resource	OS=AmigaOS	DESCRIPTION=processor.resource
 Resources/vampire.resource	OS=AmigaOS	DESCRIPTION=vampire.resource
