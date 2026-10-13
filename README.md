@@ -132,8 +132,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | arne.audio | **4.23** | - | ✓ | ✓ |  | AHI Audio Driver |
 | Drivers | cd.device | **40.29** | - |  | ✓ |  | CD32-Driver |
 | Drivers | Keymaps | **1.0** | - | ✓ | ✓ |  | Keyboard Configurations |
-| Drivers | sagagfx.hidd | **1.0** | - | ✓ |  | 12500 | CyberGraphics RTG Driver |
-| Drivers | sagasd.device | **2.41** | - |  | ✓ | 12500 | SD-Card Driver |
+| Drivers | sagagfx.hidd | **1.0** | - | ✓ |  | 12000 | CyberGraphics RTG Driver |
+| Drivers | sagasd.device | **2.41** | - |  | ✓ | 12000 | SD-Card Driver |
 | Drivers | scsi.device | **48.13** | - |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.97** | 2.99-beta | ✓ | ✓ |  | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** | - |  | ✓ |  | Picasso 96 RTG Driver |
