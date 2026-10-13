@@ -126,7 +126,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | UniCorn-Core | **12001** | 12556E-beta | ✓ | ✓ |  | UniCorn Core |
 | ROM | AmigaROM | **48.00** | - |  | ✓ |  | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
-| Resources | processor.resource | **44.3** | 44.4-beta |  | ✓ |  | processor.resource |
+| Resources | processor.resource | **44.4** | - |  | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | - |  | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.7** | - |  | ✓ |  | TCP/IP Stack |
 | Drivers | arne.audio | **4.23** | - | ✓ | ✓ |  | AHI Audio Driver |
