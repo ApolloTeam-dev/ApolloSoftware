@@ -156,7 +156,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | - |  | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | - |  | ✓ |  | vampire.resource |
-| Drivers | AmiTCP | **4.1.7** | - |  | ✓ |  | TCP/IP Stack |
+| Drivers | AmiTCP | **4.1.8** | - |  | ✓ |  | TCP/IP Stack |
 | Drivers | arne.audio | **4.23** | - | ✓ | ✓ |  | AHI Audio Driver |
 | Drivers | cd.device | **40.29** | - |  | ✓ |  | CD32-Driver |
 | Drivers | Keymaps | **1.0** | - | ✓ | ✓ |  | Keyboard Configurations |
