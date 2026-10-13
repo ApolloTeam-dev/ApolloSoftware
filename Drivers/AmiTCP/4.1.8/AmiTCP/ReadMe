@@ -1,0 +1,204 @@
+AmiTCP_NG -- an open TCP/IP stack for AmigaOS
+=============================================
+
+AmiTCP_NG is a free, open-source TCP/IP stack for 68k AmigaOS (2.04 and later).
+It provides a drop-in "bsdsocket.library" -- the standard Amiga networking API --
+so existing Amiga network software just works, with no time limit.
+
+It is a modern-toolchain revival of AmiTCP/IP 3.0b2, and a 100% drop-in
+replacement for Olaf Barthel's Roadshow: it speaks the same bsdsocket.library
+API, uses the same configuration files, and ships the same command set, so
+Roadshow's own tools and front-ends (Roadie, NetMon) drive it unchanged.
+
+The Roadshow-compatible parts are a clean-room re-implementation, written from
+scratch using the open Roadshow SDK only as a reference -- no Roadshow code is
+included. With thanks to Olaf Barthel for making that SDK available.
+
+Copyright (C) 2026 Andy Taylor (MW0MWZ). Released under the GNU GPL v2 (see the
+COPYING file). Portions derive from AmiTCP/IP 3.0b2 (AmiTCP/IP Group) and the
+4.4BSD-Lite networking code (see COPYRIGHTS).
+
+
+Requirements
+------------
+
+  * AmigaOS 2.04 or later. Any 68k processor -- see CPU BUILD below.
+  * A SANA-II network device driver for your card (e.g. a2065.device for the
+    Commodore A2065, or your card's driver), installed in DEVS:Networks/.
+
+
+CPU build
+---------
+
+There is ONE archive, and it runs on every 68k Amiga -- from a bare 68000 A500
+to an 040 or 060. There is nothing to choose and nothing to get wrong.
+
+Earlier releases came as three archives, with "-68020" and "-68040" variants
+compiled for those processors. Those are gone. Building for the newer chips was
+tested and did not make the stack any faster, so the only thing the extra
+archives reliably did was give people a way to install something their machine
+could not run.
+
+The decisions that genuinely do depend on the processor are made while the stack
+is running, inside this one build. It asks the system what CPU it is on and
+picks its memory-copy routine to suit -- so an A500 and an A4000 each get the
+right code out of the same file.
+
+
+Installing
+----------
+
+Double-click "Install-AmiTCP_NG" (or run it with the Installer tool).
+
+How much you are asked depends on the USER LEVEL in the Installer's opening
+dialog. At NOVICE level the Installer answers every question itself, by taking
+the default -- that is the Installer's own behaviour, not something this script
+chooses -- so a Novice run always INSTALLS, into "SYS:Programs/AmiTCP" (or
+"SYS:AmiTCP" if you have no Programs drawer). Uninstall and Preview are only
+reachable at INTERMEDIATE or EXPERT level.
+
+At Intermediate or Expert you are asked two things:
+
+  * WHICH ACTION to perform:
+      Install ..... put AmiTCP_NG on this machine.
+      Uninstall ... roll back a previous AmiTCP_NG install.
+      Preview ..... show exactly what an install would do, changing nothing.
+
+  * WHERE the "AmiTCP" drawer (its configuration and host database) should be
+    created -- any volume or drawer, with the same default as above.
+
+    If this machine already has an AmiTCP configuration and you answer with a
+    different place from last time, its contents are copied into the new drawer,
+    so your settings and host database come with you. The old drawer is left
+    exactly as it is -- delete it by hand once you are happy. (If the place you
+    pick already holds an AmiTCP configuration of its own, that one is kept and
+    nothing is copied over it.)
+
+If saved Roadshow settings are found in "ENVARC:Roadshow" you are asked whether
+to carry them over -- at Novice level they are carried over without asking. Only
+the settings describing how you want the network to behave are offered (IP
+forwarding, ICMP redirects, subnets-are-local, default TTL, ICMP mask replies,
+UDP checksums); the speed-related ones are not, because AmiTCP_NG sizes those
+from this machine's memory, processor and link speed. Your Roadshow
+configuration is only read, never changed.
+
+Everything else the installer decides for itself from what it finds on the
+machine, because those are the decisions that can do damage if guessed at -- in
+particular the install METHOD (below), which is never a question at any level.
+
+If you have anything in "C:" you care about, run Preview first (Intermediate or
+Expert level): it names every command that would be installed, and tells you
+which files of yours would be moved aside.
+
+The installer sets up an "AmiTCP:" assign to wherever the drawer ends up. The
+install METHOD is chosen automatically from what is already present, so it cannot
+do the wrong thing:
+
+  * UPGRADE (an existing TCP/IP stack was detected -- a "bsdsocket.library", an
+    "AddNetInterface" command, a "DEVS:NetInterfaces" drawer or an
+    "S:Network-Startup", for example a Roadshow install). AmiTCP_NG backs up your
+    original "LIBS:bsdsocket.library" as "LIBS:bsdsocket.library.orig" and replaces
+    it, does the same for "LIBS:usergroup.library" if you have one, and installs
+    its own network commands (Online, Offline, AddNetInterface,
+    ShowNetStatus, ...) over the existing ones, backing up each original as
+    "C:<name>.orig". Your interface configuration in "DEVS:NetInterfaces" is left
+    untouched and now drives AmiTCP_NG, with no time limit. Replacing the commands
+    is deliberate: the previous stack's own tools (e.g. Roadshow's AddNetInterface)
+    do not drive AmiTCP_NG's library correctly, so AmiTCP_NG supplies matching
+    commands of its own. (Stack-specific extras of the previous stack, such as
+    Roadshow's PPP/PPPoE drivers or its IP-filter firewall, are not provided by
+    AmiTCP_NG.)
+
+  * FULL INSTALL (no stack was detected). AmiTCP_NG installs the library AND its
+    own complete set of 25 Roadshow-compatible commands into C: (Online,
+    Offline, AddNetInterface, ConfigureNetInterface, AddNetRoute,
+    DeleteNetRoute, RemoveNetInterface, NetShutdown, GetNetStatus,
+    ShowNetStatus, AmiTCPControl, RoadshowControl, ping, arp, traceroute,
+    netstat, tftp, nslookup, ftp, sntp, PacketCapture, SampleNetSpeed,
+    NetLogViewer, CheckAmiTCPNGConfig and ManageNetInterfaces), an
+    "S:Network-Startup"
+    script, and example interface configurations in
+    "SYS:Storage/NetInterfaces". It also installs an example
+    "DEVS:Internet/hosts" -- but only if you do not already have one; an
+    existing host table is never touched.
+
+    Note that several of those names are generic -- "ftp", "ping", "netstat"
+    and friends. If you already have commands of those names in "C:", the
+    installer renames each to "<name>.orig" before installing ours, and
+    Uninstall puts them back. Run Preview if you want that list checked against
+    your own "C:" before anything is written.
+
+    No NETWORK CARD is brought up automatically at boot. What the installer
+    adds to "S:User-Startup" is the "AmiTCP:" assign, plus a backgrounded
+    "GetNetStatus" that starts the stack itself so the loopback interface is
+    up. Leaving the card to you is deliberate: some hardware (WiFi especially)
+    is not ready that early, and a failed bring-up at boot is harder to
+    diagnose than one you ran yourself. Bring it up with
+    "AddNetInterface <name>", or add "Execute S:Network-Startup" to your
+    User-Startup once you know your setup works.
+
+Reboot when the installer finishes.
+
+
+Configuring an interface (full install)
+---------------------------------------
+
+1. Copy an example from "SYS:Storage/NetInterfaces" into "DEVS:NetInterfaces",
+   renaming it to whatever you want the interface to be called, e.g. "eth0".
+
+2. Edit it for your hardware. The key settings are:
+
+       device=a2065.device      ; your card's SANA-II driver
+       unit=0                    ; device unit (usually 0)
+       configure=dhcp            ; get address/DNS automatically, OR omit this
+                                 ; and set a static address instead:
+       ; address=192.168.0.10
+       ; netmask=255.255.255.0
+       ; gateway=192.168.0.1
+
+3. Bring it up from a Shell -- the interface name is enough (it is looked up in
+   DEVS:NetInterfaces, exactly like Roadshow); a full path also works:
+
+       AddNetInterface eth0
+
+   Rebooting will NOT do this for you: nothing added to "S:User-Startup" touches
+   a network card, for the reason given above. Once you know your setup works,
+   add "Execute S:Network-Startup" to your own User-Startup to bring it up at
+   boot -- but not before the link is ready.
+
+These are the same configuration files Roadshow uses, so existing Roadshow
+interface configurations work unchanged.
+
+
+Uninstalling / rolling back
+---------------------------
+
+Run "Install-AmiTCP_NG" again, pick INTERMEDIATE or EXPERT level (Uninstall is
+not offered at Novice), and choose "Uninstall". It automatically does the right
+thing:
+
+  * If you had upgraded over an existing stack, your backed-up libraries
+    ("LIBS:bsdsocket.library.orig", "LIBS:usergroup.library.orig") and every
+    backed-up command ("C:<name>.orig") are restored, putting your previous stack
+    back exactly as it was.
+
+  * If it was a full install, the AmiTCP_NG libraries and every command they
+    installed are removed.
+
+  * If AmiTCP_NG is installed but the installer cannot find any record of what it
+    replaced, it changes NOTHING and tells you so, rather than removing files
+    with nothing to put back. It then lists what to delete by hand.
+
+In the first two cases the "AmiTCP:" assign and the AmiTCP_NG lines in
+"S:User-Startup" are removed too; in the third nothing is touched at all. Your
+"AmiTCP" drawer and your "DEVS:NetInterfaces" configuration are always left in
+place (delete them by hand if you no longer want them). Reboot to finish.
+
+
+Buy me a coffee
+---------------
+
+This is a hobby project, done for the love of the Amiga -- not to make money, and
+it will always be free. But if you find it useful and fancy buying me a coffee,
+that is very kind: https://paypal.me/AndyTaylorTweet -- entirely optional, and
+thank you either way.
