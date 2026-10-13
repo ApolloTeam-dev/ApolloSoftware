@@ -152,6 +152,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | MantiCore-Core | **11350** | 12001-beta | ✓ | ✓ |  | MantiCore Core |
 | Cores | StandAlone-Core | **11350** | 12556-beta | ✓ | ✓ |  | StandAlone Core |
 | Cores | UniCorn-Core | **12001** | 12556E-beta | ✓ | ✓ |  | UniCorn Core |
+| ROM | AmigaROM | **48.01** | - |  | ✓ |  | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | - |  | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | - |  | ✓ |  | vampire.resource |
@@ -193,5 +194,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ |  | MUI MP3 Player |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ |  | Default SD-Card Icon |
 
-45 items: 31 for ApolloOS, 43 for AmigaOS.
+46 items: 31 for ApolloOS, 44 for AmigaOS.
 <!-- releases:end -->
