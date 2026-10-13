@@ -18,11 +18,12 @@ Layout (the contract with the ApolloUpdate client):
     Category / Name / Release / <copied 1:1 to SYS:>
     Cores / Name / Release / file          the FPGA core (both OSes),
                                            flashed by ApolloFlash
-    ROM / ApolloROM / Release / ApolloROM + Modules
+    ROM / ApolloROM / Release / ApolloROM + ROM-Modules
                                            the 1MB ApolloOS Kickstart
-    ROM / AmigaROM / Release / AmigaROM + Modules
+    ROM / AmigaROM / Release / AmigaROM + ROM-Modules
                                            the 192KB AmigaOS Expansion ROM
-        Modules: the ROM's modules in ROM order, one Category/Name/Version
+        ROM-Modules: the ROM's modules in ROM order (the order matters),
+        one Category/Name/Version
         per line - each an existing release whose file(s) are in its
         ApolloROM/ resp. AmigaROM/ drawer. (The AmigaROM header with the
         ROM id and version is made from the version, not listed.)
@@ -69,7 +70,7 @@ ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: n
 ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS and
         "AmigaROM": ("AmigaOS", (1, 196608))}           # image size min, max (bytes)
 CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
-MODULES = "Modules"
+MODULES = "ROM-Modules"          # a ROM release's module list, in ROM order
 INDEX = "ApolloSoftware.index"
 MAX_DESC = 100                  # at most (also the Manager's limit) ...
 WRAP_DESC = 48                  # ... at this many characters per line
@@ -367,7 +368,7 @@ def release_files(root, cat, name, rel, errors=None):
     """[(path below the release, lower-case path key)] of one release, junk
     left out. The key is the SYS: path - for Cores and ROM the place in
     SYS:ApolloUpdate, for a module in an ApolloROM/ or AmigaROM/ drawer
-    "<drawer>:<file>" (never SYS:). A ROM release's Modules is read, not
+    "<drawer>:<file>" (never SYS:). A ROM release's ROM-Modules is read, not
     installed. With errors, one that breaks the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
     out = []
@@ -428,7 +429,7 @@ def sys_paths(root, names):
 
 
 def read_modules(root, cat, name, rel):
-    """The Modules file of a ROM release: [(line, entry)]"""
+    """The ROM-Modules file of a ROM release: [(line, entry)]"""
     path = os.path.join(root, cat, name, rel, MODULES)
     if not os.path.isfile(path):
         return []
@@ -441,7 +442,7 @@ def read_modules(root, cat, name, rel):
 
 
 def check_modules(root, names, errors):
-    """Every line of a ROM's Modules file: Category/Name/Version of an
+    """Every line of a ROM's ROM-Modules file: Category/Name/Version of an
     existing release, its file(s) in the drawer of this ROM (ApolloROM/ or
     AmigaROM/), for this ROM's OS; each module once; order as written."""
     rels = {(c.lower(), n.lower()): (c, n, t, r) for c, n, t, r, i in names}

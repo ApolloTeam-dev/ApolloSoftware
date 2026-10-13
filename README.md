@@ -87,11 +87,14 @@ Two kinds of image are flashed, not copied to SYS:
 | Category / Name | OS | Release holds | ApolloUpdate keeps it in | Flashed by |
 |---|---|---|---|---|
 | `Cores/<core>` | both | the core (FPGA logic), one file | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
-| `ROM/ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
-| `ROM/AmigaROM` | AmigaOS | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Coffin) and `Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
+| `ROM/ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `ROM-Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
+| `ROM/AmigaROM` | AmigaOS | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Coffin) and `ROM-Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
 
-`Modules` in a ROM release says which modules, in which version, make up
-that ROM - **in ROM order**, one `Category/Name/Version` per line:
+`ROM-Modules` in a ROM release says which modules, in which version, make
+up that ROM - **in ROM order** (the order matters, as in a Remus build
+list), one `Category/Name/Version` per line. The ApolloSoftware-Manager
+writes it: in the Files step of a ROM release you pick the modules and put
+them in order.
 
 ```
 ; AmigaROM 48.00 - its modules in ROM order
@@ -110,10 +113,12 @@ header (ROM id and version) is made from the ROM's version, not listed.
 Where an ApolloOS and an AmigaOS module would have the same Name, they get
 the suffix `-ApolloOS` / `-AmigaOS`.
 
-For now each ROM release also holds the compiled image; once ApolloUpdate
-builds ROMs itself, `Modules` alone will do.
+For now each ROM release also holds the compiled image. Once the
+ApolloSoftware-Manager compiles ROMs itself (planned, instead of the Amiga
+tool Remus), it builds the image from `ROM-Modules` and the version given
+in the wizard.
 
-The workflow checks that every `Modules` line names an existing release
+The workflow checks that every `ROM-Modules` line names an existing release
 with its file in the ROM's drawer and for the ROM's OS, each module once;
 that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS`; and
 the image sizes (ApolloROM 1MB, AmigaROM at most 192KB).
