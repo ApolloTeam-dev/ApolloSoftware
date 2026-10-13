@@ -113,15 +113,25 @@ header (ROM id and version) is made from the ROM's version, not listed.
 Where an ApolloOS and an AmigaOS module would have the same Name, they get
 the suffix `-ApolloOS` / `-AmigaOS`.
 
-For now each ROM release also holds the compiled image. Once the
-ApolloSoftware-Manager compiles ROMs itself (planned, instead of the Amiga
-tool Remus), it builds the image from `ROM-Modules` and the version given
-in the wizard.
+**The AmigaROM is built by the ApolloSoftware-Manager**, not by Remus: in
+the Files step of a new AmigaROM version it links the modules of the list,
+in that order, and shows the result (each module's address and size, the
+room left, a test image to download). The version given in the wizard goes
+into the ROM header, so an AmigaROM version is `<number>.<number>` (48.01:
+version 48, revision 1). The builder, `.github/scripts/romlink.py` (and its
+JavaScript twin in the Manager), gives byte for byte what Remus 1.81 gives;
+on every push the check rebuilds each AmigaROM release from its
+`ROM-Modules` and refuses an image that differs.
+
+The ApolloROM release still holds an image compiled elsewhere (the
+ApolloOS-Port project) next to its `ROM-Modules`.
 
 The workflow checks that every `ROM-Modules` line names an existing release
 with its file in the ROM's drawer and for the ROM's OS, each module once;
-that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS`; and
-the image sizes (ApolloROM 1MB, AmigaROM at most 192KB).
+that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS`; the
+image sizes (ApolloROM 1MB, AmigaROM at most 192KB); and that an AmigaROM
+image is exactly what its `ROM-Modules` builds. A ROM module is one file in
+its release's `AmigaROM/` (`ApolloROM/`) drawer.
 
 Before it copies, ApolloUpdate deletes whatever is already in its drawer in
 `SYS:ApolloUpdate`, so the drawer only holds what was just installed. Then

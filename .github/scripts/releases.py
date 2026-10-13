@@ -57,6 +57,7 @@ import struct
 import sys
 import time
 
+import romlink                          # .github/scripts/romlink.py: the AmigaROM builder
 import webpage                          # .github/scripts/webpage.py
 from webpage import min_core, release_beta, shown
 import textwrap
@@ -179,6 +180,7 @@ def newest_first(releases):
 
 
 def selftest():
+    romlink.selftest()
     cases = [("4.23", "4.18", 1), ("1.60", "1.7", 1), ("26.10", "26.9R1", 1),
              ("26.9R2", "26.9R1", 1), ("1.0e", "1.0", 1), ("1.0.1", "1.0b", 1),
              ("0.63R3", "0.63R10", -1), ("2.30", "2.3", 1), ("01.2", "1.2", 0),
@@ -339,7 +341,8 @@ def scan(root, avl=False):
                     errors.append(f"{cat}/{name}/{rel}: a beta is <version>{BETA} "
                                   f"(lower case, at the end)")
             if not releases:
-                errors.append(f"{cat}/{name}: no release folder")
+                if not (cat == "ROM" and name in ROMS and has_info):    # a ROM before its first build
+                    errors.append(f"{cat}/{name}: no release folder")
                 continue
             if has_info:
                 info = read_info(os.path.join(npath, INFO), f"{cat}/{name}/{INFO}",
@@ -473,6 +476,40 @@ def check_modules(root, names, errors):
                 drawer = os.path.join(root, mc, mn, parts[2], name)
                 if not os.path.isdir(drawer) or not any(not JUNK.match(f) for f in os.listdir(drawer)):
                     errors.append(f"{label}: {entry} has no {name}/ drawer with the module")
+
+
+def check_amigarom(root, names, errors):
+    """Every AmigaROM release: its image is exactly what romlink builds from
+    its ROM-Modules (the module files in their AmigaROM/ drawers, in that
+    order) and its version - as the ApolloSoftware-Manager built it."""
+    for cat, name, tags, releases, info in names:
+        if cat != "ROM" or name != "AmigaROM":
+            continue
+        for rel in releases:
+            label = f"{cat}/{name}/{rel}"
+            modules, ok = [], True
+            for i, entry in read_modules(root, cat, name, rel):
+                parts = entry.split("/")
+                drawer = os.path.join(root, *parts, name) if len(parts) == 3 else ""
+                files = sorted(f for f in os.listdir(drawer) if not JUNK.match(f)) if os.path.isdir(drawer) else []
+                if len(files) != 1:
+                    if files:
+                        errors.append(f"{label}/{MODULES}:{i}: {entry} has {len(files)} files in its {name}/ "
+                                      "drawer - a ROM module is one file")
+                    ok = False          # a missing drawer: check_modules reports it
+                    continue
+                modules.append((f"{parts[1]} {parts[2]}", open(os.path.join(drawer, files[0]), "rb").read()))
+            image = os.path.join(root, cat, name, rel, name)
+            if not ok or not os.path.isfile(image):
+                continue
+            try:
+                built, placed = romlink.build(rel, modules)
+            except romlink.RomError as e:
+                errors.append(f"{label}: {e}")
+                continue
+            if open(image, "rb").read() != built:
+                errors.append(f"{label}/{name}: not the image its {MODULES} builds - build it with the "
+                              "ApolloSoftware-Manager (or .github/scripts/romlink.py)")
 
 
 def check_public(root, names, public, errors):
@@ -767,6 +804,7 @@ def main():
     warnings[:0] = made_warnings
     check_files(args.root, names, errors, warnings)
     check_modules(args.root, names, errors)
+    check_amigarom(args.root, names, errors)
     if args.avl and args.public:
         check_public(args.root, names, args.public, errors)
 
