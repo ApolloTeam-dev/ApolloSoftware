@@ -707,6 +707,24 @@ def write_offline(root, names, outdir, date, commit):
     return len(data)
 
 
+KIT = "ApolloUpdate-Offline.zip"
+
+
+def write_kit(outdir, program, icon):
+    """ApolloUpdate-Offline.zip, the Offline Kit for a PC or Mac: ApolloUpdate,
+    its icon and ApolloSoftware-Offline.lha, to unzip onto an SD card or USB
+    stick together - ApolloUpdate finds the archive beside itself. ZIP
+    because Windows and macOS open it themselves. Returns its size."""
+    import zipfile
+    path = os.path.join(outdir, KIT)
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        for src, name in ((program, "ApolloUpdate"), (icon, "ApolloUpdate.info"),
+                          (os.path.join(outdir, OFFLINE), OFFLINE)):
+            if src and os.path.isfile(src):
+                z.write(src, name)
+    return os.path.getsize(path)
+
+
 def write_readme(path, names, avl=False):
     text = open(path, encoding="utf-8").read() if os.path.exists(path) else "# ApolloSoftware\n"
     new = table(names, avl)
@@ -796,6 +814,11 @@ def main():
         if not args.avl:
             offline = write_offline(args.root, names, args.site, day, os.environ.get("GITHUB_SHA", "local")[:12])
             print(f"{OFFLINE}: {offline // 1024} KB")
+            if version:
+                tools = os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools")
+                offline = write_kit(args.site, os.path.join(tools, "ApolloUpdate"),
+                                    os.path.join(tools, "ApolloUpdate.info"))
+                print(f"{KIT}: {offline // 1024} KB")
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),

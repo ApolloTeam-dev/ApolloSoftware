@@ -149,7 +149,8 @@ def build(names, outdir, assets, program, version, stamp, downloads=None, offlin
     next to the pages; program: the newest ApolloUpdate program, copied beside
     them as "ApolloUpdate" (may be None); version: its version; downloads: {(cat, name, release): link}
     for the Release and Beta cells (releases.py write_downloads); offline:
-    the size of ApolloSoftware-Offline.lha beside the pages, 0 for none.
+    the size of the Offline Kit (ApolloUpdate-Offline.zip) beside the pages,
+    0 for none.
     Returns the number of pages written."""
     os.makedirs(outdir, exist_ok=True)
     for f in SITE_FILES:
@@ -218,14 +219,14 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               '</table></td>'
               '</tr></table>')
     if offline:
-        otip = (f"ApolloSoftware-Offline.lha, {(offline + 524288) // 1048576} MB: every Release and Beta, "
-                "for ApolloUpdate without a network")
+        otip = (f"ApolloUpdate-Offline.zip, {(offline + 524288) // 1048576} MB: ApolloUpdate, its icon and "
+                "ApolloSoftware-Offline.lha (every Release and Beta) - unzip all three onto an SD card or USB stick")
         off = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
-               f'<td valign="middle"><a href="ApolloSoftware-Offline.lha"><img src="Offline-icon.png" '
+               f'<td valign="middle"><a href="ApolloUpdate-Offline.zip"><img src="Offline-icon.png" '
                f'width="48" height="48" border="0" alt="Offline Archive" title="{otip}"></a></td>'
                f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
                '<table border="0" cellspacing="0" cellpadding="0">'
-               f'<tr><td nowrap><a href="ApolloSoftware-Offline.lha" title="{otip}">'
+               f'<tr><td nowrap><a href="ApolloUpdate-Offline.zip" title="{otip}">'
                f'<font color="#ffffff"><b>Offline Archive</b></font></a></td></tr>'
                '<tr><td height="6"></td></tr>'
                '<tr><td nowrap><font color="#a9a9a8"><b>(Only if you have NO network)</b></font></td></tr>'

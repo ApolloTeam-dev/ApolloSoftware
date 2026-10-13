@@ -8,6 +8,12 @@ and from then on it keeps itself up to date:
 
     https://apolloupdate.com/ApolloUpdate
 
+No network on the Amiga (a new install, a broken TCP/IP stack)? Take the
+**Offline Kit** from the web page (Offline Archive, `ApolloUpdate-Offline.zip`)
+on a PC or Mac, unzip it onto an SD card or USB stick and start ApolloUpdate
+from there: it brings its icon and installs from ApolloSoftware-Offline.lha
+beside it - MUI too, when the Amiga has none.
+
 With an Amiga browser (IBrowse, AWeb, NetSurf) or from the Shell, e.g.
 `curl -o RAM:ApolloUpdate https://apolloupdate.com/ApolloUpdate`. The same
 address also works over plain `http://`, for a tool on an Amiga without
