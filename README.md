@@ -190,7 +190,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | GiggleDisk | **1.23** | - | ✓ | ✓ |  | RDB Mountlist Creator |
 | Tools | i2clock | **0.7** | - | ✓ | ✓ |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | - | ✓ | ✓ |  | SAGA Videoplayer |
-| Tools | UAEMap | **1.0** | - | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
+| Tools | UAEMap | **1.1** | - | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ |  | MUI MP3 Player |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ |  | Default SD-Card Icon |
 
