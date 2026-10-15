@@ -8,6 +8,5 @@ Libraries/VampireSupport/40.50
 Libraries/ptable.library/2.0
 FileSystems/fat95/4.0
 FileSystems/exfat-handler/1.11
-FileSystems/ODFileSystem/0.8.0
 Drivers/scsi.device/48.13
 Drivers/sagasd.device/2.41
