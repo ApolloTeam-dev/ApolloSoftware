@@ -170,6 +170,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** | - | ✓ | ✓ |  | Maggie 3DFX API library |
 | Libraries | MUI | **5.0** | - | ✓ | ✓ |  | MUI 5.0 - Magic User Interface, the GUI system ApolloUpdate and many programs use |
+| Libraries | ptable.library | **2.0** | - | ✓ | ✓ |  | ptable.library is part of fat95 (4.0+) filesystem |
 | Libraries | VampireSupport | **40.50** | - |  | ✓ |  | Vampire support: V4 chip/fast RAM, FPU |
 | FileSystems | exfat-handler | **1.11** | - |  | ✓ |  | Ex-FAT Filesystem |
 | FileSystems | fat95 | **4.0** | - |  | ✓ |  | FAT Filesystem |
@@ -194,5 +195,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ |  | MUI MP3 Player |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ |  | Default SD-Card Icon |
 
-46 items: 31 for ApolloOS, 44 for AmigaOS.
+47 items: 32 for ApolloOS, 45 for AmigaOS.
 <!-- releases:end -->
