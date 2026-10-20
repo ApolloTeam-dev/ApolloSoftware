@@ -164,7 +164,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | sagasd.device | **2.41** | 2.42-beta |  | ✓ | 12000 | SD-Card Driver |
 | Drivers | scsi.device | **48.13** | - |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.97** | 2.978-beta | ✓ | ✓ | 12000 | Network Interface Driver |
-| Drivers | vampiregfx.card | **1.61** | - |  | ✓ |  | Picasso 96 RTG Driver |
+| Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ |  | Picasso 96 RTG Driver |
 | Libraries | 68040.library | **40.2** | - |  | ✓ |  | 68040.library for the AC68080 |
 | Libraries | 680x0.library | **40.1** | - |  | ✓ |  | 680x0.library, Apollo AC68080 support |
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ |  | I2C Chip Library |
