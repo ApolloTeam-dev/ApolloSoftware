@@ -165,7 +165,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | scsi.device | **48.13** | - |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.97** | 2.978-beta | ✓ | ✓ | 12000 | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ |  | Picasso 96 RTG Driver |
-| Libraries | 68040.library | **40.2** | - |  | ✓ |  | 68040.library for the AC68080 |
+| Libraries | 68040.library | **40.2** | 40.6-beta |  | ✓ |  | 68040.library for the AC68080 |
 | Libraries | 680x0.library | **40.1** | - |  | ✓ |  | 680x0.library, Apollo AC68080 support |
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** | - | ✓ | ✓ |  | Maggie 3DFX API library |
