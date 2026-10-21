@@ -155,7 +155,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | ROM | AmigaROM | **48.02** | 48.05-beta |  | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | - |  | ✓ |  | processor.resource |
-| Resources | vampire.resource | **45.3** | - |  | ✓ |  | vampire.resource |
+| Resources | vampire.resource | **45.3** | 45.4-beta |  | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.8** | - |  | ✓ |  | TCP/IP Stack |
 | Drivers | arne.audio | **4.23** | - | ✓ | ✓ |  | AHI Audio Driver |
 | Drivers | cd.device | **40.29** | - |  | ✓ |  | CD32-Driver |
