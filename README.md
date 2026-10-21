@@ -161,7 +161,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | cd.device | **40.29** | - |  | ✓ |  | CD32-Driver |
 | Drivers | Keymaps | **1.0** | - | ✓ | ✓ |  | Keyboard Configurations |
 | Drivers | sagagfx.hidd | **1.0** | - | ✓ |  | 12000 | CyberGraphics RTG Driver |
-| Drivers | sagasd.device | **2.41** | 2.42-beta |  | ✓ | 12000 | SD-Card Driver |
+| Drivers | sagasd.device | **2.41** | 2.43-beta |  | ✓ | 12000 | SD-Card Driver |
 | Drivers | scsi.device | **48.13** | - |  | ✓ |  | IDE Driver for AmigaOS |
 | Drivers | v4net.device | **2.97** | 2.978-beta | ✓ | ✓ | 12000 | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ |  | Picasso 96 RTG Driver |
