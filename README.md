@@ -148,9 +148,9 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Category | Name | Release | Beta | ApolloOS | AmigaOS | Minimal Core | Description |
 |---|---|---|---|:-:|:-:|---|---|
 | Cores | FireBird-Core | **11350** | 12205-beta | ✓ | ✓ |  | FireBird Core |
-| Cores | IceDrake-Core | **11385** | 12201-beta | ✓ | ✓ |  | IceDrake Core |
+| Cores | IceDrake-Core | **11385** | 12856-beta | ✓ | ✓ |  | IceDrake Core |
 | Cores | MantiCore-Core | **11350** | 12001-beta | ✓ | ✓ |  | MantiCore Core |
-| Cores | StandAlone-Core | **11350** | 12556-beta | ✓ | ✓ |  | StandAlone Core |
+| Cores | StandAlone-Core | **11350** | 12856-beta | ✓ | ✓ |  | StandAlone Core |
 | Cores | UniCorn-Core | **12001** | 12856-beta | ✓ | ✓ |  | UniCorn Core |
 | ROM | AmigaROM | **48.02** | 48.12-beta |  | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
@@ -184,7 +184,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloMap | **2.31** | - | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMax | **1.0** | - | ✓ | ✓ |  | Resize CF-Card to maximum size |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.88** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloUpdate | **0.89** | - | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** | - | ✓ | ✓ |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | - | ✓ | ✓ |  | Apollo MouseWheel Driver |
