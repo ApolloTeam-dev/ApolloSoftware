@@ -510,6 +510,11 @@ def check_amigarom(root, names, errors):
             if open(image, "rb").read() != built:
                 errors.append(f"{label}/{name}: not the image its {MODULES} builds - build it with the "
                               "ApolloSoftware-Manager (or .github/scripts/romlink.py)")
+                continue
+            packed = romlink.packed_size(built)
+            if packed > romlink.PACKED_MAX:
+                errors.append(f"{label}: packed it has {packed} bytes - the flash holds {romlink.PACKED_MAX} "
+                              f"($710000-$72FFFF): {packed - romlink.PACKED_MAX} bytes too many")
 
 
 def check_public(root, names, public, errors):

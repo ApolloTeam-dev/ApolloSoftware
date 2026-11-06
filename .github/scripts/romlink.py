@@ -125,6 +125,93 @@ def hunks(data, label="module"):
     return out
 
 
+# ---------------------------------------------------------------------------
+# the packed size: the AmigaROM is flashed NOVA-packed into a 128KB block
+# ($710000-$72FFFF); the core unpacks it to $F00000. Port of ApolloUpdate's
+# nova.c (pknova7 of ApolloFlash / ApolloExpROM): the same length, byte for
+# byte. Only the length is needed here.
+# ---------------------------------------------------------------------------
+
+PACKED_MAX = 0x20000            # the flash block of the AmigaROM
+NOVA_HEADER = 12
+NOVA_DIST_EXP = 65535           # ApolloExpROM's search distance
+
+
+def packed_size(image, distance=NOVA_DIST_EXP):
+    """The NOVA7 packed length (header included) of an image"""
+    src = bytes(image) + bytes(16)                  # the packer reads past the end
+    n = len(image)
+    head, prev = {}, [0] * n
+    out = NOVA_HEADER
+    to_copy, last0, last1 = 1, 9999, 9999
+
+    def h(p):
+        return (src[p] << 16) | (src[p + 1] << 8) | src[p + 2]
+
+    def insert(p):
+        k = h(p)
+        prev[p] = head.get(k, -99999)
+        head[k] = p
+
+    def copy(size):
+        nonlocal out, to_copy, last0, last1
+        if last1 < 1000 and last0 in (2003, 3004) and last1 + size <= 60:
+            size += last1
+            out -= 1 + last1
+            if last0 > 3000:
+                size += 4
+                out -= 3
+            else:
+                size += 3
+                out -= 2
+        out += 1 + size
+        to_copy = 0
+        last1, last0 = last0, size
+
+    def crunch(dist, size):
+        nonlocal out, last0, last1
+        if dist > 2047 or size > 17:
+            out += 3
+            last1, last0 = last0, 3000 + size
+        else:
+            out += 2
+            last1, last0 = last0, 2000 + size
+
+    insert(0)
+    ptr = 1
+    while ptr < n:
+        length = min(n - ptr, 65)
+        best, best_dist = 0, 0
+        pointer = head.get(h(ptr), -99999)
+        lo = ptr - min(ptr, distance) + 1
+        if ptr - pointer < 65535:
+            while pointer >= lo:
+                m = 0
+                while m < length and src[pointer + m] == src[ptr + m]:
+                    m += 1
+                if m > best:
+                    best, best_dist = m, ptr - pointer
+                    if m == 65:
+                        break
+                pointer = prev[pointer]
+        if best > 3 or (best > 2 and best_dist <= 2047) or (best == 2 and to_copy == 0 and best_dist <= 2047):
+            if to_copy > 0:
+                copy(to_copy)
+            crunch(best_dist, best)
+            for _ in range(best):
+                insert(ptr)
+                ptr += 1
+        else:
+            insert(ptr)
+            to_copy += 1
+            ptr += 1
+            if to_copy == 64:
+                copy(to_copy)
+    if to_copy > 0:
+        copy(to_copy)
+    return out
+
+
 def checksum(rom):
     """The Kickstart checksum: add with carry over every longword (with the
     checksum longword 0), complemented"""
@@ -186,6 +273,13 @@ def selftest():
         if s > 0xFFFFFFFF:
             s = (s & 0xFFFFFFFF) + 1
     assert s == 0xFFFFFFFF
+    # packed lengths as ApolloUpdate's nova.c gives them
+    assert packed_size(bytes(1000)) == 63
+    mixed, x = bytearray(70000), 12345
+    for i in range(len(mixed)):
+        x = (x * 1103515245 + 12345) & 0xFFFFFFFFFFFFFFFF
+        mixed[i] = 65 if i % 7 == 0 else (x >> 16) & 0xFF
+    assert packed_size(bytes(mixed)) == 71013
     for bad in ("48", "48.1.2", "R9.6", "70000.1"):
         try:
             version_words(bad)
@@ -209,4 +303,5 @@ if __name__ == "__main__":
     open(out, "wb").write(image)
     for label, addr, size in placed:
         print(f"${addr:06X}  {size:6d}  {label}")
-    print(f"{out}: {sum(p[2] for p in placed) + 16} of {SIZE - END} bytes used")
+    print(f"{out}: {sum(p[2] for p in placed) + 16} of {SIZE - END} bytes used, "
+          f"packed {packed_size(image)} of {PACKED_MAX}")
