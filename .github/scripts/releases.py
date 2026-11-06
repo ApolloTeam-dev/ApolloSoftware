@@ -764,6 +764,43 @@ def write_kit(root, names, outdir, date, commit, program=None, icon=None):
     return os.path.getsize(path)
 
 
+TREE = "ApolloSoftware.tree"
+
+
+def write_tree(root, outdir):
+    """ApolloSoftware.tree for ApolloUpdate, on the web page: the commit the
+    page was made from and every file of it with its size, as the GitHub
+    API's recursive tree ({"sha": ..., "tree": [{"path", "type", "size"}],
+    "truncated": false}). ApolloUpdate reads the repository from it, not
+    from api.github.com (60 requests an hour per IP address without a
+    token), and the files from raw.githubusercontent.com at that commit.
+    Returns the number of files; 0 when root is no git checkout."""
+    import json
+    import subprocess
+    try:
+        sha = subprocess.run(["git", "-C", root, "rev-parse", "HEAD"], check=True,
+                             capture_output=True, text=True).stdout.strip()
+        out = subprocess.run(["git", "-C", root, "ls-tree", "-r", "-l", "-z", "HEAD"], check=True,
+                             capture_output=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return 0
+    if not re.fullmatch(r"[0-9a-f]{40}", sha):
+        return 0
+    tree = []
+    for entry in out.split(b"\0"):
+        if not entry:
+            continue
+        meta, path = entry.split(b"\t", 1)
+        mode, kind, _obj, size = meta.split()
+        if kind != b"blob":
+            continue            # submodules: no file to download
+        tree.append({"path": path.decode("utf-8"), "type": "blob", "size": int(size)})
+    with open(os.path.join(outdir, TREE), "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"sha": sha, "tree": tree, "truncated": False}, f, ensure_ascii=True,
+                  separators=(",", ":"))
+    return len(tree)
+
+
 def write_readme(path, names, avl=False):
     text = open(path, encoding="utf-8").read() if os.path.exists(path) else "# ApolloSoftware\n"
     new = table(names, avl)
@@ -857,6 +894,8 @@ def main():
                                 tools and os.path.join(tools, "ApolloUpdate"),
                                 tools and os.path.join(tools, "ApolloUpdate.info"))
             print(f"{KIT}: {offline // 1024} KB")
+            files = write_tree(args.root, args.site)
+            print(f"{TREE}: {files} files" if files else f"{TREE}: not written (no git checkout)")
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
