@@ -151,7 +151,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | IceDrake-Core | **11385** | 12201-beta | ✓ | ✓ |  | IceDrake Core |
 | Cores | MantiCore-Core | **11350** | 12001-beta | ✓ | ✓ |  | MantiCore Core |
 | Cores | StandAlone-Core | **11350** | 12556-beta | ✓ | ✓ |  | StandAlone Core |
-| Cores | UniCorn-Core | **12001** | 12556E-beta | ✓ | ✓ |  | UniCorn Core |
+| Cores | UniCorn-Core | **12001** | 12856-beta | ✓ | ✓ |  | UniCorn Core |
 | ROM | AmigaROM | **48.02** | 48.12-beta |  | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
 | ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | 44.7-beta |  | ✓ |  | processor.resource |
