@@ -213,7 +213,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               f'<td width="10"></td><td valign="middle" class="dl" nowrap>'
               '<table border="0" cellspacing="0" cellpadding="0">'
               f'<tr><td nowrap><a href="ApolloUpdate" title="{tip}">'
-              f'<font color="#ffffff"><b>Download and Execute</b></font></a></td></tr>'
+              f'<font color="#ffffff"><b>Download and Execute on V4</b></font></a></td></tr>'
               '<tr><td height="6"></td></tr>'                  # a little air between the lines
               f'<tr><td nowrap><font color="#a9a9a8"><b>{esc(stamp)}</b></font></td></tr>'
               '</table></td>'
