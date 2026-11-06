@@ -56,6 +56,41 @@ Example (multiple files):
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
 
+### S:User-Startup and S:Startup-Sequence
+
+A release never holds the shared startup scripts themselves. It adds its
+lines to them with a **fragment** named after the Name:
+
+- `S/User-Startup/<Name>`: lines for S:User-Startup
+- `S/Startup-Sequence/<Name>`: lines for S:Startup-Sequence (only when
+  they cannot wait for S:User-Startup)
+
+A fragment holds one or more blocks, each named `<Name>` or
+`<Name> <more>`:
+
+```
+;BEGIN MUI
+if exists "SYS:System/MUI"
+   assign MUI: "SYS:System/MUI"
+endif
+;END MUI
+```
+
+ApolloUpdate does not copy a fragment to SYS:. It merges each block into
+the script, once all the other files of the release are installed:
+
+- A block that is already in the script (same `;BEGIN`/`;END` name) is
+  replaced where it is.
+- A new block goes at the end of S:User-Startup. In S:Startup-Sequence it
+  goes before the lines that run S:User-Startup (else before `LoadWB` or
+  `EndCLI`).
+- The rest of the script stays as it is. When nothing changes, nothing is
+  written. Otherwise the previous script is kept as `S:User-Startup.bak`
+  (or `S:Startup-Sequence.bak`).
+
+Example: `Libraries/MUI/5.0/S/User-Startup/MUI`, with the blocks `MUI` and
+`MUI ASL` that MUI's own Installer writes.
+
 ### The Info file
 
 Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`

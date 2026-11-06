@@ -561,6 +561,68 @@ def check_files(root, names, errors, warnings):
                     owner.setdefault(key, mine)
             if files == 0:
                 errors.append(f"{cat}/{name}/{rel}: empty release")
+            if cat not in ROM_CATS:
+                check_startup(root, cat, name, rel, errors)
+
+
+STARTUP_SCRIPTS = ("User-Startup", "Startup-Sequence")
+STARTUP_MARK = re.compile(r";(BEGIN|END) +(\S.{0,59})$", re.I)
+
+
+def check_startup(root, cat, name, rel, errors):
+    """S/User-Startup/<Name> and S/Startup-Sequence/<Name>: fragments that
+    ApolloUpdate merges into the shared scripts (never copied to SYS:).
+    Each holds only ;BEGIN <block> ... ;END <block> blocks, a block named
+    <Name> or "<Name> <more>"; the scripts themselves are not in a release."""
+    label = f"{cat}/{name}/{rel}"
+    sdir = next((e for e in os.listdir(os.path.join(root, cat, name, rel))
+                 if e.lower() == "s" and is_dir(root, cat, name, rel, e)), None)
+    if not sdir:
+        return
+    spath = os.path.join(root, cat, name, rel, sdir)
+    for e in sorted(os.listdir(spath)):
+        script = next((x for x in STARTUP_SCRIPTS if x.lower() == e.lower()), None)
+        if not script or JUNK.match(e):
+            continue
+        if not os.path.isdir(os.path.join(spath, e)):
+            errors.append(f"{label}/{sdir}/{e}: the shared script itself - a release adds to it "
+                          f"with the fragment {sdir}/{script}/{name}")
+            continue
+        for f in sorted(os.listdir(os.path.join(spath, e))):
+            if JUNK.match(f):
+                continue
+            flabel = f"{label}/{sdir}/{e}/{f}"
+            fpath = os.path.join(spath, e, f)
+            if os.path.isdir(fpath) or f != name:
+                errors.append(f"{flabel}: only the file {name} (the fragment of this Name)")
+                continue
+            data = open(fpath, "rb").read()
+            if any(b > 126 or (b < 32 and b not in (9, 10, 13)) for b in data):
+                errors.append(f"{flabel}: not plain ASCII text")
+                continue
+            block, blocks = None, 0
+            for i, raw in enumerate(data.decode("ascii").split("\n"), 1):
+                line = raw.strip(" \t\r")
+                m = STARTUP_MARK.match(line)
+                tag, bname = (m.group(1).upper(), m.group(2).strip()) if m else (None, None)
+                if block is None:
+                    if tag == "BEGIN":
+                        if bname.lower() != name.lower() and not bname.lower().startswith(name.lower() + " "):
+                            errors.append(f"{flabel}:{i}: block {bname} - a block is named {name} or "
+                                          f"\"{name} <more>\"")
+                        block = bname
+                    elif line:
+                        errors.append(f"{flabel}:{i}: outside a ;BEGIN/;END block")
+                elif tag == "BEGIN":
+                    errors.append(f"{flabel}:{i}: ;BEGIN {bname} inside block {block}")
+                elif tag == "END":
+                    if bname.lower() != block.lower():
+                        errors.append(f"{flabel}:{i}: ;END {bname} closes block {block}")
+                    block, blocks = None, blocks + 1
+            if block is not None:
+                errors.append(f"{flabel}: block {block} has no ;END {block}")
+            elif not blocks:
+                errors.append(f"{flabel}: no ;BEGIN {name} ... ;END {name} block")
 
 
 def create_info(root, avl, warnings):
