@@ -220,7 +220,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
               '</tr></table>')
     if offline:
         otip = (f"ApolloUpdate-Offline.zip, {(offline + 524288) // 1048576} MB: ApolloUpdate, its icon and "
-                "ApolloSoftware-Offline.lha (every Release and Beta) - unzip all three onto an SD card or USB stick")
+                "every Release and Beta - copy it, or what it unzips to, onto an SD card or USB stick")
         off = ('<table border="0" cellspacing="0" cellpadding="0"><tr>'
                f'<td valign="middle"><a href="ApolloUpdate-Offline.zip"><img src="Offline-icon.png" '
                f'width="48" height="48" border="0" alt="Offline Archive" title="{otip}"></a></td>'

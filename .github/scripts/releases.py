@@ -712,54 +712,50 @@ def write_downloads(root, names, outdir, date):
     return links
 
 
-OFFLINE = "ApolloSoftware-Offline.lha"
+KIT = "ApolloUpdate-Offline.zip"
+OFFLINE_DIR = "ApolloSoftware-Offline"
 OFFLINE_INFO = "ApolloSoftware.offline"
 
 
-def write_offline(root, names, outdir, date, commit):
-    """ApolloSoftware-Offline.lha for ApolloUpdate without internet: the
-    Release and the Beta of every Name in the repository's own layout
-    (Category/Name/Release/..., the Info files), ApolloSoftware.index and
-    ApolloSoftware.offline (date, commit). Stored, not packed, so ApolloUpdate
-    reads it as it is. Returns its size."""
-    members = []
-    for cat, name, tags, releases, info in names:
-        npath = os.path.join(root, cat, name)
-        if os.path.isfile(os.path.join(npath, INFO)):
-            members.append((f"{cat}/{name}/{INFO}", open(os.path.join(npath, INFO), "rb").read(), date))
-        for rel in [r for r in release_beta(releases) if r != "-"]:
-            rpath = os.path.join(npath, rel)
-            for dirpath, dirs, fns in os.walk(rpath):
-                dirs.sort()
-                for fn in sorted(fns):
-                    if JUNK.match(fn):
-                        continue
-                    full = os.path.join(dirpath, fn)
-                    sub = os.path.relpath(full, root).replace(os.sep, "/")
-                    members.append((sub, open(full, "rb").read(), date))
-    members.append((INDEX, open(os.path.join(root, INDEX), "rb").read(), date))
-    members.append((OFFLINE_INFO, ("date=%04d-%02d-%02d\ncommit=%s\n" % (date + (commit,))).encode("ascii"), date))
-    data = lha(members)
-    with open(os.path.join(outdir, OFFLINE), "wb") as f:
-        f.write(data)
-    return len(data)
-
-
-KIT = "ApolloUpdate-Offline.zip"
-
-
-def write_kit(outdir, program, icon):
-    """ApolloUpdate-Offline.zip, the Offline Kit for a PC or Mac: ApolloUpdate,
-    its icon and ApolloSoftware-Offline.lha, to unzip onto an SD card or USB
-    stick together - ApolloUpdate finds the archive beside itself. ZIP
-    because Windows and macOS open it themselves. Returns its size."""
+def write_kit(root, names, outdir, date, commit, program=None, icon=None):
+    """ApolloUpdate-Offline.zip, the Offline Kit and the one offline
+    archive: ApolloUpdate and its icon, and the drawer ApolloSoftware-Offline
+    with the Release and the Beta of every Name in the repository's own
+    layout (Category/Name/Release/..., the Info files), ApolloSoftware.index
+    and ApolloSoftware.offline (date, commit). ApolloUpdate reads the zip
+    itself (each member deflated on its own), or the drawer it is unzipped
+    in on a PC or Mac. ZIP because Windows and macOS open it themselves.
+    Returns its size."""
     import zipfile
+    stamp = date + (12, 0, 0)
+
+    def put(z, name, data):
+        zi = zipfile.ZipInfo(name, stamp)
+        zi.compress_type = zipfile.ZIP_DEFLATED
+        zi.external_attr = 0o644 << 16
+        z.writestr(zi, data, compresslevel=9)
+
     path = os.path.join(outdir, KIT)
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        for src, name in ((program, "ApolloUpdate"), (icon, "ApolloUpdate.info"),
-                          (os.path.join(outdir, OFFLINE), OFFLINE)):
+    with zipfile.ZipFile(path, "w") as z:
+        for src, name in ((program, "ApolloUpdate"), (icon, "ApolloUpdate.info")):
             if src and os.path.isfile(src):
-                z.write(src, name)
+                put(z, name, open(src, "rb").read())
+        for cat, name, tags, releases, info in names:
+            npath = os.path.join(root, cat, name)
+            if os.path.isfile(os.path.join(npath, INFO)):
+                put(z, f"{OFFLINE_DIR}/{cat}/{name}/{INFO}", open(os.path.join(npath, INFO), "rb").read())
+            for rel in [r for r in release_beta(releases) if r != "-"]:
+                for dirpath, dirs, fns in os.walk(os.path.join(npath, rel)):
+                    dirs.sort()
+                    for fn in sorted(fns):
+                        if JUNK.match(fn):
+                            continue
+                        full = os.path.join(dirpath, fn)
+                        sub = os.path.relpath(full, root).replace(os.sep, "/")
+                        put(z, f"{OFFLINE_DIR}/{sub}", open(full, "rb").read())
+        put(z, f"{OFFLINE_DIR}/{INDEX}", open(os.path.join(root, INDEX), "rb").read())
+        put(z, f"{OFFLINE_DIR}/{OFFLINE_INFO}",
+            ("date=%04d-%02d-%02d\ncommit=%s\n" % (date + (commit,))).encode("ascii"))
     return os.path.getsize(path)
 
 
@@ -851,13 +847,11 @@ def main():
         downloads = {} if args.avl else write_downloads(args.root, names, args.site, day)
         offline = 0
         if not args.avl:
-            offline = write_offline(args.root, names, args.site, day, os.environ.get("GITHUB_SHA", "local")[:12])
-            print(f"{OFFLINE}: {offline // 1024} KB")
-            if version:
-                tools = os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools")
-                offline = write_kit(args.site, os.path.join(tools, "ApolloUpdate"),
-                                    os.path.join(tools, "ApolloUpdate.info"))
-                print(f"{KIT}: {offline // 1024} KB")
+            tools = os.path.join(args.root, "Tools", "ApolloUpdate", version, "Tools") if version else None
+            offline = write_kit(args.root, names, args.site, day, os.environ.get("GITHUB_SHA", "local")[:12],
+                                tools and os.path.join(tools, "ApolloUpdate"),
+                                tools and os.path.join(tools, "ApolloUpdate.info"))
+            print(f"{KIT}: {offline // 1024} KB")
         pages = webpage.build(
             names, args.site,
             assets=os.path.join(args.root, ".github", "site"),
