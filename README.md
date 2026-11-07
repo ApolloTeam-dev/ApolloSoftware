@@ -88,8 +88,7 @@ the script, once all the other files of the release are installed:
   written. Otherwise the previous script is kept as `S:User-Startup.bak`
   (or `S:Startup-Sequence.bak`).
 
-Example: `Libraries/MUI/5.0/S/User-Startup/MUI`, with the blocks `MUI` and
-`MUI ASL` that MUI's own Installer writes.
+Example: `Libraries/MUI/5.0/S/User-Startup/MUI`, with the block `MUI`.
 
 ### The Info file
 
