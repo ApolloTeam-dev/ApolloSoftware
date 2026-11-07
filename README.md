@@ -104,7 +104,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS` | required: one or more of `ApolloOS`, `AmigaOS` and `coffin`, comma separated. `coffin` is AmigaOS with its own places and versions for software; ApolloUpdate detects it by `Version CoffinLib VERSION 65` giving WARN |
+| `OS` | required: one or more of `ApolloOS`, `AmigaOS` and `coffin`, comma separated. `coffin` is AmigaOS with its own places and versions for software; ApolloUpdate detects it by `Version CoffinLib VERSION 65` succeeding (rc 0, no WARN) |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
