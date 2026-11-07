@@ -25,6 +25,9 @@ On every push to main, `.github/workflows/releases.yml` runs
 - **notifies** ApolloSoftware-Sources.
 
 Consequences:
+- **Watch the run after every push**, even one that only adds notes. A new
+  file at the top of the repository fails the layout check unless it is in
+  `TOP_FILES` in `releases.py` (in both repositories).
 - **Never edit by hand** the README table (between the `releases:` markers)
   or `ApolloSoftware.index`.
 - **Pull before you push.** The bot, and Manager merges by other team
