@@ -204,7 +204,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Libraries | 680x0.library | **40.1** | - |  | ✓ | ✓ |  | 680x0.library, Apollo AC68080 support |
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | maggie.library | **4.0** | - | ✓ | ✓ | ✓ |  | Maggie 3DFX API library |
-| Libraries | MUI | **5.0** | - | ✓ | ✓ | ✓ |  | MUI 5.0 - Magic User Interface, the GUI system ApolloUpdate and many programs use |
+| Libraries | MUI | **5.0** | - | ✓ | ✓ |  |  | MUI 5.0 - Magic User Interface, the GUI system ApolloUpdate and many programs use |
 | Libraries | ptable.library | **2.0** | - | ✓ | ✓ | ✓ |  | ptable.library is part of fat95 (4.0+) filesystem |
 | Libraries | VampireSupport | **40.50** | 40.51-beta |  | ✓ | ✓ |  | Vampire support: V4 chip/fast RAM, FPU |
 | FileSystems | exfat-handler | **1.11** | - |  | ✓ | ✓ |  | Ex-FAT Filesystem |
@@ -219,7 +219,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | ApolloMap | **2.31** | - | ✓ | ✓ | ✓ |  | Map ROM (SoftKick) |
 | Tools | ApolloMax | **1.0** | - | ✓ | ✓ | ✓ |  | Resize CF-Card to maximum size |
 | Tools | ApolloMon | **1.0e** | - | ✓ | ✓ | ✓ |  | CPU Monitoring Widget |
-| Tools | ApolloUpdate | **0.106** | - | ✓ | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
+| Tools | ApolloUpdate | **0.107** | - | ✓ | ✓ | ✓ |  | Apollo Update Manager for ApolloOS and AmigaOS |
 | Tools | ApolloVNC | **26.6R1** | - | ✓ | ✓ | ✓ |  | Fast & Easy Remote VNC Application |
 | Tools | ApolloWHDSet | **0.3.3** | - | ✓ | ✓ | ✓ |  | Set SAGA Display ToolTypes |
 | Tools | ApolloWheel | **0.1i** | - | ✓ | ✓ | ✓ |  | Apollo MouseWheel Driver |
@@ -231,5 +231,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoad | **20.1.7190** | - | ✓ | ✓ | ✓ |  | Amiga game retro-installation software launcher. |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-48 items: 33 for ApolloOS, 46 for AmigaOS, 46 for coffin.
+48 items: 33 for ApolloOS, 46 for AmigaOS, 45 for coffin.
 <!-- releases:end -->
