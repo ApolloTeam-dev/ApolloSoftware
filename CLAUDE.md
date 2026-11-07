@@ -36,7 +36,7 @@ Consequences:
 
 ## Checking locally
 
-The NAS checkout collects untracked clutter (`.DS_Store`, empty release
+A working folder collects untracked clutter (`.DS_Store`, empty release
 folders) that the workflow never sees. Check a clean export instead of the
 working folder:
 
@@ -67,9 +67,10 @@ Add `--site <dir>` to build the web pages too.
 - Releasing a new ApolloUpdate is done from the ApolloUpdate repository
   (`make release`), which commits `Tools/ApolloUpdate/<version>` here.
 
-## NAS pitfall
+## Network share pitfall
 
-If git says "unable to write new index file" on the NAS share:
+Work in a local clone. If a checkout on a network share (the old NAS
+copies) says "unable to write new index file":
 
 ```
 mv .git/index .git/index.stuck-<date>
