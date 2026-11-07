@@ -78,7 +78,7 @@ WRAP_DESC = 48                  # ... at this many characters per line
 MARK_START = "<!-- releases:start -->"
 MARK_END = "<!-- releases:end -->"
 MAX_NAME = 30                   # FFS file name limit
-TOP_FILES = {"README.md", ".gitattributes", ".gitignore", INDEX}
+TOP_FILES = {"README.md", "AGENTS.md", "CLAUDE.md", ".gitattributes", ".gitignore", INDEX}   # AGENTS.md, CLAUDE.md: notes for AI agents
 JUNK = re.compile(r"^(\.DS_Store|\._.*|Thumbs\.db|desktop\.ini)$", re.I)
 
 
