@@ -1,4 +1,4 @@
 ; Libraries/VampireSupport - read by ApolloUpdate, see README.md
-OS=AmigaOS
+OS=AmigaOS,coffin
 MINCORE=
 DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU

@@ -50,7 +50,7 @@ def cat_rank(cat):
     return (len(CATEGORY_ORDER), cat.lower())
 
 
-OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"))
+OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"), ("coffin", "coffin"))
 SORTS = (("category", "Category"), ("name", "Name"))
 
 FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
@@ -263,7 +263,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Release", None, ""),
             ("Beta", None, ""),
-            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"),
+            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"), ("coffin", None, "center"),
             ("Minimal Core", None, ""), ("Description", None, "")]
     out.append(f'<table class="grid" width="100%" border="0" cellspacing="1" cellpadding="3" '
                f'bgcolor="{LINE}">')
@@ -297,6 +297,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
                    + version_cell(cat, name, rel, True) + version_cell(cat, name, beta, False) +
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
+                   f'<td align="center">{"Yes" if "coffin" in tags else "-"}</td>'
                    f'<td nowrap>{esc(min_core(info, shown(releases)))}</td>'
                    f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
                    "</tr>")

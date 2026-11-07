@@ -1,4 +1,4 @@
 ; FileSystems/fat95 - read by ApolloUpdate, see README.md
-OS=AmigaOS
+OS=AmigaOS,coffin
 MINCORE=
 DESCRIPTION=FAT Filesystem

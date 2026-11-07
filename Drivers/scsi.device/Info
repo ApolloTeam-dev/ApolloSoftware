@@ -1,4 +1,4 @@
 ; Drivers/scsi.device - read by ApolloUpdate, see README.md
-OS=AmigaOS
+OS=AmigaOS,coffin
 MINCORE=
 DESCRIPTION=IDE Driver for AmigaOS

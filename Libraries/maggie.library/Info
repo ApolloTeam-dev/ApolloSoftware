@@ -1,4 +1,4 @@
 ; Libraries/maggie.library - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS
+OS=ApolloOS,AmigaOS,coffin
 MINCORE=
 DESCRIPTION=Maggie 3DFX API library

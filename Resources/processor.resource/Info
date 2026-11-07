@@ -1,4 +1,4 @@
 ; Resources/processor.resource - read by ApolloUpdate, see README.md
-OS=AmigaOS
+OS=AmigaOS,coffin
 MINCORE=
 DESCRIPTION=processor.resource

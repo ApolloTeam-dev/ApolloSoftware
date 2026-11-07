@@ -34,7 +34,7 @@ Layout (the contract with the ApolloUpdate client):
     Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ApolloROM,
     /AmigaROM (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
-        OS=ApolloOS,AmigaOS           required: the OS(es) the Name is for
+        OS=ApolloOS,AmigaOS,coffin    required: the OS(es) the Name is for
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
         MINCORE=                      lowest Apollo core it runs on (number)
         MINCORE.<release>=            the same for one release
@@ -63,13 +63,13 @@ from webpage import min_core, release_beta, shown
 import textwrap
 import unicodedata
 
-OSES = ("ApolloOS", "AmigaOS")
+OSES = ("ApolloOS", "AmigaOS", "coffin")   # coffin: AmigaOS with its own conventions
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
 INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
-ROMS = {"ApolloROM": ("ApolloOS", (1048576, 1048576)),   # the Names in ROM: OS and
-        "AmigaROM": ("AmigaOS", (1, 196608))}           # image size min, max (bytes)
+ROMS = {"ApolloROM": (("ApolloOS",), (1048576, 1048576)),            # the Names in ROM: OSes and
+        "AmigaROM": (("AmigaOS", "coffin"), (1, 196608))}           # image size min, max (bytes)
 CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
 MODULES = "ROM-Modules"          # a ROM release's module list, in ROM order
 INDEX = "ApolloSoftware.index"
@@ -265,9 +265,9 @@ def read_info(path, label, releases, avl, errors, warnings):
     oses = [o.strip() for o in info.get("OS", "").split(",") if o.strip()]
     for o in oses:
         if o not in OSES:
-            errors.append(f"{label}: OS={o}? (ApolloOS and/or AmigaOS)")
+            errors.append(f"{label}: OS={o}? ({", ".join(OSES)})")
     if not oses:
-        errors.append(f"{label}: no OS= line (OS=ApolloOS, OS=AmigaOS or OS=ApolloOS,AmigaOS)")
+        errors.append(f"{label}: no OS= line (one or more of {",".join(OSES)}, e.g. OS={",".join(OSES)})")
     info["OS"] = [o for o in OSES if o in oses]
 
     tier = info.get("AVL", "")
@@ -348,21 +348,21 @@ def scan(root, avl=False):
                 info = read_info(os.path.join(npath, INFO), f"{cat}/{name}/{INFO}",
                                  releases, avl, errors, warnings)
             else:
-                errors.append(f"{cat}/{name}: no Info file (at least OS=ApolloOS,AmigaOS"
+                errors.append(f"{cat}/{name}: no Info file (at least OS={','.join(OSES)}"
                               + (" and AVL=Bronze" if avl else "") + ")")
                 info = {"OS": [], "AVL": None, "MINCORE": "",
                         "DESCRIPTION": ""}
-            if cat == "Cores":         # the core itself: for both systems, no minimal core
+            if cat == "Cores":         # the core itself: for every system, no minimal core
                 if info["OS"] != list(OSES):
-                    errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - a core is for both "
-                                  f"systems (OS={','.join(OSES)})")
+                    errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - a core is for every "
+                                  f"system (OS={','.join(OSES)})")
                 for key in [k for k in info if k.startswith("MINCORE") and info[k]]:
                     errors.append(f"{cat}/{name}/{INFO}: {key}={info[key]} - a core has no minimal core")
             if cat == "ROM" and name not in ROMS:
                 errors.append(f"{cat}/{name}: ROM holds {' and '.join(ROMS)} only")
-            elif cat == "ROM" and info["OS"] != [ROMS[name][0]]:
+            elif cat == "ROM" and info["OS"] != list(ROMS[name][0]):
                 errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {name} is "
-                              f"for {ROMS[name][0]} only (OS={ROMS[name][0]})")
+                              f"for OS={','.join(ROMS[name][0])}")
             names.append((cat, name, set(info["OS"]), newest_first(releases), info))
     return names, errors, warnings
 
@@ -471,8 +471,8 @@ def check_modules(root, names, errors):
                     errors.append(f"{label}: {entry} is a beta - a release ROM holds "
                                   "releases only (a beta ROM may hold betas)")
                 mc, mn, mt, mr = rels[key]
-                if ROMS[name][0] not in mt:
-                    errors.append(f"{label}: {entry} is not for {ROMS[name][0]}")
+                if ROMS[name][0][0] not in mt:          # a module is for the ROM's own OS
+                    errors.append(f"{label}: {entry} is not for {ROMS[name][0][0]}")
                 drawer = os.path.join(root, mc, mn, parts[2], name)
                 if not os.path.isdir(drawer) or not any(not JUNK.match(f) for f in os.listdir(drawer)):
                     errors.append(f"{label}: {entry} has no {name}/ drawer with the module")
@@ -666,21 +666,19 @@ def table(names, avl=False):
     rows = [MARK_START,
             "<!-- Generated by .github/scripts/releases.py on every push - do not edit by hand. -->",
             "",
-            "| Category | Name | Release | Beta | ApolloOS | AmigaOS |"
+            "| Category | Name | Release | Beta | " + " | ".join(OSES) + " |"
             + (" Level |" if avl else "") + " Minimal Core | Description |",
-            "|---|---|---|---|:-:|:-:|" + ("---|" if avl else "") + "---|---|"]
+            "|---|---|---|---|" + ":-:|" * len(OSES) + ("---|" if avl else "") + "---|---|"]
     # by category in the priority order of the web page, then by name
     for cat, name, tags, releases, info in sorted(names, key=lambda n: (webpage.cat_rank(n[0]),
                                                                          n[1].lower())):
         rel, beta = release_beta(releases)
-        rows.append("| %s | %s | **%s** | %s | %s | %s |" % (
-            cat, name, rel, beta,
-            "✓" if "ApolloOS" in tags else "", "✓" if "AmigaOS" in tags else "")
+        rows.append("| %s | %s | **%s** | %s |" % (cat, name, rel, beta)
+            + "".join(" %s |" % ("✓" if o in tags else "") for o in OSES)
             + (" %s |" % (info["AVL"] or "?") if avl else "")
             + " %s | %s |" % (min_core(info, shown(releases)), cell(info["DESCRIPTION"])))
-    apollo = sum(1 for n in names if "ApolloOS" in n[2])
-    amiga = sum(1 for n in names if "AmigaOS" in n[2])
-    rows += ["", f"{len(names)} items: {apollo} for ApolloOS, {amiga} for AmigaOS.", MARK_END]
+    per = ", ".join(f"{sum(1 for n in names if o in n[2])} for {o}" for o in OSES)
+    rows += ["", f"{len(names)} items: {per}.", MARK_END]
     return "\n".join(rows)
 
 

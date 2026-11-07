@@ -1,4 +1,4 @@
 ; FileSystems/ODFileSystem - read by ApolloUpdate, see README.md
-OS=AmigaOS
+OS=AmigaOS,coffin
 MINCORE=
 DESCRIPTION=CD (ISO9660) Filesystem
