@@ -1,4 +1,3 @@
 ; Tools/ApolloMap - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=Map ROM (SoftKick)

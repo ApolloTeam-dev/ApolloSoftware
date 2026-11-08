@@ -1,4 +1,5 @@
 ; Drivers/AmiTCP - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.4.1.7=AmigaOS,Others
+OS.4.1.8=AmigaOS,Others
 MINCORE=
 DESCRIPTION=TCP/IP Stack

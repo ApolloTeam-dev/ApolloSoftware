@@ -1,4 +1,6 @@
 ; Libraries/VampireSupport - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.40.49=AmigaOS,Others
+OS.40.50=AmigaOS,Others
+OS.40.51-beta=AmigaOS,Others
 MINCORE=
 DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU

@@ -1,4 +1,3 @@
 ; Libraries/ptable.library - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=ptable.library is part of fat95 (4.0+) filesystem

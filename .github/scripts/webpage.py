@@ -317,10 +317,11 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
             head.append(f'<td nowrap bgcolor="{HEAD}" class="th"{al}>'
                         f'<font color="#ffffff"><b>{esc(title)}</b></font></td>')
     out.append("<tr>" + "".join(head) + "</tr>")
-    def version_cell(cat, name, rel, bold):
-        # a version links to its download (an .lha, or the core / ROM file)
+    def version_cell(cat, name, rel, bold, os_name=None):
+        # a version links to its download (an .lha, or the core / ROM file);
+        # on a system's page the one of that system (its system drawer)
         text = f"<b>{esc(rel)}</b>" if bold else esc(rel)
-        href = downloads.get((cat, name, rel))
+        href = downloads.get((cat, name, rel, os_name)) or downloads.get((cat, name, rel))
         if href:
             text = f'<a href="{esc(href)}" title="Download {esc(name)} {esc(rel)}">{text}</a>'
         return f"<td nowrap>{text}</td>"
@@ -333,7 +334,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
         out.append(f'<tr bgcolor="{bg}">'
                    f'<td nowrap class="dim">{esc(cat)}</td>'
                    f'<td nowrap><b>{esc(name)}</b></td>'
-                   + version_cell(cat, name, rel, True) + version_cell(cat, name, beta, False) +
+                   + version_cell(cat, name, rel, True, os_name) + version_cell(cat, name, beta, False, os_name) +
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "Others" in tags else "-"}</td>'

@@ -1,4 +1,3 @@
 ; Tools/ApolloAMP - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=SAGA Audioplayer

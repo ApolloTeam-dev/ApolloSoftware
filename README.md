@@ -56,6 +56,22 @@ Example (multiple files):
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
 
+### Other files for one system
+
+A release can hold a drawer named after a system (`ApolloOS/`,
+`AmigaOS/`, `Others/`), with that system's own SYS: tree. That system
+installs only what is in its drawer; the other systems install what is
+outside the system drawers. Others (an AmigaOS with its own places for
+software) keeps RiVA in SYS:Utilities, not in SYS:Tools:
+
+- Tools/RiVA/0.63R4/Tools/RiVA - ApolloOS and AmigaOS
+- Tools/RiVA/0.63R4/Others/Utilities/RiVA - Others
+
+A system drawer is only for a system the release is for (`OS.<release>`),
+and it may hold startup fragments (`Others/S/User-Startup/<Name>`) but no
+ROM modules. The web page has a download per system drawer
+(`RiVA-0.63R4-Others.lha`).
+
 ### S:User-Startup and S:Startup-Sequence
 
 A release never holds the shared startup scripts themselves. It adds its
@@ -96,7 +112,6 @@ Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
 
 ```
-OS=ApolloOS,AmigaOS,Others
 OS.1.1=AmigaOS,Others
 MINCORE=11000
 MINCORE.1.0e=10900
@@ -105,8 +120,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS` | required: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). `Others` is an AmigaOS with its own places and versions for software; ApolloUpdate tells it by a probe for its own library (see ApolloUpdate's README) |
-| `OS.<release>` | fewer OSes for one release: a subset of `OS`. Each OS gets the newest release that is for it, so `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Every OS of `OS` needs at least one release. Not for Cores and ROM |
+| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ApolloROM: ApolloOS, AmigaROM: AmigaOS and Others) |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
@@ -114,7 +128,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 Leave a value empty when unknown. On every push a GitHub workflow checks the
 layout and the `Info` files, and writes the table below and
 `ApolloSoftware.index`, the file ApolloUpdate reads (do not edit it).
-A new Name without an `Info` gets one from the workflow, for every OS.
+A new Name without an `Info` gets one from the workflow (all systems).
 Check it and fill in the rest.
 
 ### Cores and ROM
@@ -167,9 +181,8 @@ The ApolloROM release still holds an image compiled elsewhere (the
 ApolloOS-Port project) next to its `ROM-Modules`.
 
 The workflow checks that every `ROM-Modules` line names an existing release
-with its file in the ROM's drawer and for the ROM's OS, each module once;
-that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS,Others`; the
-image sizes (ApolloROM 1MB, AmigaROM at most 192KB); and that an AmigaROM
+with its file in the ROM's drawer and for the ROM's system, each module
+once; the image sizes (ApolloROM 1MB, AmigaROM at most 192KB); and that an AmigaROM
 image is exactly what its `ROM-Modules` builds. A ROM module is one file in
 its release's `AmigaROM/` (`ApolloROM/`) drawer.
 

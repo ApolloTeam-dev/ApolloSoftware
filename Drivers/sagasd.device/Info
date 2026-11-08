@@ -1,4 +1,8 @@
 ; Drivers/sagasd.device - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.2.41=AmigaOS,Others
+OS.2.42-beta=AmigaOS,Others
+OS.2.43-beta=AmigaOS,Others
+OS.2.44-beta=AmigaOS,Others
+OS.2.45-beta=AmigaOS,Others
 MINCORE=12000
 DESCRIPTION=SD-Card Driver

@@ -50,7 +50,9 @@ SYS_DRAWERS = {"c", "classes", "devs", "expansion", "fonts", "help", "l", "libs"
 
 def tree(root, avl, public=None):
     """{(cat, name): {"releases": [newest first], "info": {...}, "files":
-    {rel: {sub: size}}}}, errors, warnings - releases.py's scan and checks"""
+    {rel: {sub: size}}, "dst": {rel: {system: {sub: SYS path}}}}}, errors,
+    warnings - releases.py's scan and checks. A file in a system drawer
+    (Others/Utilities/x) has its SYS: path without the drawer."""
     names, errors, warnings = R.scan(root, avl)
     R.check_files(root, names, errors, warnings)
     R.check_modules(root, names, errors)
@@ -58,11 +60,13 @@ def tree(root, avl, public=None):
         R.check_public(root, names, public, errors)
     out = {}
     for cat, name, tags, rels, info in names:
-        files = {}
+        files, dst = {}, {}
         for rel in rels:
             files[rel] = {sub: os.path.getsize(os.path.join(root, cat, name, rel, sub))
                           for sub, key in R.release_files(root, cat, name, rel)}
-        out[(cat, name)] = {"releases": rels, "info": info, "files": files, "row": (cat, name, tags, rels, info)}
+            dst[rel] = {o: dict(R.release_files(root, cat, name, rel, os_name=o)) for o in R.rel_oses(info, rel)}
+        out[(cat, name)] = {"releases": rels, "info": info, "files": files, "dst": dst,
+                            "row": (cat, name, tags, rels, info)}
     return out, names, errors, warnings
 
 
@@ -93,10 +97,11 @@ def drawers_in(t):
     for (cat, name), n in t.items():
         if cat in R.ROM_CATS:
             continue
-        for rel, files in n["files"].items():
-            for sub in files:
-                if os.sep in sub:
-                    used.add(sub.split(os.sep)[0].lower())
+        for rel, systems in n["dst"].items():
+            for paths in systems.values():
+                for path in paths.values():
+                    if os.sep in path and ":" not in path:
+                        used.add(path.split(os.sep)[0])
     return used
 
 
@@ -123,10 +128,11 @@ def compare(base, head, errors, warnings, changes):
                 changes.append(f"Info changed: {label} ({', '.join(diff)})")
 
         newest_before = b["releases"][0] if b and b["releases"] else None
-        before_paths = {}           # file name -> where the newest release had it
+        before_paths = {}           # (system, file name) -> where the newest release had it
         if newest_before:
-            for sub in b["files"][newest_before]:
-                before_paths.setdefault(os.path.basename(sub).lower(), sub)
+            for o, paths in b["dst"][newest_before].items():
+                for path in paths.values():
+                    before_paths.setdefault((o, os.path.basename(path)), path)
 
         for rel in h["releases"]:
             files = h["files"][rel]
@@ -155,14 +161,19 @@ def compare(base, head, errors, warnings, changes):
                     warnings.append(f"{flabel}: {size // (1024 * 1024)} MB - a big file")
                 if cat in R.ROM_CATS:
                     continue
-                if os.sep in sub:
-                    top = sub.split(os.sep)[0]
-                    if top.lower() not in known:
-                        warnings.append(f"{flabel}: SYS:{top}/ is a drawer no item used before")
-                was = before_paths.get(os.path.basename(sub).lower())
-                if was and was.lower() != sub.lower() and rel != newest_before:
-                    warnings.append(f"{flabel}: lands in SYS:{os.path.dirname(sub) or ''} - "
-                                    f"{newest_before} had it in SYS:{os.path.dirname(was) or ''}")
+                for o, paths in sorted(h["dst"][rel].items()):
+                    path = paths.get(sub)
+                    if path is None or ":" in path:
+                        continue
+                    if os.sep in path:
+                        top = path.split(os.sep)[0]
+                        if top not in known:
+                            warnings.append(f"{flabel}: SYS:{top}/ is a drawer no item used before")
+                            known.add(top)
+                    was = before_paths.get((o, os.path.basename(path)))
+                    if was and was != path and rel != newest_before:
+                        warnings.append(f"{flabel}: lands in SYS:{os.path.dirname(path) or ''} on {o} - "
+                                        f"{newest_before} had it in SYS:{os.path.dirname(was) or ''}")
 
 
 def main():

@@ -1,4 +1,5 @@
 ; Resources/vampire.resource - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.45.3=AmigaOS,Others
+OS.45.4-beta=AmigaOS,Others
 MINCORE=
 DESCRIPTION=vampire.resource

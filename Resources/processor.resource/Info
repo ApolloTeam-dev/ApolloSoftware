@@ -1,4 +1,8 @@
 ; Resources/processor.resource - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.44.3=AmigaOS,Others
+OS.44.4=AmigaOS,Others
+OS.44.4-beta=AmigaOS,Others
+OS.44.6-beta=AmigaOS,Others
+OS.44.7-beta=AmigaOS,Others
 MINCORE=
 DESCRIPTION=processor.resource

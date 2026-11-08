@@ -27,6 +27,10 @@ Layout (the contract with the ApolloUpdate client):
         per line - each an existing release whose file(s) are in its
         ApolloROM/ resp. AmigaROM/ drawer. (The AmigaROM header with the
         ROM id and version is made from the version, not listed.)
+    Category / Name / Release / ApolloOS|AmigaOS|Others / <to SYS:>
+                                           a system drawer: that system
+                                           installs only this drawer, the
+                                           others what is outside them
     Category / Name / Release / AmigaROM/<module>
     Category / Name / Release / ApolloROM/<module>
                                            a ROM module: never copied to
@@ -34,9 +38,10 @@ Layout (the contract with the ApolloUpdate client):
     Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ApolloROM,
     /AmigaROM (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
-        OS=ApolloOS,AmigaOS,Others    required: the OS(es) the Name is for
-        OS.<release>=AmigaOS,Others   fewer OSes for one release: each OS
-                                      gets the newest release for it
+        OS.<release>=AmigaOS,Others   the systems of one release, when not
+                                      all three; each system gets the
+                                      newest release for it. A Name is for
+                                      the systems of its releases
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
         MINCORE=                      lowest Apollo core it runs on (number)
         MINCORE.<release>=            the same for one release
@@ -61,13 +66,13 @@ import time
 
 import romlink                          # .github/scripts/romlink.py: the AmigaROM builder
 import webpage                          # .github/scripts/webpage.py
-from webpage import kept, min_core, os_notes, release_beta, shown
+from webpage import kept, min_core, os_notes, rel_oses, release_beta, shown
 import textwrap
 import unicodedata
 
 OSES = webpage.OS_NAMES   # ApolloOS, AmigaOS, Others (an AmigaOS with its own conventions)
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
-KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and OS.<release>, MINCORE.<release>
+KEYS = ("AVL", "MINCORE", "DESCRIPTION")   # and OS.<release>, MINCORE.<release>
 INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
 ROMS = {"ApolloROM": (("ApolloOS",), (1048576, 1048576)),            # the Names in ROM: OSes and
@@ -259,7 +264,8 @@ def read_info(path, label, releases, avl, errors, warnings):
             key = f"{base}.{rel}"
         elif key not in KEYS:
             errors.append(f"{label}:{i}: unknown key {key} (known: {', '.join(KEYS)}, "
-                          "OS.<release>, MINCORE.<release>)")
+                          "OS.<release>, MINCORE.<release>)"
+                          + (" - the systems are per release now: OS.<release>" if key == "OS" else ""))
             continue
         if key in info:
             errors.append(f"{label}:{i}: {key} given twice")
@@ -267,35 +273,23 @@ def read_info(path, label, releases, avl, errors, warnings):
     for key in ("MINCORE", "DESCRIPTION"):
         info.setdefault(key, "")
 
-    oses = [o.strip() for o in info.get("OS", "").split(",") if o.strip()]
-    for o in oses:
-        if o not in OSES:
-            errors.append(f"{label}: OS={o}? ({", ".join(OSES)})")
-    if not oses:
-        errors.append(f"{label}: no OS= line (one or more of {",".join(OSES)}, e.g. OS={",".join(OSES)})")
-    info["OS"] = [o for o in OSES if o in oses]
-
-    # OS.<release>: fewer OSes for one release - a subset of the Name's
+    # OS.<release>: the systems of one release (all three without); the
+    # Name is for the systems of its releases
     for key in [k for k in info if k.startswith("OS.")]:
         rel_os = [o.strip() for o in info[key].split(",") if o.strip()]
         for o in rel_os:
             if o not in OSES:
                 errors.append(f"{label}: {key}: {o}? ({", ".join(OSES)})")
-            elif o not in info["OS"]:
-                errors.append(f"{label}: {key}: {o} is not in OS={",".join(info["OS"])} - "
-                              "a release can only be for fewer OSes than its Name")
-        rel_os = [o for o in OSES if o in rel_os and o in info["OS"]]
+        rel_os = [o for o in OSES if o in rel_os]
         if not rel_os:
-            errors.append(f"{label}: {key}= names no OS of the Name - remove the release instead")
+            errors.append(f"{label}: {key}= names no system - remove the release instead")
             del info[key]
-        elif rel_os == info["OS"]:
-            warnings.append(f"{label}: {key}={",".join(rel_os)} is the Name's own OS= - not needed")
+        elif rel_os == list(OSES):
+            warnings.append(f"{label}: {key}={",".join(rel_os)} - all systems, the default: not needed")
             del info[key]
         else:
             info[key] = rel_os
-    for o in info["OS"]:
-        if releases and not any(o in info.get("OS." + r, info["OS"]) for r in releases):
-            errors.append(f"{label}: OS={o}, but no release is for {o} (OS.<release>)")
+    info["OS"] = [o for o in OSES if any(o in info.get("OS." + r, OSES) for r in releases)]
 
     tier = info.get("AVL", "")
     if avl:
@@ -375,35 +369,41 @@ def scan(root, avl=False):
                 info = read_info(os.path.join(npath, INFO), f"{cat}/{name}/{INFO}",
                                  releases, avl, errors, warnings)
             else:
-                errors.append(f"{cat}/{name}: no Info file (at least OS={','.join(OSES)}"
+                errors.append(f"{cat}/{name}: no Info file (at least DESCRIPTION="
                               + (" and AVL=Bronze" if avl else "") + ")")
-                info = {"OS": [], "AVL": None, "MINCORE": "",
+                info = {"OS": list(OSES), "AVL": None, "MINCORE": "",
                         "DESCRIPTION": ""}
             if cat == "Cores":         # the core itself: for every system, no minimal core
-                if info["OS"] != list(OSES):
-                    errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - a core is for every "
-                                  f"system (OS={','.join(OSES)})")
                 for key in [k for k in info if k.startswith("MINCORE") and info[k]]:
                     errors.append(f"{cat}/{name}/{INFO}: {key}={info[key]} - a core has no minimal core")
-            if cat in ROM_CATS:         # flashed: one image for all its OSes
+            if cat in ROM_CATS:         # flashed: fixed systems, the same for every release
                 for key in [k for k in info if k.startswith("OS.")]:
-                    errors.append(f"{cat}/{name}/{INFO}: {key} - {cat} has the same OS for every release")
+                    errors.append(f"{cat}/{name}/{INFO}: {key} - {cat} has fixed systems")
                     del info[key]
+                info["OS"] = list(ROMS[name][0]) if cat == "ROM" and name in ROMS else list(OSES)
             if cat == "ROM" and name not in ROMS:
                 errors.append(f"{cat}/{name}: ROM holds {' and '.join(ROMS)} only")
-            elif cat == "ROM" and info["OS"] != list(ROMS[name][0]):
-                errors.append(f"{cat}/{name}/{INFO}: OS={','.join(info['OS'])} - {name} is "
-                              f"for OS={','.join(ROMS[name][0])}")
             names.append((cat, name, set(info["OS"]), newest_first(releases), info))
     return names, errors, warnings
 
 
-def release_files(root, cat, name, rel, errors=None):
+def sys_drawers(root, cat, name, rel):
+    """The system drawers of a release (ApolloOS/, AmigaOS/, Others/): each
+    holds what that system installs instead of the rest of the release"""
+    if cat in ROM_CATS:
+        return []
+    return [o for o in OSES if os.path.isdir(os.path.join(root, cat, name, rel, o))]
+
+
+def release_files(root, cat, name, rel, errors=None, os_name=None):
     """[(path below the release, lower-case path key)] of one release, junk
     left out. The key is the SYS: path - for Cores and ROM the place in
     SYS:ApolloUpdate, for a module in an ApolloROM/ or AmigaROM/ drawer
-    "<drawer>:<file>" (never SYS:). A ROM release's ROM-Modules is read, not
-    installed. With errors, one that breaks the rules is reported."""
+    "<drawer>:<file>" (never SYS:), for a file in a system drawer its path
+    without the drawer. A ROM release's ROM-Modules is read, not
+    installed. With os_name: only what that system installs (its own system
+    drawer, else what is outside the system drawers). With errors, one
+    that breaks the rules is reported."""
     rpath = os.path.join(root, cat, name, rel)
     out = []
     if cat in ROM_CATS:
@@ -439,25 +439,37 @@ def release_files(root, cat, name, rel, errors=None):
         if cat == "ROM":
             return [(f, f"apolloupdate/{name}/{f}".lower()) for f in files if f != MODULES]
         return [(f, f"{ROM_CATS[cat]}/{f}".lower()) for f in files]
+    own = sys_drawers(root, cat, name, rel)
     for dirpath, dirs, fns in os.walk(rpath):
         for fn in fns:
             if not JUNK.match(fn):
                 sub = os.path.relpath(os.path.join(dirpath, fn), rpath)
                 top = sub.split(os.sep)[0]
-                if top in ROMS and os.sep in sub:            # a ROM module
-                    out.append((sub, f"{top}:{sub[len(top) + 1:]}".lower()))
+                inner = sub
+                if top in own and os.sep in sub:            # a system drawer
+                    if os_name and top != os_name:
+                        continue
+                    inner = sub[len(top) + 1:]
+                    if errors is not None and inner.split(os.sep)[0] in ROMS:
+                        errors.append(f"{cat}/{name}/{rel}/{sub}: a ROM module sits in the release's "
+                                      f"own {inner.split(os.sep)[0]}/ drawer, not in a system drawer")
+                elif os_name and os_name in own:
+                    continue                                # that system has its own drawer
+                itop = inner.split(os.sep)[0]
+                if itop in ROMS and os.sep in inner and inner == sub:   # a ROM module
+                    out.append((sub, f"{itop}:{inner[len(itop) + 1:]}".lower()))
                 else:
-                    out.append((sub, sub.lower()))
+                    out.append((sub, inner.lower()))
     return out
 
 
 def sys_paths(root, names):
     """{(os, lower-case SYS path): "Cat/Name"} for every release of every Name"""
     owner = {}
-    for cat, name, tags, releases, tier in names:
+    for cat, name, tags, releases, info in names:
         for rel in releases:
-            for sub, key in release_files(root, cat, name, rel):
-                for o in tags:
+            for o in rel_oses(info, rel):
+                for sub, key in release_files(root, cat, name, rel, os_name=o):
                     owner.setdefault((o, key), f"{cat}/{name}")
     return owner
 
@@ -479,7 +491,7 @@ def check_modules(root, names, errors):
     """Every line of a ROM's ROM-Modules file: Category/Name/Version of an
     existing release, its file(s) in the drawer of this ROM (ApolloROM/ or
     AmigaROM/), for this ROM's OS; each module once; order as written."""
-    rels = {(c.lower(), n.lower()): (c, n, t, r) for c, n, t, r, i in names}
+    rels = {(c.lower(), n.lower()): (c, n, i, r) for c, n, t, r, i in names}
     for cat, name, tags, releases, info in names:
         if cat != "ROM" or name not in ROMS:
             continue
@@ -501,8 +513,8 @@ def check_modules(root, names, errors):
                 if not is_beta(rel) and is_beta(parts[2]):
                     errors.append(f"{label}: {entry} is a beta - a release ROM holds "
                                   "releases only (a beta ROM may hold betas)")
-                mc, mn, mt, mr = rels[key]
-                if ROMS[name][0][0] not in mt:          # a module is for the ROM's own OS
+                mc, mn, mi, mr = rels[key]
+                if ROMS[name][0][0] not in rel_oses(mi, parts[2]):     # a module is for the ROM's own OS
                     errors.append(f"{label}: {entry} is not for {ROMS[name][0][0]}")
                 drawer = os.path.join(root, mc, mn, parts[2], name)
                 if not os.path.isdir(drawer) or not any(not JUNK.match(f) for f in os.listdir(drawer)):
@@ -564,10 +576,28 @@ def check_public(root, names, public, errors):
 def check_files(root, names, errors, warnings):
     """Per file: names, metadata junk, SYS: paths shared between Names."""
     owner = {}          # (os, lower-case SYS path) -> "Cat/Name"
-    for cat, name, tags, releases, tier in names:
+    for cat, name, tags, releases, info in names:
         for rel in releases:
             rpath = os.path.join(root, cat, name, rel)
             files = 0
+            mine_os = rel_oses(info, rel)
+            own = sys_drawers(root, cat, name, rel)
+            for o in own:
+                if o not in mine_os:
+                    errors.append(f"{cat}/{name}/{rel}/{o}: a system drawer for {o}, but {rel} is not "
+                                  f"for {o} (OS.{rel}={','.join(mine_os)})")
+                elif not release_files(root, cat, name, rel, os_name=o):
+                    errors.append(f"{cat}/{name}/{rel}/{o}: an empty system drawer")
+                if os.path.isfile(os.path.join(rpath, o)):
+                    errors.append(f"{cat}/{name}/{rel}/{o}: a file named after a system - a system drawer "
+                                  "is a drawer")
+            shared = [s_ for s_, k in release_files(root, cat, name, rel) if s_.split(os.sep)[0] not in own]
+            if own and all(o in own for o in mine_os) and shared:
+                warnings.append(f"{cat}/{name}/{rel}: every system has its own drawer - "
+                                f"{len(shared)} file(s) outside them are installed by none")
+            elif any(o not in own for o in mine_os) and not shared and own:
+                errors.append(f"{cat}/{name}/{rel}: nothing for " + ", ".join(o for o in mine_os if o not in own)
+                              + " - outside the system drawers the release is empty")
             for dirpath, dirs, fns in os.walk(rpath):
                 for d in dirs + fns:
                     if JUNK.match(d):
@@ -581,9 +611,10 @@ def check_files(root, names, errors, warnings):
                                       "character that AmigaDOS or GitHub cannot take")
             for sub, path in release_files(root, cat, name, rel, errors):
                 files += 1
-                if cat not in ROM_CATS and os.sep not in sub and ":" not in path:
+                if cat not in ROM_CATS and os.sep not in path and ":" not in path:
                     warnings.append(f"{cat}/{name}/{rel}/{sub}: lands in the root of SYS:")
-                for o in tags:
+            for o in mine_os:
+                for sub, path in release_files(root, cat, name, rel, os_name=o):
                     key = (o, path)
                     mine = f"{cat}/{name}"
                     if key in owner and owner[key] != mine:
@@ -594,6 +625,8 @@ def check_files(root, names, errors, warnings):
                 errors.append(f"{cat}/{name}/{rel}: empty release")
             if cat not in ROM_CATS:
                 check_startup(root, cat, name, rel, errors)
+                for o in own:
+                    check_startup(root, cat, name, os.path.join(rel, o), errors)
 
 
 STARTUP_SCRIPTS = ("User-Startup", "Startup-Sequence")
@@ -658,7 +691,7 @@ def check_startup(root, cat, name, rel, errors):
 
 def create_info(root, avl, warnings):
     """A new Name (release folders, no Info) gets a template
-    Info - for both OSes and, in ApolloSoftware-AVL, the Bronze level. A
+    Info - for all systems and, in ApolloSoftware-AVL, the Bronze level. A
     warning asks to check it. Returns the "Cat/Name" made."""
     made = []
     for cat in sorted(c for c in os.listdir(root) if not c.startswith(".") and is_dir(root, c)):
@@ -671,14 +704,13 @@ def create_info(root, avl, warnings):
                 continue
             if not any(os.path.isdir(os.path.join(npath, e)) for e in ents):
                 continue
-            lines = [f"; {cat}/{name} - read by ApolloUpdate, see README.md",
-                     "OS=" + ",".join(OSES)]
+            lines = [f"; {cat}/{name} - read by ApolloUpdate, see README.md"]
             if avl:
                 lines.append("AVL=" + TIERS[0])
             lines += ["MINCORE=", "DESCRIPTION="]
             open(os.path.join(npath, INFO), "w", newline="\n").write("\n".join(lines) + "\n")
             made.append(f"{cat}/{name}")
-            warnings.append(f"{cat}/{name}: new Name - made its Info (OS={','.join(OSES)}"
+            warnings.append(f"{cat}/{name}: new Name - made its Info (all systems"
                             + (f", AVL={TIERS[0]}" if avl else "") + "): check it, fill in DESCRIPTION "
                             "(and the owner in ApolloSoftware-Sources)")
     return made
@@ -722,8 +754,8 @@ def index(names, avl=False, root="."):
            "<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\\nline"]
     for cat, name, tags, releases, info in names:
         f = [f"{cat}/{name}", "OS=" + ",".join(o for o in OSES if o in tags)]
-        for r in releases:
-            if info.get("OS." + r):
+        for r in releases:      # a release for fewer systems than the Name (its union)
+            if info.get("OS." + r) and info["OS." + r] != info["OS"]:
                 f.append(f"OS.{r}=" + ",".join(info["OS." + r]))
         if info["AVL"]:
             f.append("AVL=" + info["AVL"])
@@ -787,10 +819,34 @@ def write_downloads(root, names, outdir, date):
     <Name>-<version>.lha); for Cores and ROM the file itself (the core,
     the ROM image). ROM modules - files in an ApolloROM/ or AmigaROM/
     drawer - are left out, so a Name that is only that gets no link.
-    Returns {(cat, name, release): link below outdir}."""
+    A release with system drawers gets one .lha per such system
+    (<Name>-<version>-<system>.lha) besides the one of the other systems.
+    Returns {(cat, name, release): link, (cat, name, release, system):
+    link} below outdir."""
     links = {}
     for cat, name, tags, releases, info in names:
         for rel in kept(releases, info, OSES):
+            mine_os = rel_oses(info, rel)
+            own = sys_drawers(root, cat, name, rel)
+            if own and cat not in ROM_CATS:
+                rest = [o for o in mine_os if o not in own]
+                for suffix, systems in [(o, [o]) for o in own if o in mine_os] + ([(None, rest)] if rest else []):
+                    files = [(sub, key) for sub, key in release_files(root, cat, name, rel, os_name=systems[0])
+                             if ":" not in key]
+                    if not files:
+                        continue
+                    link = "/".join(["download", cat, f"{name}-{rel}" + (f"-{suffix}" if suffix else "") + ".lha"])
+                    os.makedirs(os.path.join(outdir, os.path.dirname(link)), exist_ok=True)
+                    cut = len(suffix) + 1 if suffix else 0
+                    members = [(sub[cut:].replace(os.sep, "/"), open(os.path.join(root, cat, name, rel, sub), "rb").read(), date)
+                               for sub, key in sorted(files)]
+                    with open(os.path.join(outdir, link), "wb") as f:
+                        f.write(lha(members))
+                    for o in systems:
+                        links[(cat, name, rel, o)] = link
+                    if not suffix or (cat, name, rel) not in links:
+                        links[(cat, name, rel)] = link
+                continue
             files = [(sub, key) for sub, key in release_files(root, cat, name, rel) if ":" not in key]
             if not files:
                 continue

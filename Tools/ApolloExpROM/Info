@@ -1,4 +1,4 @@
 ; Tools/ApolloExpROM - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.1.1=AmigaOS,Others
 MINCORE=
 DESCRIPTION=Flash/Dump Expansion ROM ($F0)

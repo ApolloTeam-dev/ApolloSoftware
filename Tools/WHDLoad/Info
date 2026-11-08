@@ -1,5 +1,4 @@
 ; Tools/WHDLoad - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 OS.20.1.7190=AmigaOS,Others
 OS.19.2.6915=ApolloOS
 MINCORE=

@@ -1,4 +1,3 @@
 ; Cores/IceDrake-Core - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=IceDrake Core

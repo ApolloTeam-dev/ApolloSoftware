@@ -1,4 +1,4 @@
 ; FileSystems/exfat-handler - read by ApolloUpdate, see README.md
-OS=AmigaOS,Others
+OS.1.11=AmigaOS,Others
 MINCORE=
 DESCRIPTION=Ex-FAT Filesystem

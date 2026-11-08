@@ -1,4 +1,3 @@
 ; Tools/ApolloVNC - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=Fast & Easy Remote VNC Application
