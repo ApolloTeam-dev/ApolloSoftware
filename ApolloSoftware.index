@@ -47,4 +47,4 @@ Tools/i2clock	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Load/Save date & time to RT
 Tools/RiVA	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=SAGA Videoplayer
 Tools/UAEMap	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Map ROM on UAE (counterpart of ApolloMap)
 Tools/VaMP3	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=MUI MP3 Player
-Tools/WHDLoad	OS=ApolloOS,AmigaOS,Others	OS.20.1.7190=AmigaOS,Others	DESCRIPTION=Amiga game retro-installation software launcher.
+Tools/WHDLoad	OS=ApolloOS,AmigaOS,Others	OS.20.1.7190=AmigaOS,Others	OS.19.2.6915=ApolloOS	DESCRIPTION=Amiga game retro-installation software launcher.
