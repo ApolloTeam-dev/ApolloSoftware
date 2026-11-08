@@ -50,7 +50,8 @@ def cat_rank(cat):
     return (len(CATEGORY_ORDER), cat.lower())
 
 
-OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"), ("coffin", "coffin"))
+OS_NAMES = ("ApolloOS", "AmigaOS", "Others")      # = releases.OSES
+OSES = (("all", "All"), ("apolloos", "ApolloOS"), ("amigaos", "AmigaOS"), ("others", "Others"))
 SORTS = (("category", "Category"), ("name", "Name"))
 
 FONTS = ('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, '
@@ -118,9 +119,23 @@ def chips(label, items, active, link):
             + "".join(cells) + "</tr></table>")
 
 
-def release_beta(releases):
+def rel_oses(info, rel):
+    """The OSes of one release: its own OS.<release>, else the Name's OS"""
+    return info.get("OS." + rel) or info.get("OS") or []
+
+
+def for_os(releases, info, os_name):
+    """The releases (newest first) that are for os_name - what ApolloUpdate
+    lists on that OS"""
+    return [r for r in releases if os_name in rel_oses(info, r)]
+
+
+def release_beta(releases, info=None, os_name=None):
     """(newest release, newest beta newer than it) of releases newest first;
-    "-" for none. A release folder ending in -beta is a beta."""
+    "-" for none. A release folder ending in -beta is a beta. With os_name:
+    of the releases for that OS only (OS.<release> in info)."""
+    if os_name:
+        releases = for_os(releases, info, os_name)
     rel = next((r for r in releases if not r.endswith("-beta")), "-")
     beta = "-"
     for r in releases:
@@ -131,10 +146,32 @@ def release_beta(releases):
     return rel, beta
 
 
-def shown(releases):
+def shown(releases, info=None, os_name=None):
     """the version the overviews describe: the newest release, else the beta"""
-    rel, beta = release_beta(releases)
+    rel, beta = release_beta(releases, info, os_name)
     return rel if rel != "-" else beta
+
+
+def os_notes(releases, info, oses):
+    """" (ApolloOS: 19.2.6915)" for each OS whose newest release (with
+    beta) differs from the newest overall; "" when they all agree"""
+    overall = release_beta(releases)
+    notes = []
+    for o in oses:
+        if o in info.get("OS", []):
+            mine = release_beta(releases, info, o)
+            if mine != overall:
+                notes.append(f"{o}: " + (mine[0] if mine[1] == "-" else f"{mine[0]}, beta {mine[1]}"))
+    return f" ({'; '.join(notes)})" if notes else ""
+
+
+def kept(releases, info, oses):
+    """The releases the overviews offer, newest first: the newest release
+    and beta overall and for each OS (OS.<release> can hold one back)"""
+    want = set(release_beta(releases))
+    for o in oses:
+        want |= set(release_beta(releases, info, o))
+    return [r for r in releases if r in want]
 
 
 def min_core(info, latest):
@@ -263,7 +300,7 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
     # the table
     cols = [("Category", "category", ""), ("Name", "name", ""), ("Release", None, ""),
             ("Beta", None, ""),
-            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"), ("coffin", None, "center"),
+            ("ApolloOS", None, "center"), ("AmigaOS", None, "center"), ("Others", None, "center"),
             ("Minimal Core", None, ""), ("Description", None, "")]
     out.append(f'<table class="grid" width="100%" border="0" cellspacing="1" cellpadding="3" '
                f'bgcolor="{LINE}">')
@@ -290,16 +327,20 @@ def one_page(names, rows, os_key, cat_key, sort_key, cat_items, size, version, s
 
     for i, (cat, name, tags, releases, info) in enumerate(rows):
         bg = CARD if i % 2 == 0 else ALT
-        rel, beta = release_beta(releases)
+        os_name = dict(OSES).get(os_key) if os_key != "all" else None
+        rel, beta = release_beta(releases, info, os_name)
+        note = "" if os_name else os_notes(releases, info, OS_NAMES)
         out.append(f'<tr bgcolor="{bg}">'
                    f'<td nowrap class="dim">{esc(cat)}</td>'
                    f'<td nowrap><b>{esc(name)}</b></td>'
                    + version_cell(cat, name, rel, True) + version_cell(cat, name, beta, False) +
                    f'<td align="center">{"Yes" if "ApolloOS" in tags else "-"}</td>'
                    f'<td align="center">{"Yes" if "AmigaOS" in tags else "-"}</td>'
-                   f'<td align="center">{"Yes" if "coffin" in tags else "-"}</td>'
-                   f'<td nowrap>{esc(min_core(info, shown(releases)))}</td>'
-                   f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}</td>'
+                   f'<td align="center">{"Yes" if "Others" in tags else "-"}</td>'
+                   f'<td nowrap>{esc(min_core(info, shown(releases, info, os_name)))}</td>'
+                   f'<td>{esc(info.get("DESCRIPTION") or "").replace(chr(92) + "n", " ")}'
+                   + (f'<br><span class="dim small">{esc(note.strip(" ()"))}</span>' if note else "")
+                   + '</td>'
                    "</tr>")
     if not rows:
         out.append(f'<tr bgcolor="{CARD}"><td colspan="{len(cols)}" class="dim">'

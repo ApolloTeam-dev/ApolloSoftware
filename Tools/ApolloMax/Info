@@ -1,4 +1,4 @@
 ; Tools/ApolloMax - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,coffin
+OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=Resize CF-Card to maximum size

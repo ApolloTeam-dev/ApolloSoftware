@@ -34,7 +34,9 @@ Layout (the contract with the ApolloUpdate client):
     Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ApolloROM,
     /AmigaROM (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
-        OS=ApolloOS,AmigaOS,coffin    required: the OS(es) the Name is for
+        OS=ApolloOS,AmigaOS,Others    required: the OS(es) the Name is for
+        OS.<release>=AmigaOS,Others   fewer OSes for one release: each OS
+                                      gets the newest release for it
         AVL=Bronze|Silver|Gold        ApolloSoftware-AVL only, required there
         MINCORE=                      lowest Apollo core it runs on (number)
         MINCORE.<release>=            the same for one release
@@ -59,17 +61,17 @@ import time
 
 import romlink                          # .github/scripts/romlink.py: the AmigaROM builder
 import webpage                          # .github/scripts/webpage.py
-from webpage import min_core, release_beta, shown
+from webpage import kept, min_core, os_notes, release_beta, shown
 import textwrap
 import unicodedata
 
-OSES = ("ApolloOS", "AmigaOS", "coffin")   # coffin: AmigaOS with its own conventions
+OSES = webpage.OS_NAMES   # ApolloOS, AmigaOS, Others (an AmigaOS with its own conventions)
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
-KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and MINCORE.<release>
+KEYS = ("OS", "AVL", "MINCORE", "DESCRIPTION")   # and OS.<release>, MINCORE.<release>
 INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
 ROMS = {"ApolloROM": (("ApolloOS",), (1048576, 1048576)),            # the Names in ROM: OSes and
-        "AmigaROM": (("AmigaOS", "coffin"), (1, 196608))}           # image size min, max (bytes)
+        "AmigaROM": (("AmigaOS", "Others"), (1, 196608))}           # image size min, max (bytes)
 CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
 MODULES = "ROM-Modules"          # a ROM release's module list, in ROM order
 INDEX = "ApolloSoftware.index"
@@ -231,7 +233,8 @@ def to_ascii(text):
 
 
 def read_info(path, label, releases, avl, errors, warnings):
-    """The Info file of a Name -> {KEY: value}, plus {"MINCORE.<rel>": value}"""
+    """The Info file of a Name -> {KEY: value}, plus {"MINCORE.<rel>": value}
+    and {"OS.<rel>": [OS, ...]}"""
     raw = open(path, "rb").read()
     try:
         text = raw.decode("utf-8")
@@ -247,14 +250,16 @@ def read_info(path, label, releases, avl, errors, warnings):
             continue
         key, value = s.split("=", 1)
         key, value = key.strip().upper(), value.strip()
-        if key.startswith("MINCORE."):
-            rel = s.split("=", 1)[0].strip()[8:]
+        if key.startswith(("MINCORE.", "OS.")):
+            base = key.split(".", 1)[0]
+            rel = s.split("=", 1)[0].strip()[len(base) + 1:]
             if rel not in releases:
-                errors.append(f"{label}:{i}: MINCORE.{rel}: there is no release {rel}")
+                errors.append(f"{label}:{i}: {base}.{rel}: there is no release {rel}")
                 continue
-            key = "MINCORE." + rel
+            key = f"{base}.{rel}"
         elif key not in KEYS:
-            errors.append(f"{label}:{i}: unknown key {key} (known: {', '.join(KEYS)}, MINCORE.<release>)")
+            errors.append(f"{label}:{i}: unknown key {key} (known: {', '.join(KEYS)}, "
+                          "OS.<release>, MINCORE.<release>)")
             continue
         if key in info:
             errors.append(f"{label}:{i}: {key} given twice")
@@ -269,6 +274,28 @@ def read_info(path, label, releases, avl, errors, warnings):
     if not oses:
         errors.append(f"{label}: no OS= line (one or more of {",".join(OSES)}, e.g. OS={",".join(OSES)})")
     info["OS"] = [o for o in OSES if o in oses]
+
+    # OS.<release>: fewer OSes for one release - a subset of the Name's
+    for key in [k for k in info if k.startswith("OS.")]:
+        rel_os = [o.strip() for o in info[key].split(",") if o.strip()]
+        for o in rel_os:
+            if o not in OSES:
+                errors.append(f"{label}: {key}: {o}? ({", ".join(OSES)})")
+            elif o not in info["OS"]:
+                errors.append(f"{label}: {key}: {o} is not in OS={",".join(info["OS"])} - "
+                              "a release can only be for fewer OSes than its Name")
+        rel_os = [o for o in OSES if o in rel_os and o in info["OS"]]
+        if not rel_os:
+            errors.append(f"{label}: {key}= names no OS of the Name - remove the release instead")
+            del info[key]
+        elif rel_os == info["OS"]:
+            warnings.append(f"{label}: {key}={",".join(rel_os)} is the Name's own OS= - not needed")
+            del info[key]
+        else:
+            info[key] = rel_os
+    for o in info["OS"]:
+        if releases and not any(o in info.get("OS." + r, info["OS"]) for r in releases):
+            errors.append(f"{label}: OS={o}, but no release is for {o} (OS.<release>)")
 
     tier = info.get("AVL", "")
     if avl:
@@ -358,6 +385,10 @@ def scan(root, avl=False):
                                   f"system (OS={','.join(OSES)})")
                 for key in [k for k in info if k.startswith("MINCORE") and info[k]]:
                     errors.append(f"{cat}/{name}/{INFO}: {key}={info[key]} - a core has no minimal core")
+            if cat in ROM_CATS:         # flashed: one image for all its OSes
+                for key in [k for k in info if k.startswith("OS.")]:
+                    errors.append(f"{cat}/{name}/{INFO}: {key} - {cat} has the same OS for every release")
+                    del info[key]
             if cat == "ROM" and name not in ROMS:
                 errors.append(f"{cat}/{name}: ROM holds {' and '.join(ROMS)} only")
             elif cat == "ROM" and info["OS"] != list(ROMS[name][0]):
@@ -673,7 +704,7 @@ def table(names, avl=False):
     for cat, name, tags, releases, info in sorted(names, key=lambda n: (webpage.cat_rank(n[0]),
                                                                          n[1].lower())):
         rel, beta = release_beta(releases)
-        rows.append("| %s | %s | **%s** | %s |" % (cat, name, rel, beta)
+        rows.append("| %s | %s | **%s**%s | %s |" % (cat, name, rel, os_notes(releases, info, OSES), beta)
             + "".join(" %s |" % ("✓" if o in tags else "") for o in OSES)
             + (" %s |" % (info["AVL"] or "?") if avl else "")
             + " %s | %s |" % (min_core(info, shown(releases)), cell(info["DESCRIPTION"])))
@@ -687,10 +718,13 @@ def index(names, avl=False, root="."):
     KEY=VALUE fields; the description wrapped, its line breaks as "\\n"."""
     out = [f"; {INDEX} - generated from the Info files by "
            ".github/scripts/releases.py, do not edit",
-           "; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>MINCORE=..."
+           "; Category/Name<TAB>OS=...<TAB>OS.<release>=...<TAB>AVL=...<TAB>MINCORE=..."
            "<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\\nline"]
     for cat, name, tags, releases, info in names:
         f = [f"{cat}/{name}", "OS=" + ",".join(o for o in OSES if o in tags)]
+        for r in releases:
+            if info.get("OS." + r):
+                f.append(f"OS.{r}=" + ",".join(info["OS." + r]))
         if info["AVL"]:
             f.append("AVL=" + info["AVL"])
         if info["MINCORE"]:
@@ -748,14 +782,15 @@ def lha(members):
 def write_downloads(root, names, outdir, date):
     """The downloads of the web page (ApolloSoftware only: the AVL
     repository has no web page): for the Release and the Beta of every
-    Name an .lha of its files as they go to SYS: (download/<Category>/
+    Name (and for each OS its own, when OS.<release> holds one back) an
+    .lha of its files as they go to SYS: (download/<Category>/
     <Name>-<version>.lha); for Cores and ROM the file itself (the core,
     the ROM image). ROM modules - files in an ApolloROM/ or AmigaROM/
     drawer - are left out, so a Name that is only that gets no link.
     Returns {(cat, name, release): link below outdir}."""
     links = {}
     for cat, name, tags, releases, info in names:
-        for rel in [r for r in release_beta(releases) if r != "-"]:
+        for rel in kept(releases, info, OSES):
             files = [(sub, key) for sub, key in release_files(root, cat, name, rel) if ":" not in key]
             if not files:
                 continue
@@ -785,7 +820,7 @@ OFFLINE_INFO = "ApolloSoftware.offline"
 def write_kit(root, names, outdir, date, commit, program=None, icon=None):
     """ApolloUpdate-Offline.zip, the Offline Kit and the one offline
     archive: ApolloUpdate and its icon, and the drawer ApolloSoftware-Offline
-    with the Release and the Beta of every Name in the repository's own
+    with the Release and the Beta of every Name (also per OS) in the repository's own
     layout (Category/Name/Release/..., the Info files), ApolloSoftware.index
     and ApolloSoftware.offline (date, commit). ApolloUpdate reads the zip
     itself (each member deflated on its own), or the drawer it is unzipped
@@ -809,7 +844,7 @@ def write_kit(root, names, outdir, date, commit, program=None, icon=None):
             npath = os.path.join(root, cat, name)
             if os.path.isfile(os.path.join(npath, INFO)):
                 put(z, f"{OFFLINE_DIR}/{cat}/{name}/{INFO}", open(os.path.join(npath, INFO), "rb").read())
-            for rel in [r for r in release_beta(releases) if r != "-"]:
+            for rel in kept(releases, info, OSES):
                 for dirpath, dirs, fns in os.walk(os.path.join(npath, rel)):
                     dirs.sort()
                     for fn in sorted(fns):

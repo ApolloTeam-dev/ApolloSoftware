@@ -1,4 +1,4 @@
 ; Libraries/68040.library - read by ApolloUpdate, see README.md
-OS=AmigaOS,coffin
+OS=AmigaOS,Others
 MINCORE=
 DESCRIPTION=68040.library for the AC68080

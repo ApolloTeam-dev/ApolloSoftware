@@ -96,7 +96,8 @@ Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
 
 ```
-OS=ApolloOS,AmigaOS,coffin
+OS=ApolloOS,AmigaOS,Others
+OS.1.1=AmigaOS,Others
 MINCORE=11000
 MINCORE.1.0e=10900
 DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
@@ -104,7 +105,8 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS` | required: one or more of `ApolloOS`, `AmigaOS` and `coffin`, comma separated. `coffin` is AmigaOS with its own places and versions for software; ApolloUpdate detects it by `Version CoffinLib VERSION 65` succeeding (rc 0, no WARN) |
+| `OS` | required: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). `Others` is an AmigaOS with its own places and versions for software; ApolloUpdate tells it by a probe for its own library (see ApolloUpdate's README) |
+| `OS.<release>` | fewer OSes for one release: a subset of `OS`. Each OS gets the newest release that is for it, so `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Every OS of `OS` needs at least one release. Not for Cores and ROM |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
@@ -123,7 +125,7 @@ Two kinds of image are flashed, not copied to SYS:
 |---|---|---|---|---|
 | `Cores/<core>` | all | the core (FPGA logic), one file | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
 | `ROM/ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `ROM-Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
-| `ROM/AmigaROM` | AmigaOS, coffin | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. coffin) and `ROM-Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
+| `ROM/AmigaROM` | AmigaOS, Others | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Others) and `ROM-Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
 
 `ROM-Modules` in a ROM release says which modules, in which version, make
 up that ROM - **in ROM order** (the order matters, as in a Remus build
@@ -146,7 +148,7 @@ release, e.g. `Drivers/sagasd.device/2.41/AmigaROM/sagasd.device`: such
 files are only built into the ROM, never copied to SYS:. The AmigaROM's
 header (ROM id and version) is made from the ROM's version, not listed.
 Where an ApolloOS and an AmigaOS module would have the same Name, they get
-the suffix `-ApolloOS` / `-AmigaOS` (and `-coffin` for a coffin one).
+the suffix `-ApolloOS` / `-AmigaOS` (and `-Others` for an Others one).
 
 **The AmigaROM is built by the ApolloSoftware-Manager**, not by Remus: in
 the Files step of a new AmigaROM version it links the modules of the list,
@@ -166,7 +168,7 @@ ApolloOS-Port project) next to its `ROM-Modules`.
 
 The workflow checks that every `ROM-Modules` line names an existing release
 with its file in the ROM's drawer and for the ROM's OS, each module once;
-that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS,coffin`; the
+that `ROM/ApolloROM` is `OS=ApolloOS` and `ROM/AmigaROM` `OS=AmigaOS,Others`; the
 image sizes (ApolloROM 1MB, AmigaROM at most 192KB); and that an AmigaROM
 image is exactly what its `ROM-Modules` builds. A ROM module is one file in
 its release's `AmigaROM/` (`ApolloROM/`) drawer.

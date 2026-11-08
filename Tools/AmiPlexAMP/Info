@@ -1,4 +1,4 @@
 ; Tools/AmiPlexAMP - read by ApolloUpdate, see README.md
-OS=ApolloOS,AmigaOS,coffin
+OS=ApolloOS,AmigaOS,Others
 MINCORE=
 DESCRIPTION=Plex Audio Client

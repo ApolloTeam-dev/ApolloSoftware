@@ -1,4 +1,5 @@
 ; Tools/WHDLoad - read by ApolloUpdate, see README.md
-OS=ApolloOS
+OS=ApolloOS,AmigaOS,Others
+OS.20.1.7190=AmigaOS,Others
 MINCORE=
 DESCRIPTION=Amiga game retro-installation software launcher.
