@@ -228,8 +228,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | RiVA | **0.63R4** | - | ✓ | ✓ | ✓ |  | SAGA Videoplayer |
 | Tools | UAEMap | **1.1** | - | ✓ | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ | ✓ |  | MUI MP3 Player |
-| Tools | WHDLoad | **20.1.7190** | - | ✓ | ✓ | ✓ |  | Amiga game retro-installation software launcher. |
+| Tools | WHDLoad | **20.1.7190** | - |  | ✓ | ✓ |  | Amiga game retro-installation software launcher. |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-48 items: 33 for ApolloOS, 46 for AmigaOS, 45 for coffin.
+48 items: 32 for ApolloOS, 46 for AmigaOS, 45 for coffin.
 <!-- releases:end -->
