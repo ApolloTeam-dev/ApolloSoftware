@@ -192,7 +192,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Resources | processor.resource | **44.4** | 44.7-beta |  | ✓ | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | 45.4-beta |  | ✓ | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.8** | - |  | ✓ | ✓ |  | TCP/IP Stack |
-| Drivers | arne.audio | **4.23** | - | ✓ | ✓ | ✓ |  | AHI Audio Driver |
+| Drivers | arne.audio | **4.23** | 4.50-beta | ✓ | ✓ | ✓ |  | AHI Audio Driver |
 | Drivers | cd.device | **40.29** | - |  | ✓ | ✓ |  | CD32-Driver |
 | Drivers | Keymaps | **1.0** | - | ✓ | ✓ | ✓ |  | Keyboard Configurations |
 | Drivers | sagagfx.hidd | **1.0** | - | ✓ |  |  | 12000 | CyberGraphics RTG Driver |
