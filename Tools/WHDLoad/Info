@@ -1,4 +1,4 @@
 ; Tools/WHDLoad - read by ApolloUpdate, see README.md
-OS=AmigaOS,coffin
+OS=ApolloOS
 MINCORE=
 DESCRIPTION=Amiga game retro-installation software launcher.
