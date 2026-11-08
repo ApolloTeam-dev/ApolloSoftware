@@ -1,50 +1,50 @@
 ; ApolloSoftware.index - generated from the Info files by .github/scripts/releases.py, do not edit
-; Category/Name<TAB>OS=...<TAB>AVL=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
-Cores/FireBird-Core	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=FireBird Core
-Cores/IceDrake-Core	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=IceDrake Core
-Cores/MantiCore-Core	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=MantiCore Core
-Cores/StandAlone-Core	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=StandAlone Core
-Cores/UniCorn-Core	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=UniCorn Core
-Drivers/AmiTCP	OS=AmigaOS,coffin	DESCRIPTION=TCP/IP Stack
-Drivers/arne.audio	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=AHI Audio Driver
-Drivers/cd.device	OS=AmigaOS,coffin	DESCRIPTION=CD32-Driver
-Drivers/Keymaps	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Keyboard Configurations
+; Category/Name<TAB>OS=...<TAB>OS.<release>=...<TAB>AVL=...<TAB>MINCORE=...<TAB>MINCORE.<release>=...<TAB>DESCRIPTION=line\nline
+Cores/FireBird-Core	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=FireBird Core
+Cores/IceDrake-Core	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=IceDrake Core
+Cores/MantiCore-Core	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=MantiCore Core
+Cores/StandAlone-Core	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=StandAlone Core
+Cores/UniCorn-Core	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=UniCorn Core
+Drivers/AmiTCP	OS=AmigaOS,Others	DESCRIPTION=TCP/IP Stack
+Drivers/arne.audio	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=AHI Audio Driver
+Drivers/cd.device	OS=AmigaOS,Others	DESCRIPTION=CD32-Driver
+Drivers/Keymaps	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Keyboard Configurations
 Drivers/sagagfx.hidd	OS=ApolloOS	MINCORE.1.0=12000	DESCRIPTION=CyberGraphics RTG Driver
-Drivers/sagasd.device	OS=AmigaOS,coffin	MINCORE=12000	DESCRIPTION=SD-Card Driver
-Drivers/scsi.device	OS=AmigaOS,coffin	DESCRIPTION=IDE Driver for AmigaOS
-Drivers/v4net.device	OS=ApolloOS,AmigaOS,coffin	MINCORE=12000	DESCRIPTION=Network Interface Driver
-Drivers/vampiregfx.card	OS=AmigaOS,coffin	DESCRIPTION=Picasso 96 RTG Driver
-FileSystems/exfat-handler	OS=AmigaOS,coffin	DESCRIPTION=Ex-FAT Filesystem
-FileSystems/fat95	OS=AmigaOS,coffin	DESCRIPTION=FAT Filesystem
-FileSystems/ODFileSystem	OS=AmigaOS,coffin	DESCRIPTION=CD (ISO9660) Filesystem
-Icons/def_SDROM	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Default SD-Card Icon
-Libraries/68040.library	OS=AmigaOS,coffin	DESCRIPTION=68040.library for the AC68080
-Libraries/680x0.library	OS=AmigaOS,coffin	DESCRIPTION=680x0.library, Apollo AC68080 support
-Libraries/i2c.library	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=I2C Chip Library
-Libraries/maggie.library	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Maggie 3DFX API library
+Drivers/sagasd.device	OS=AmigaOS,Others	MINCORE=12000	DESCRIPTION=SD-Card Driver
+Drivers/scsi.device	OS=AmigaOS,Others	DESCRIPTION=IDE Driver for AmigaOS
+Drivers/v4net.device	OS=ApolloOS,AmigaOS,Others	MINCORE=12000	DESCRIPTION=Network Interface Driver
+Drivers/vampiregfx.card	OS=AmigaOS,Others	DESCRIPTION=Picasso 96 RTG Driver
+FileSystems/exfat-handler	OS=AmigaOS,Others	DESCRIPTION=Ex-FAT Filesystem
+FileSystems/fat95	OS=AmigaOS,Others	DESCRIPTION=FAT Filesystem
+FileSystems/ODFileSystem	OS=AmigaOS,Others	DESCRIPTION=CD (ISO9660) Filesystem
+Icons/def_SDROM	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Default SD-Card Icon
+Libraries/68040.library	OS=AmigaOS,Others	DESCRIPTION=68040.library for the AC68080
+Libraries/680x0.library	OS=AmigaOS,Others	DESCRIPTION=680x0.library, Apollo AC68080 support
+Libraries/i2c.library	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=I2C Chip Library
+Libraries/maggie.library	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Maggie 3DFX API library
 Libraries/MUI	OS=ApolloOS,AmigaOS	DESCRIPTION=MUI 5.0 - Magic User Interface, the GUI system\nApolloUpdate and many programs use
-Libraries/ptable.library	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=ptable.library is part of fat95 (4.0+)\nfilesystem
-Libraries/VampireSupport	OS=AmigaOS,coffin	DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU
-Resources/processor.resource	OS=AmigaOS,coffin	DESCRIPTION=processor.resource
-Resources/vampire.resource	OS=AmigaOS,coffin	DESCRIPTION=vampire.resource
-ROM/AmigaROM	OS=AmigaOS,coffin	MINCORE=12500	MODULES.48.12-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.7-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.45-beta	MODULES.48.11-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.7-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.44-beta	MODULES.48.10-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.6-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.44-beta	MODULES.48.09-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.6-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.43-beta	MODULES.48.08-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.43-beta	MODULES.48.07-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.06-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.05-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.04-beta=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.03-beta=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	MODULES.48.02=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,FileSystems/ODFileSystem/0.8.0,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	MODULES.48.01=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	DESCRIPTION=AmigaOS Expansion ROM ($F0): the Apollo drivers,\nfilesystems and resources for all AmigaOS\nreleases
+Libraries/ptable.library	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=ptable.library is part of fat95 (4.0+)\nfilesystem
+Libraries/VampireSupport	OS=AmigaOS,Others	DESCRIPTION=Vampire support: V4 chip/fast RAM, FPU
+Resources/processor.resource	OS=AmigaOS,Others	DESCRIPTION=processor.resource
+Resources/vampire.resource	OS=AmigaOS,Others	DESCRIPTION=vampire.resource
+ROM/AmigaROM	OS=AmigaOS,Others	MINCORE=12500	MODULES.48.12-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.7-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.45-beta	MODULES.48.11-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.7-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.44-beta	MODULES.48.10-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.6-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.44-beta	MODULES.48.09-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.6-beta,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.43-beta	MODULES.48.08-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.43-beta	MODULES.48.07-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.51-beta,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.06-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.4-beta,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.05-beta=Libraries/68040.library/40.6-beta,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.04-beta=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.42-beta	MODULES.48.03-beta=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,Libraries/ptable.library/2.0,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	MODULES.48.02=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,FileSystems/fat95/4.0,FileSystems/exfat-handler/1.11,FileSystems/ODFileSystem/0.8.0,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	MODULES.48.01=Libraries/68040.library/40.2,Libraries/680x0.library/40.1,Resources/processor.resource/44.4,Resources/vampire.resource/45.3,Libraries/VampireSupport/40.50,FileSystems/exfat-handler/1.11,Drivers/scsi.device/48.13,Drivers/sagasd.device/2.41	DESCRIPTION=AmigaOS Expansion ROM ($F0): the Apollo drivers,\nfilesystems and resources for all AmigaOS\nreleases
 ROM/ApolloROM	OS=ApolloOS	DESCRIPTION=ApolloOS Kickstart ROM, 1MB: main ($F8) and\nextended ($E0) ROM
-Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Plex Audio Client
-Tools/ApolloAMP	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=SAGA Audioplayer
-Tools/ApolloControl	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Apollo V4 Settings
-Tools/ApolloExpROM	OS=AmigaOS,coffin	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
-Tools/ApolloFlash	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Flash Core or ROM
-Tools/ApolloFloppy	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Apollo Virtual Floppy Loader
-Tools/ApolloMap	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Map ROM (SoftKick)
-Tools/ApolloMax	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Resize CF-Card to maximum size
-Tools/ApolloMon	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=CPU Monitoring Widget
-Tools/ApolloUpdate	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS
-Tools/ApolloVNC	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Fast & Easy Remote VNC Application
-Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Set SAGA Display ToolTypes
-Tools/ApolloWheel	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Apollo MouseWheel Driver
-Tools/GiggleDisk	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=RDB Mountlist Creator
-Tools/i2clock	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Load/Save date & time to RTC
-Tools/RiVA	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=SAGA Videoplayer
-Tools/UAEMap	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=Map ROM on UAE (counterpart of ApolloMap)
-Tools/VaMP3	OS=ApolloOS,AmigaOS,coffin	DESCRIPTION=MUI MP3 Player
-Tools/WHDLoad	OS=ApolloOS	DESCRIPTION=Amiga game retro-installation software launcher.
+Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Plex Audio Client
+Tools/ApolloAMP	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=SAGA Audioplayer
+Tools/ApolloControl	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Apollo V4 Settings
+Tools/ApolloExpROM	OS=AmigaOS,Others	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
+Tools/ApolloFlash	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Flash Core or ROM
+Tools/ApolloFloppy	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Apollo Virtual Floppy Loader
+Tools/ApolloMap	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Map ROM (SoftKick)
+Tools/ApolloMax	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Resize CF-Card to maximum size
+Tools/ApolloMon	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=CPU Monitoring Widget
+Tools/ApolloUpdate	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Apollo Update Manager for ApolloOS and AmigaOS
+Tools/ApolloVNC	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Fast & Easy Remote VNC Application
+Tools/ApolloWHDSet	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Set SAGA Display ToolTypes
+Tools/ApolloWheel	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Apollo MouseWheel Driver
+Tools/GiggleDisk	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=RDB Mountlist Creator
+Tools/i2clock	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Load/Save date & time to RTC
+Tools/RiVA	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=SAGA Videoplayer
+Tools/UAEMap	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=Map ROM on UAE (counterpart of ApolloMap)
+Tools/VaMP3	OS=ApolloOS,AmigaOS,Others	DESCRIPTION=MUI MP3 Player
+Tools/WHDLoad	OS=ApolloOS,AmigaOS,Others	OS.20.1.7190=AmigaOS,Others	DESCRIPTION=Amiga game retro-installation software launcher.
