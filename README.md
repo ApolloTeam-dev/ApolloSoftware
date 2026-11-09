@@ -244,7 +244,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | UAEMap | **1.1** | - | ✓ | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ | ✓ |  | MUI MP3 Player |
 | Tools | WHDLoad | **20.1.7190** (ApolloOS: 19.2.6915) | - | ✓ | ✓ | ✓ |  | Amiga game retro-installation software launcher. |
+| Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-48 items: 33 for ApolloOS, 46 for AmigaOS, 45 for Others.
+49 items: 34 for ApolloOS, 47 for AmigaOS, 46 for Others.
 <!-- releases:end -->
