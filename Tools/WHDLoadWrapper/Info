@@ -1,0 +1,3 @@
+; Tools/WHDLoadWrapper - read by ApolloUpdate, see README.md
+MINCORE=
+DESCRIPTION=WHDLoadWrapper keeps WHDLoad Up-To-Date
