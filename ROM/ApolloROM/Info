@@ -1,3 +1,0 @@
-; ROM/ApolloROM - read by ApolloUpdate, see README.md
-MINCORE=
-DESCRIPTION=ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM

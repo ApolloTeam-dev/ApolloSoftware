@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-romlink.py - builds the AmigaROM (the 192KB Expansion ROM at $F00000) from
+romlink.py - builds the EXP (the 192KB Expansion ROM at $F00000) from
 its modules, as Remus does: byte-identical to Remus 1.81 (checked against
 the 48.00 build and two test compiles, 13-10-2026) but for the header's
 jump, which is JMP (A5) - the jump back to the ROM that called the
@@ -10,10 +10,10 @@ the image is right as it is, and so is its checksum.
 
 The ApolloSoftware-Manager has the same builder in JavaScript (romBuild()
 in public/manager/app.js): change both together. releases.py uses this one
-to check that an AmigaROM image is exactly what its ROM-Modules builds.
+to check that an EXP image is exactly what its ROM-Modules builds.
 
     python3 .github/scripts/romlink.py <out> <version> <module> ...
-    e.g. romlink.py AmigaROM 48.01 68040.library 680x0.library ...
+    e.g. romlink.py EXP 48.01 68040.library 680x0.library ...
 
 The image:
     $000  header, 16 bytes: $1111, JMP (A5) ($4ED5, then $00F80152 as in
@@ -30,7 +30,7 @@ import re
 import struct
 import sys
 
-BASE = 0xF00000                 # where the AmigaROM sits
+BASE = 0xF00000                 # where the EXP sits
 SIZE = 0x30000                  # 192KB
 ALIGN = 4
 HEADER = bytes.fromhex("11114ed500f801520000ffff")      # + version.w revision.w
@@ -47,10 +47,10 @@ class RomError(Exception):
 
 def version_words(release):
     """'48.01' (or '48.01-beta') -> (48, 1); RomError when it is no
-    <number>.<number> an AmigaROM header can hold"""
+    <number>.<number> an EXP header can hold"""
     m = re.fullmatch(r"(\d+)\.(\d+)(-beta)?", release)
     if not m or int(m.group(1)) > 0xFFFF or int(m.group(2)) > 0xFFFF:
-        raise RomError(f"{release}: an AmigaROM version is <number>.<number> (e.g. 48.01)")
+        raise RomError(f"{release}: an EXP version is <number>.<number> (e.g. 48.01)")
     return int(m.group(1)), int(m.group(2))
 
 
@@ -126,13 +126,13 @@ def hunks(data, label="module"):
 
 
 # ---------------------------------------------------------------------------
-# the packed size: the AmigaROM is flashed NOVA-packed into a 128KB block
+# the packed size: the EXP is flashed NOVA-packed into a 128KB block
 # ($710000-$72FFFF); the core unpacks it to $F00000. Port of ApolloUpdate's
 # nova.c (pknova7 of ApolloFlash / ApolloExpROM): the same length, byte for
 # byte. Only the length is needed here.
 # ---------------------------------------------------------------------------
 
-PACKED_MAX = 0x20000            # the flash block of the AmigaROM
+PACKED_MAX = 0x20000            # the flash block of the EXP
 NOVA_HEADER = 12
 NOVA_DIST_EXP = 65535           # ApolloExpROM's search distance
 
@@ -224,7 +224,7 @@ def checksum(rom):
 
 
 def build(release, modules):
-    """The AmigaROM image for a release from [(label, data)] in ROM order.
+    """The EXP image for a release from [(label, data)] in ROM order.
     Returns (image, [(label, address, size)])."""
     version, revision = version_words(release)
     rom = bytearray(HEADER + struct.pack(">HH", version, revision))
@@ -246,7 +246,7 @@ def build(release, modules):
         rom += bytes(at - len(rom))
         placed.append((label, BASE + start, len(rom) - start))
     if len(rom) > SIZE - END:
-        raise RomError(f"the modules take {len(rom)} bytes - an AmigaROM holds {SIZE - END}")
+        raise RomError(f"the modules take {len(rom)} bytes - an EXP holds {SIZE - END}")
     rom += b"\xff" * (SIZE - END - len(rom))
     rom += struct.pack(">II", 0, SIZE) + struct.pack(">8H", *range(0x18, 0x20))
     struct.pack_into(">I", rom, SIZE - END, checksum(rom))

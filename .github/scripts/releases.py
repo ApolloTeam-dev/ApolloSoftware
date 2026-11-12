@@ -18,25 +18,29 @@ Layout (the contract with the ApolloUpdate client):
     Category / Name / Release / <copied 1:1 to SYS:>
     Cores / Name / Release / file          the FPGA core (both OSes),
                                            flashed by ApolloFlash
-    ROM / ApolloROM / Release / ApolloROM + ROM-Modules
-                                           the 1MB ApolloOS Kickstart
-    ROM / AmigaROM / Release / AmigaROM + ROM-Modules
-                                           the 192KB AmigaOS Expansion ROM
+    ROM / ROM / Release / ROM + ROM-Modules
+                                           the 1MB Kickstart ROM: main
+                                           ($F80000) and extended ($E00000)
+                                           ROM (ApolloOS, AmigaOS)
+    ROM / EXP / Release / EXP + ROM-Modules
+                                           the 192KB Expansion ROM
+                                           ($F00000; AmigaOS, later ApolloOS)
+    ROM and EXP are for every system, as the core: a V4 boots any
         ROM-Modules: the ROM's modules in ROM order (the order matters),
         one Category/Name/Version
         per line - each an existing release whose file(s) are in its
-        ApolloROM/ resp. AmigaROM/ drawer. (The AmigaROM header with the
+        ROM/ resp. EXP/ drawer. (The EXP header with the
         ROM id and version is made from the version, not listed.)
     Category / Name / Release / ApolloOS|AmigaOS|Others / <to SYS:>
                                            a system drawer: that system
                                            installs only this drawer, the
                                            others what is outside them
-    Category / Name / Release / AmigaROM/<module>
-    Category / Name / Release / ApolloROM/<module>
+    Category / Name / Release / EXP/<module>
+    Category / Name / Release / ROM/<module>
                                            a ROM module: never copied to
                                            SYS:, only built into the ROM
-    Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ApolloROM,
-    /AmigaROM (the collision check uses that path).
+    Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ROM,
+    /EXP (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
         OS.<release>=AmigaOS,Others   the systems of one release, when not
                                       all three; each system gets the
@@ -64,7 +68,7 @@ import struct
 import sys
 import time
 
-import romlink                          # .github/scripts/romlink.py: the AmigaROM builder
+import romlink                          # .github/scripts/romlink.py: the EXP builder
 import webpage                          # .github/scripts/webpage.py
 from webpage import kept, min_core, os_notes, rel_oses, release_beta, shown
 import textwrap
@@ -75,8 +79,8 @@ TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("AVL", "MINCORE", "DESCRIPTION")   # and OS.<release>, MINCORE.<release>
 INFO = "Info"
 ROM_CATS = {"Cores": "ApolloUpdate/Cores", "ROM": "ApolloUpdate"}   # flashed: not SYS:
-ROMS = {"ApolloROM": (("ApolloOS",), (1048576, 1048576)),            # the Names in ROM: OSes and
-        "AmigaROM": (("AmigaOS", "Others"), (1, 196608))}           # image size min, max (bytes)
+ROMS = {"ROM": (OSES, (1048576, 1048576)),        # the Names in ROM: their systems (every
+        "EXP": (OSES, (1, 196608))}               # one: a V4 boots any) and image size min, max
 CORE_JIC = (8388828, 8388832)   # bytes of a V4 core (.jic), as ApolloFlash takes it
 MODULES = "ROM-Modules"          # a ROM release's module list, in ROM order
 INDEX = "ApolloSoftware.index"
@@ -121,7 +125,7 @@ def version_cmp(a, b):
     """<0, 0, >0 like strcmp. The -beta suffix is left out, and of two equal
     versions the release is newer than the beta (1.2 > 1.2-beta). A release
     candidate is older than its release, the candidates go by number:
-    R9.6-RC05 < R9.6-RC06 < R9.6 (ApolloROM: Rx.y-RCz)."""
+    R9.6-RC05 < R9.6-RC06 < R9.6 (ROM: Rx.y-RCz)."""
     ra, rc_a = split_rc(a[:-len(BETA)] if is_beta(a) else a)
     rb, rc_b = split_rc(b[:-len(BETA)] if is_beta(b) else b)
     c = base_cmp(ra, rb)
@@ -398,7 +402,7 @@ def sys_drawers(root, cat, name, rel):
 def release_files(root, cat, name, rel, errors=None, os_name=None):
     """[(path below the release, lower-case path key)] of one release, junk
     left out. The key is the SYS: path - for Cores and ROM the place in
-    SYS:ApolloUpdate, for a module in an ApolloROM/ or AmigaROM/ drawer
+    SYS:ApolloUpdate, for a module in a ROM/ or EXP/ drawer
     "<drawer>:<file>" (never SYS:), for a file in a system drawer its path
     without the drawer. A ROM release's ROM-Modules is read, not
     installed. With os_name: only what that system installs (its own system
@@ -489,8 +493,9 @@ def read_modules(root, cat, name, rel):
 
 def check_modules(root, names, errors):
     """Every line of a ROM's ROM-Modules file: Category/Name/Version of an
-    existing release, its file(s) in the drawer of this ROM (ApolloROM/ or
-    AmigaROM/), for this ROM's OS; each module once; order as written."""
+    existing release, its file(s) in the drawer of this ROM (ROM/ or
+    EXP/); each module once; order as written. A module's systems do not
+    matter: it is only built into the ROM, never installed."""
     rels = {(c.lower(), n.lower()): (c, n, i, r) for c, n, t, r, i in names}
     for cat, name, tags, releases, info in names:
         if cat != "ROM" or name not in ROMS:
@@ -514,19 +519,17 @@ def check_modules(root, names, errors):
                     errors.append(f"{label}: {entry} is a beta - a release ROM holds "
                                   "releases only (a beta ROM may hold betas)")
                 mc, mn, mi, mr = rels[key]
-                if ROMS[name][0][0] not in rel_oses(mi, parts[2]):     # a module is for the ROM's own OS
-                    errors.append(f"{label}: {entry} is not for {ROMS[name][0][0]}")
                 drawer = os.path.join(root, mc, mn, parts[2], name)
                 if not os.path.isdir(drawer) or not any(not JUNK.match(f) for f in os.listdir(drawer)):
                     errors.append(f"{label}: {entry} has no {name}/ drawer with the module")
 
 
-def check_amigarom(root, names, errors):
-    """Every AmigaROM release: its image is exactly what romlink builds from
-    its ROM-Modules (the module files in their AmigaROM/ drawers, in that
+def check_exp(root, names, errors):
+    """Every EXP release: its image is exactly what romlink builds from
+    its ROM-Modules (the module files in their EXP/ drawers, in that
     order) and its version - as the ApolloSoftware-Manager built it."""
     for cat, name, tags, releases, info in names:
-        if cat != "ROM" or name != "AmigaROM":
+        if cat != "ROM" or name != "EXP":
             continue
         for rel in releases:
             label = f"{cat}/{name}/{rel}"
@@ -817,7 +820,7 @@ def write_downloads(root, names, outdir, date):
     Name (and for each OS its own, when OS.<release> holds one back) an
     .lha of its files as they go to SYS: (download/<Category>/
     <Name>-<version>.lha); for Cores and ROM the file itself (the core,
-    the ROM image). ROM modules - files in an ApolloROM/ or AmigaROM/
+    the ROM image). ROM modules - files in a ROM/ or EXP/
     drawer - are left out, so a Name that is only that gets no link.
     A release with system drawers gets one .lha per such system
     (<Name>-<version>-<system>.lha) besides the one of the other systems.
@@ -993,7 +996,7 @@ def main():
     warnings[:0] = made_warnings
     check_files(args.root, names, errors, warnings)
     check_modules(args.root, names, errors)
-    check_amigarom(args.root, names, errors)
+    check_exp(args.root, names, errors)
     if args.avl and args.public:
         check_public(args.root, names, args.public, errors)
 

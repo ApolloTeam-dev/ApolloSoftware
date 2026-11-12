@@ -15,7 +15,7 @@ shows:
 
   errors     generated files edited (README.md, ApolloSoftware.index: the
              workflow writes them after the merge);
-             a version folder with a space; an ApolloROM version that is
+             a version folder with a space; a ROM version that is
              not Rx.y-RCz (optionally -beta); a file over 95 MB (GitHub
              takes 100 MB at most)
   warnings   a SYS: drawer no Name used before (C, Devs, Libs ...); a file
@@ -41,11 +41,11 @@ import releases as R                    # noqa: E402
 GENERATED = {"README.md", R.INDEX}
 WARN_SIZE = 50 * 1024 * 1024
 MAX_SIZE = 95 * 1024 * 1024
-APOLLOROM_VER = re.compile(r"^R\d+\.\d+(-RC\d+)?(-beta)?$")
+ROM_VER = re.compile(r"^R\d+\.\d+(-RC\d+)?(-beta)?$")
 # the drawers of a standard SYS:, plus the ROM module drawers
 SYS_DRAWERS = {"c", "classes", "devs", "expansion", "fonts", "help", "l", "libs", "locale",
                "prefs", "rexxc", "s", "storage", "system", "tools", "utilities", "wbstartup",
-               "amigarom", "apollorom"}
+               "exp", "rom"}
 
 
 def tree(root, avl, public=None):
@@ -140,8 +140,8 @@ def compare(base, head, errors, warnings, changes):
             rlabel = f"{label}/{rel}"
             if " " in rel:
                 errors.append(f"{rlabel}: a version has no spaces")
-            if cat == "ROM" and name == "ApolloROM" and not APOLLOROM_VER.match(rel):
-                errors.append(f"{rlabel}: an ApolloROM version is Rx.y-RCz (e.g. R9.6-RC06, R9.6)")
+            if cat == "ROM" and name == "ROM" and not ROM_VER.match(rel):
+                errors.append(f"{rlabel}: a ROM version is Rx.y-RCz (e.g. R9.6-RC06, R9.6)")
             if new:
                 if b:
                     changes.append(f"new version: {label} **{rel}**")

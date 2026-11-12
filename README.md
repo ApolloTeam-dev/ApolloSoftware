@@ -39,7 +39,7 @@ switch on. The version decides what is newest - the `-beta` suffix is left
 out of the comparison, and of two equal versions the release wins
 (`1.2` is newer than `1.2-beta`). The overviews show the newest **Release**
 and the newest **Beta** (when it is newer than that release, else "-").
-The ApolloROM uses `Rx.y-RCz` (major, minor, release candidate): numbers
+The ROM uses `Rx.y-RCz` (major, minor, release candidate): numbers
 compare as numbers, and a release candidate `-RC<n>` is older than its
 release (`R9.6-RC05` < `R9.6-RC06` < `R9.6` < `R9.7-RC01`).
 
@@ -120,7 +120,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ApolloROM: ApolloOS, AmigaROM: AmigaOS and Others) |
+| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ROM: ApolloOS, EXP: AmigaOS and Others) |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
@@ -138,8 +138,15 @@ Two kinds of image are flashed, not copied to SYS:
 | Category / Name | OS | Release holds | ApolloUpdate keeps it in | Flashed by |
 |---|---|---|---|---|
 | `Cores/<core>` | all | the core (FPGA logic), one file | `SYS:ApolloUpdate/Cores/` | ApolloFlash |
-| `ROM/ApolloROM` | ApolloOS | `ApolloROM` (the 1MB ApolloOS Kickstart: main ROM at $F80000, extended at $E00000) and `ROM-Modules` | `SYS:ApolloUpdate/ApolloROM/` | ApolloFlash |
-| `ROM/AmigaROM` | AmigaOS, Others | `AmigaROM` (the 192KB Expansion ROM at $F00000, for all AmigaOS releases incl. Others) and `ROM-Modules` | `SYS:ApolloUpdate/AmigaROM/` | ApolloExpROM |
+| `ROM/ROM` | all | `ROM` (the 1MB Kickstart ROM: main ROM at $F80000, extended at $E00000; flash $750000-$7FFFFF, NOVA packed) and `ROM-Modules` | `SYS:ApolloUpdate/ROM/` | ApolloFlash |
+| `ROM/EXP` | all | `EXP` (the 192KB Expansion ROM at $F00000; flash $710000-$72FFFF, NOVA packed) and `ROM-Modules` | `SYS:ApolloUpdate/EXP/` | ApolloExpROM |
+
+The names say which ROM space of the V4 an image fills, not which system
+uses it: the **ROM** (the regular Commodore main and extended ROM ranges)
+holds a Kickstart of ApolloOS or of AmigaOS, the **EXP** (Expansion ROM) is
+used by AmigaOS now and by ApolloOS later. Both are for every system, as
+the core is (a V4 boots either, and a core flash overwrites both), so
+ApolloUpdate always lists them together, whatever system runs.
 
 `ROM-Modules` in a ROM release says which modules, in which version, make
 up that ROM - **in ROM order** (the order matters, as in a Remus build
@@ -148,7 +155,7 @@ writes it: in the Files step of a ROM release you pick the modules and put
 them in order.
 
 ```
-; AmigaROM 48.00 - its modules in ROM order
+; EXP 48.00 - its modules in ROM order (the order matters)
 Libraries/68040.library/40.2
 Libraries/680x0.library/40.1
 ...
@@ -157,34 +164,34 @@ Drivers/sagasd.device/2.41
 
 The modules themselves are ordinary entries in their own category
 (Drivers, FileSystems, Libraries, Resources, ...) with their own versions.
-A module's file sits in an `AmigaROM/` (or `ApolloROM/`) drawer of its
-release, e.g. `Drivers/sagasd.device/2.41/AmigaROM/sagasd.device`: such
-files are only built into the ROM, never copied to SYS:. The AmigaROM's
+A module's file sits in an `EXP/` (or `ROM/`) drawer of its
+release, e.g. `Drivers/sagasd.device/2.41/EXP/sagasd.device`: such
+files are only built into the ROM, never copied to SYS:. The EXP's
 header (ROM id and version) is made from the ROM's version, not listed.
 Where an ApolloOS and an AmigaOS module would have the same Name, they get
 the suffix `-ApolloOS` / `-AmigaOS` (and `-Others` for an Others one).
 
-**The AmigaROM is built by the ApolloSoftware-Manager**, not by Remus: in
-the Files step of a new AmigaROM version it links the modules of the list,
+**The EXP is built by the ApolloSoftware-Manager**, not by Remus: in
+the Files step of a new EXP version it links the modules of the list,
 in that order, and shows the result (each module's address and size, the
 room left, a test image to download). The version given in the wizard goes
-into the ROM header, so an AmigaROM version is `<number>.<number>` (48.01:
+into the ROM header, so an EXP version is `<number>.<number>` (48.01:
 version 48, revision 1). The header jumps back with `JMP (A5)` (`$4ED5`),
 which Remus does not accept: Remus images had `JMP $F80152`, patched before
 flashing. The builder, `.github/scripts/romlink.py` (and its JavaScript
 twin in the Manager), gives byte for byte what Remus 1.81 gives, but for
 that jump and so the checksum;
-on every push the check rebuilds each AmigaROM release from its
+on every push the check rebuilds each EXP release from its
 `ROM-Modules` and refuses an image that differs.
 
-The ApolloROM release still holds an image compiled elsewhere (the
+The ROM release still holds an image compiled elsewhere (the
 ApolloOS-Port project) next to its `ROM-Modules`.
 
 The workflow checks that every `ROM-Modules` line names an existing release
-with its file in the ROM's drawer and for the ROM's system, each module
-once; the image sizes (ApolloROM 1MB, AmigaROM at most 192KB); and that an AmigaROM
+with its file in the ROM's drawer, each module once (its systems do not
+matter: a module is only built into the ROM); the image sizes (ROM 1MB, EXP at most 192KB); and that an EXP
 image is exactly what its `ROM-Modules` builds. A ROM module is one file in
-its release's `AmigaROM/` (`ApolloROM/`) drawer.
+its release's `EXP/` (`ROM/`) drawer.
 
 Before it copies, ApolloUpdate deletes whatever is already in its drawer in
 `SYS:ApolloUpdate`, so the drawer only holds what was just installed. Then
@@ -202,8 +209,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | MantiCore-Core | **11350** | 12001-beta | ✓ | ✓ | ✓ |  | MantiCore Core |
 | Cores | StandAlone-Core | **11350** | 12856-beta | ✓ | ✓ | ✓ |  | StandAlone Core |
 | Cores | UniCorn-Core | **12001** | 12856-beta | ✓ | ✓ | ✓ |  | UniCorn Core |
-| ROM | AmigaROM | **48.02** | 48.12-beta |  | ✓ | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
-| ROM | ApolloROM | **R9.6-RC06** | - | ✓ |  |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
+| ROM | EXP | **48.02** | 48.12-beta |  | ✓ | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
+| ROM | ROM | **R9.6-RC06** | - | ✓ |  |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | 44.7-beta |  | ✓ | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | 45.4-beta |  | ✓ | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.8** | - |  | ✓ | ✓ |  | TCP/IP Stack |

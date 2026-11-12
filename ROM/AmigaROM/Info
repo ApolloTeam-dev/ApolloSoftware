@@ -1,3 +1,0 @@
-; ROM/AmigaROM - read by ApolloUpdate, see README.md
-MINCORE=12500
-DESCRIPTION=AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases
