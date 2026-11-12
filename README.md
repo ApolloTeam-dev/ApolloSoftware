@@ -248,7 +248,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | GiggleDisk | **1.23** | - | ✓ | ✓ | ✓ |  | RDB Mountlist Creator |
 | Tools | i2clock | **0.7** | - | ✓ | ✓ | ✓ |  | Load/Save date & time to RTC |
 | Tools | RiVA | **0.63R4** | - | ✓ | ✓ | ✓ |  | SAGA Videoplayer |
-| Tools | UAEMap | **1.1** | - | ✓ | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
+| Tools | UAEMap | **1.5** | - | ✓ | ✓ | ✓ |  | Map ROM on UAE (counterpart of ApolloMap) |
 | Tools | VaMP3 | **1.1** | - | ✓ | ✓ | ✓ |  | MUI MP3 Player |
 | Tools | WHDLoad | **20.1.7190** (ApolloOS: 19.2.6915) | - | ✓ | ✓ | ✓ |  | Amiga game retro-installation software launcher. |
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
