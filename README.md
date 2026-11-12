@@ -209,8 +209,8 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | MantiCore-Core | **11350** | 12001-beta | ✓ | ✓ | ✓ |  | MantiCore Core |
 | Cores | StandAlone-Core | **11350** | 12856-beta | ✓ | ✓ | ✓ |  | StandAlone Core |
 | Cores | UniCorn-Core | **12001** | 12856-beta | ✓ | ✓ | ✓ |  | UniCorn Core |
-| ROM | EXP | **48.02** | 48.12-beta |  | ✓ | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
-| ROM | ROM | **R9.6-RC06** | - | ✓ |  |  |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
+| ROM | EXP | **48.02** | 48.12-beta | ✓ | ✓ | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
+| ROM | ROM | **R9.6-RC06** | - | ✓ | ✓ | ✓ |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | 44.7-beta |  | ✓ | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | 45.4-beta |  | ✓ | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.8** | - |  | ✓ | ✓ |  | TCP/IP Stack |
@@ -254,5 +254,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-49 items: 34 for ApolloOS, 47 for AmigaOS, 46 for Others.
+49 items: 35 for ApolloOS, 48 for AmigaOS, 47 for Others.
 <!-- releases:end -->
