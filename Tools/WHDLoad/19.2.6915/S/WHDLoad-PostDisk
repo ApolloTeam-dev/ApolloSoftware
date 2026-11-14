@@ -1,0 +1,14 @@
+;ApolloBoot Shared WHDLoad Postdisk R93-P0-RC02
+;Willem Drijver
+;10-11-2026
+
+; S:WHDLoad.prefs => ExecutePostDisk=S:WHDLoad-PostDisk
+; 
+; This script is executed __AFTER__ the WHDLoad Splash-Window, 
+; and just after the slave is loaded in memory and ready to start.
+
+FailAt 21
+
+If NOT $ABHOST EQ "UAE"
+  BOOT:C/ApolloControl >NIL: TU=1 SS=0
+Endif
