@@ -32,7 +32,7 @@ NoAutoVec        ;ignore unwanted autovector interrupts
 ;QuitKey=$5F         ;rawkey code to quit (HELP)
 ;ReadDelay=150       ;wait after reading from disk (1/50 seconds)
 ;RestartKey=$5c         ;rawkey code to restart
-SavePath=PERSONAL:Games/_WHDSave     ;base directory for all saves
+SavePath=PERSONAL:Games     ;base directory for all saves
 ;ShowRegs=SYS:Utilities/MuchMore W WL=80 WT=80 WW=582 WH=700   ;command for Show Regs
 ;SplashDelay=200     ;time to display splash window (1/50 seconds)
 ;WriteDelay=150         ;wait after saving something to disk (1/50 seconds, as Coffin)
