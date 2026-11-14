@@ -1,0 +1,6 @@
+;
+; S:WHDLoad.prefs => ExecutePostDisk=S:WHDLoad-PostDisk
+; 
+; This script is executed __AFTER__ the WHDLoad Splash-Window, 
+; and just after the slave is loaded in memory and ready to start.
+; 

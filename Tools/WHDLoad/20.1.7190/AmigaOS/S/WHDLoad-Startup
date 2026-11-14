@@ -1,0 +1,20 @@
+;ApolloBoot Shared WHDLoad Startup R93-P0-RC02
+;Willem Drijver
+;10-11-2026
+
+FailAt 21
+SYS:WBStartup/ApolloWheel STOP >NIL:
+If NOT $ABHOST EQ "UAE"
+  If NOT $CURRENTROM EQ "ApolloROM"
+    SetEnv Picasso96/AmigaVideo 15kHz
+    Execute BOOT:S/AOS-Network-Shutdown >NIL:
+  Else
+    If $ONLINE EQ "YES" 
+      RX "address AROSTCP; KILL" ; Send "KILL" to the TCP/IP stack
+    Endif  
+  Endif
+Endif
+
+Avail >NIL: FLUSH
+
+Echo >NIL: ""
