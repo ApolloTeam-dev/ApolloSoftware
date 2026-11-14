@@ -1,0 +1,20 @@
+;
+; example script to be used with WHDLoad option ExecuteCleanup
+; - restore emulation settings
+; - restart all software which has been stopped previously with ExecuteStartup
+;
+
+; Set environment settings
+C:ApolloControl >NIL: TU=0 SS=1 ZO=0 ZH=0 ZV=0 SC=$Scanlines 
+C:SetEnv Picasso96/AmigaVideo 31kHz
+C:Avail Flush >NIL:
+
+; Start IP stack
+run <>NIL: S:Network-Startup2
+
+; Start Poseidon USB-stack
+;ENVARC:PsdStackLoader
+
+If $MouseWheel GT "0"
+    Execute S:Startup-Mouse
+EndIf

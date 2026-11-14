@@ -1,0 +1,18 @@
+;
+; example script to be used with WHDLoad option ExecuteStartup
+; stop all software which can cause interrupts with external hardware
+; optionally free memory to allow WHDLoad better PreLoad
+;
+
+; Set environment settings
+C:SetEnv Picasso96/AmigaVideo 15kHz
+C:ApolloControl >NIL: SC=$Scanlines
+run <>NIL: C:ApolloWheel.driver STOP
+
+; Stop Roadshow
+S:Network-Shutdown >NIL:
+
+; Stop Poseidon USB-stack
+;C:AddUSBHardware REMOVE ALL
+
+C:Avail Flush >NIL:

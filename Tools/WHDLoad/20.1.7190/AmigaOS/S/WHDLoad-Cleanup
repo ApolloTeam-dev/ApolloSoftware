@@ -1,0 +1,22 @@
+;ApolloBoot Shared WHDLoad Cleanup R93-P0-RC02
+;Willem Drijver
+;10-11-2026
+
+FailAt 21
+
+SYS:WBStartup/ApolloWheel RESTART >NIL:
+
+If NOT $ABHOST EQ "UAE"
+  BOOT:C/ApolloControl >NIL: TU=0 SS=1
+
+  If NOT $CURRENTROM EQ "ApolloROM"
+    SetEnv Picasso96/AmigaVideo 31kHz
+    Execute BOOT:S/AOS-Network-Resume >NIL:
+  Else
+    If $ONLINE EQ "YES"
+      Run <>NIL: QUIET SYS:System/Network/AROSTCP/C/AROSTCP
+    Endif  
+  Endif
+Endif
+
+Echo >NIL: ""
