@@ -225,6 +225,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Libraries | 68040.library | **40.2** | 40.6-beta |  | ✓ | ✓ |  | 68040.library for the AC68080 |
 | Libraries | 680x0.library | **40.1** | - |  | ✓ | ✓ |  | 680x0.library, Apollo AC68080 support |
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ | ✓ |  | I2C Chip Library |
+| Libraries | icon.library | **46.4** | - | ✓ | ✓ |  |  |  |
 | Libraries | maggie.library | **4.0** | - | ✓ | ✓ | ✓ |  | Maggie 3DFX API library |
 | Libraries | MUI | **5.0** | - | ✓ | ✓ |  |  | MUI 5.0 - Magic User Interface, the GUI system ApolloUpdate and many programs use |
 | Libraries | ptable.library | **2.0** | - | ✓ | ✓ | ✓ |  | ptable.library is part of fat95 (4.0+) filesystem |
@@ -254,5 +255,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-49 items: 35 for ApolloOS, 48 for AmigaOS, 47 for Others.
+50 items: 36 for ApolloOS, 49 for AmigaOS, 47 for Others.
 <!-- releases:end -->
