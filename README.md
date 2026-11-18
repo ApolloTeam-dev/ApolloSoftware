@@ -59,18 +59,18 @@ Example (multiple files):
 ### Other files for one system
 
 A release can hold a drawer named after a system (`ApolloOS/`,
-`AmigaOS/`, `Others/`), with that system's own SYS: tree. That system
+`AmigaOS/`, `OtherOS/`), with that system's own SYS: tree. That system
 installs only what is in its drawer; the other systems install what is
-outside the system drawers. Others (an AmigaOS with its own places for
+outside the system drawers. OtherOS (an AmigaOS with its own places for
 software) keeps RiVA in SYS:Utilities, not in SYS:Tools:
 
 - Tools/RiVA/0.63R4/Tools/RiVA - ApolloOS and AmigaOS
-- Tools/RiVA/0.63R4/Others/Utilities/RiVA - Others
+- Tools/RiVA/0.63R4/OtherOS/Utilities/RiVA - OtherOS
 
 A system drawer is only for a system the release is for (`OS.<release>`),
-and it may hold startup fragments (`Others/S/User-Startup/<Name>`) but no
+and it may hold startup fragments (`OtherOS/S/User-Startup/<Name>`) but no
 ROM modules. The web page has a download per system drawer
-(`RiVA-0.63R4-Others.lha`).
+(`RiVA-0.63R4-OtherOS.lha`).
 
 ### S:User-Startup and S:Startup-Sequence
 
@@ -112,7 +112,7 @@ Each Name folder holds one text file `Info`, `KEY=VALUE` per line, `;`
 starts a comment:
 
 ```
-OS.1.1=AmigaOS,Others
+OS.1.1=AmigaOS,OtherOS
 MINCORE=11000
 MINCORE.1.0e=10900
 DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
@@ -120,7 +120,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `Others`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,Others` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ROM: ApolloOS, EXP: AmigaOS and Others) |
+| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `OtherOS`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,OtherOS` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ROM: ApolloOS, EXP: AmigaOS and OtherOS) |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
@@ -169,7 +169,7 @@ release, e.g. `Drivers/sagasd.device/2.41/EXP/sagasd.device`: such
 files are only built into the ROM, never copied to SYS:. The EXP's
 header (ROM id and version) is made from the ROM's version, not listed.
 Where an ApolloOS and an AmigaOS module would have the same Name, they get
-the suffix `-ApolloOS` / `-AmigaOS` (and `-Others` for an Others one).
+the suffix `-ApolloOS` / `-AmigaOS` (and `-OtherOS` for an OtherOS one).
 
 **The EXP is built by the ApolloSoftware-Manager**, not by Remus: in
 the Files step of a new EXP version it links the modules of the list,

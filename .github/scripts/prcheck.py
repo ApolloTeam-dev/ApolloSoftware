@@ -52,7 +52,7 @@ def tree(root, avl, public=None):
     """{(cat, name): {"releases": [newest first], "info": {...}, "files":
     {rel: {sub: size}}, "dst": {rel: {system: {sub: SYS path}}}}}, errors,
     warnings - releases.py's scan and checks. A file in a system drawer
-    (Others/Utilities/x) has its SYS: path without the drawer."""
+    (OtherOS/Utilities/x) has its SYS: path without the drawer."""
     names, errors, warnings = R.scan(root, avl)
     R.check_files(root, names, errors, warnings)
     R.check_modules(root, names, errors)

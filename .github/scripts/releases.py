@@ -31,7 +31,7 @@ Layout (the contract with the ApolloUpdate client):
         per line - each an existing release whose file(s) are in its
         ROM/ resp. EXP/ drawer. (The EXP header with the
         ROM id and version is made from the version, not listed.)
-    Category / Name / Release / ApolloOS|AmigaOS|Others / <to SYS:>
+    Category / Name / Release / ApolloOS|AmigaOS|OtherOS / <to SYS:>
                                            a system drawer: that system
                                            installs only this drawer, the
                                            others what is outside them
@@ -42,7 +42,7 @@ Layout (the contract with the ApolloUpdate client):
     Cores and ROM files are kept in SYS:ApolloUpdate/Cores, /ROM,
     /EXP (the collision check uses that path).
     Category / Name / Info            KEY=VALUE lines, ";" comments:
-        OS.<release>=AmigaOS,Others   the systems of one release, when not
+        OS.<release>=AmigaOS,OtherOS  the systems of one release, when not
                                       all three; each system gets the
                                       newest release for it. A Name is for
                                       the systems of its releases
@@ -74,7 +74,7 @@ from webpage import kept, min_core, os_notes, rel_oses, release_beta, shown
 import textwrap
 import unicodedata
 
-OSES = webpage.OS_NAMES   # ApolloOS, AmigaOS, Others (an AmigaOS with its own conventions)
+OSES = webpage.OS_NAMES   # ApolloOS, AmigaOS, OtherOS (an AmigaOS with its own conventions)
 TIERS = ("Bronze", "Silver", "Gold")                  # low to high
 KEYS = ("AVL", "MINCORE", "DESCRIPTION")   # and OS.<release>, MINCORE.<release>
 INFO = "Info"
@@ -392,7 +392,7 @@ def scan(root, avl=False):
 
 
 def sys_drawers(root, cat, name, rel):
-    """The system drawers of a release (ApolloOS/, AmigaOS/, Others/): each
+    """The system drawers of a release (ApolloOS/, AmigaOS/, OtherOS/): each
     holds what that system installs instead of the rest of the release"""
     if cat in ROM_CATS:
         return []

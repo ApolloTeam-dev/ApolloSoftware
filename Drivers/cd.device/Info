@@ -1,4 +1,4 @@
 ; Drivers/cd.device - read by ApolloUpdate, see README.md
-OS.40.29=AmigaOS,Others
+OS.40.29=AmigaOS,OtherOS
 MINCORE=
 DESCRIPTION=CD32-Driver
