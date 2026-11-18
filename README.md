@@ -56,21 +56,45 @@ Example (multiple files):
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer
 - Tools/ApolloExplorer/1.4.0/Tools/ApolloExplorer.info
 
-### Other files for one system
+### Files for one OS
 
-A release can hold a drawer named after a system (`ApolloOS/`,
-`AmigaOS/`, `OtherOS/`), with that system's own SYS: tree. That system
-installs only what is in its drawer; the other systems install what is
-outside the system drawers. OtherOS (an AmigaOS with its own places for
-software) keeps RiVA in SYS:Utilities, not in SYS:Tools:
+A release can hold a drawer named after an OS (`ApolloOS/`, `AmigaOS/`,
+`OtherOS/`), with that OS's own SYS: tree. That OS installs only what is in
+its drawer; the other OSes install what is outside the OS drawers. OtherOS
+(an AmigaOS with its own places for software) keeps RiVA in
+SYS:Utilities, not in SYS:Tools:
 
 - Tools/RiVA/0.63R4/Tools/RiVA - ApolloOS and AmigaOS
 - Tools/RiVA/0.63R4/OtherOS/Utilities/RiVA - OtherOS
 
-A system drawer is only for a system the release is for (`OS.<release>`),
-and it may hold startup fragments (`OtherOS/S/User-Startup/<Name>`) but no
-ROM modules. The web page has a download per system drawer
+An OS drawer is only for an OS the release is for (`OS.<release>`), and it
+may hold startup fragments (`OtherOS/S/User-Startup/<Name>`) but no ROM
+modules. The web page has a download per OS drawer
 (`RiVA-0.63R4-OtherOS.lha`).
+
+Releases are normally added with the
+[ApolloSoftware-Manager](https://apolloupdate.com/manager), which opens a
+pull request that a Maintainer merges. After the OS step (the OSes the
+release is for), its Files step shows:
+
+```
+OS: [*ApolloOS*] [AmigaOS] [OtherOS]       the ticked OSes, the first selected
+[x] Same as ApolloOS                       for any OS but the first
+[ Set Folder | Choose Files | Choose Folder | Choose ZIP ]
+SYS: [Libs]/icon.library  38 KB  x         the files of the selected OS
+```
+
+- The first OS's files go outside the OS drawers.
+- Another OS is **Same as** the first (it installs the same files), or gets
+  files of its own in its OS drawer and then installs only those. Ticking
+  **Same as** discards that OS's files, after a warning.
+- **Set Folder** sets the SYS: drawer (default SYS:Tools) for chosen files
+  whose name gives no drawer (`.library`: Libs, `.device`: Devs, ...) and
+  that the release before did not have elsewhere. Choose Folder and Choose
+  ZIP keep the paths they contain.
+- **ROM Module** puts the one file into the `EXP/` (or `ROM/`) drawer: built
+  into that ROM, never copied to SYS:. The ROM choice shows only when it is
+  ticked.
 
 ### S:User-Startup and S:Startup-Sequence
 
@@ -120,7 +144,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 
 | Key | |
 |---|---|
-| `OS.<release>` | the systems of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `OtherOS`, comma separated (no other names). Without it a release is for every system. A Name is for the systems of its releases, and each system gets the newest release that is for it: `OS.20.1.7190=AmigaOS,OtherOS` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every system) and ROM (ROM: ApolloOS, EXP: AmigaOS and OtherOS) |
+| `OS.<release>` | the OSes of one release, when it is not for all three: one or more of `ApolloOS`, `AmigaOS` and `OtherOS`, comma separated (no other names). Without it a release is for every OS. A Name is for the OSes of its releases, and each OS gets the newest release that is for it: `OS.20.1.7190=AmigaOS,OtherOS` keeps ApolloOS on the release before 20.1.7190. Not for Cores (every OS) and ROM (ROM: ApolloOS, EXP: AmigaOS and OtherOS) |
 | `MINCORE` | the lowest Apollo core it runs on (core number); ApolloUpdate shows the entry in blue and does not install it on an older core |
 | `MINCORE.<release>` | the same for one release, overrides `MINCORE` |
 | `DESCRIPTION` | one line, at most 100 characters (the check refuses a longer one); ApolloUpdate wraps it at about 48 characters per line, `\n` forces a break. Plain ASCII: typographic quotes and accents are converted |
@@ -128,7 +152,7 @@ DESCRIPTION=One line of text, shown in the bubble help of ApolloUpdate.
 Leave a value empty when unknown. On every push a GitHub workflow checks the
 layout and the `Info` files, and writes the table below and
 `ApolloSoftware.index`, the file ApolloUpdate reads (do not edit it).
-A new Name without an `Info` gets one from the workflow (all systems).
+A new Name without an `Info` gets one from the workflow (every OS).
 Check it and fill in the rest.
 
 ### Cores and ROM
@@ -141,12 +165,12 @@ Two kinds of image are flashed, not copied to SYS:
 | `ROM/ROM` | all | `ROM` (the 1MB Kickstart ROM: main ROM at $F80000, extended at $E00000; flash $750000-$7FFFFF, NOVA packed) and `ROM-Modules` | `SYS:ApolloUpdate/ROM/` | ApolloFlash |
 | `ROM/EXP` | all | `EXP` (the 192KB Expansion ROM at $F00000; flash $710000-$72FFFF, NOVA packed) and `ROM-Modules` | `SYS:ApolloUpdate/EXP/` | ApolloExpROM |
 
-The names say which ROM space of the V4 an image fills, not which system
+The names say which ROM space of the V4 an image fills, not which OS
 uses it: the **ROM** (the regular Commodore main and extended ROM ranges)
 holds a Kickstart of ApolloOS or of AmigaOS, the **EXP** (Expansion ROM) is
-used by AmigaOS now and by ApolloOS later. Both are for every system, as
+used by AmigaOS now and by ApolloOS later. Both are for every OS, as
 the core is (a V4 boots either, and a core flash overwrites both), so
-ApolloUpdate always lists them together, whatever system runs.
+ApolloUpdate always lists them together, whatever OS runs.
 
 `ROM-Modules` in a ROM release says which modules, in which version, make
 up that ROM - **in ROM order** (the order matters, as in a Remus build
@@ -188,7 +212,7 @@ The ROM release still holds an image compiled elsewhere (the
 ApolloOS-Port project) next to its `ROM-Modules`.
 
 The workflow checks that every `ROM-Modules` line names an existing release
-with its file in the ROM's drawer, each module once (its systems do not
+with its file in the ROM's drawer, each module once (its OSes do not
 matter: a module is only built into the ROM); the image sizes (ROM 1MB, EXP at most 192KB); and that an EXP
 image is exactly what its `ROM-Modules` builds. A ROM module is one file in
 its release's `EXP/` (`ROM/`) drawer.
