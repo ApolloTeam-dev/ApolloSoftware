@@ -244,7 +244,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | sagagfx.hidd | **1.0** | - | ✓ |  |  | 12000 | CyberGraphics RTG Driver |
 | Drivers | sagasd.device | **2.41** (ApolloOS: -, beta 2.45-beta) | 2.45-beta | ✓ | ✓ | ✓ | 12000 | SD-Card Driver |
 | Drivers | scsi.device | **48.13** (ApolloOS: -, beta 48.14-beta) | 48.14-beta | ✓ | ✓ | ✓ | 12500 | IDE Driver for AmigaOS (ALL) and ApolloOS (R10+) |
-| Drivers | v4net.device | **2.97** | 3.0-beta | ✓ | ✓ | ✓ | 12000 | Network Interface Driver |
+| Drivers | v4net.device | **2.97** | 3.1-beta | ✓ | ✓ | ✓ | 12000 | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ | ✓ |  | Picasso 96 RTG Driver |
 | Libraries | 68040.library | **40.2** | 40.6-beta |  | ✓ | ✓ |  | 68040.library for the AC68080 |
 | Libraries | 680x0.library | **40.1** | - |  | ✓ | ✓ |  | 680x0.library, Apollo AC68080 support |
