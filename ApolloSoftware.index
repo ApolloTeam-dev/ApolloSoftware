@@ -10,7 +10,7 @@ Drivers/arne.audio	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=AHI Audio Driver
 Drivers/cd.device	OS=AmigaOS,OtherOS	DESCRIPTION=CD32-Driver
 Drivers/Keymaps	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Keyboard Configurations
 Drivers/sagagfx.hidd	OS=ApolloOS	MINCORE.1.0=12000	DESCRIPTION=CyberGraphics RTG Driver
-Drivers/sagasd.device	OS=AmigaOS,OtherOS	MINCORE=12000	DESCRIPTION=SD-Card Driver
+Drivers/sagasd.device	OS=ApolloOS,AmigaOS,OtherOS	OS.2.44-beta=AmigaOS,OtherOS	OS.2.43-beta=AmigaOS,OtherOS	OS.2.42-beta=AmigaOS,OtherOS	OS.2.41=AmigaOS,OtherOS	MINCORE=12000	DESCRIPTION=SD-Card Driver
 Drivers/scsi.device	OS=ApolloOS,AmigaOS,OtherOS	OS.48.13=AmigaOS,OtherOS	MINCORE=12500	DESCRIPTION=IDE Driver for AmigaOS (ALL) and ApolloOS (R10+)
 Drivers/v4net.device	OS=ApolloOS,AmigaOS,OtherOS	MINCORE=12000	DESCRIPTION=Network Interface Driver
 Drivers/vampiregfx.card	OS=AmigaOS,OtherOS	DESCRIPTION=Picasso 96 RTG Driver
