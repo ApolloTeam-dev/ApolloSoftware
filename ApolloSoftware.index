@@ -33,7 +33,7 @@ ROM/ROM	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=ApolloOS Kickstart ROM, 1MB: mai
 Tools/AmiPlexAMP	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Plex Audio Client
 Tools/ApolloAMP	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=SAGA Audioplayer
 Tools/ApolloControl	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Apollo V4 Settings
-Tools/ApolloExpROM	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
+Tools/ApolloExpROM	OS=ApolloOS,AmigaOS,OtherOS	MINCORE=12500	DESCRIPTION=Flash/Dump Expansion ROM ($F0)
 Tools/ApolloFlash	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Flash Core or ROM
 Tools/ApolloFloppy	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Apollo Virtual Floppy Loader
 Tools/ApolloMap	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Map ROM (SoftKick)
