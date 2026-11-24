@@ -243,7 +243,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | Keymaps | **1.0** | - | ✓ | ✓ | ✓ |  | Keyboard Configurations |
 | Drivers | sagagfx.hidd | **1.0** | - | ✓ |  |  | 12000 | CyberGraphics RTG Driver |
 | Drivers | sagasd.device | **2.41** | 2.45-beta |  | ✓ | ✓ | 12000 | SD-Card Driver |
-| Drivers | scsi.device | **48.13** | - |  | ✓ | ✓ |  | IDE Driver for AmigaOS |
+| Drivers | scsi.device | **48.13** (ApolloOS: -, beta 48.14-beta) | 48.14-beta | ✓ | ✓ | ✓ | 12500 | IDE Driver for AmigaOS (ALL) and ApolloOS (R10+) |
 | Drivers | v4net.device | **2.97** | 3.0-beta | ✓ | ✓ | ✓ | 12000 | Network Interface Driver |
 | Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ | ✓ |  | Picasso 96 RTG Driver |
 | Libraries | 68040.library | **40.2** | 40.6-beta |  | ✓ | ✓ |  | 68040.library for the AC68080 |
@@ -279,5 +279,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-50 items: 37 for ApolloOS, 49 for AmigaOS, 47 for OtherOS.
+50 items: 38 for ApolloOS, 49 for AmigaOS, 47 for OtherOS.
 <!-- releases:end -->
