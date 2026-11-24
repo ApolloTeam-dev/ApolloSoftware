@@ -260,7 +260,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | AmiPlexAMP | **0.54** | - | ✓ | ✓ | ✓ |  | Plex Audio Client |
 | Tools | ApolloAMP | **26.9R1** | - | ✓ | ✓ | ✓ |  | SAGA Audioplayer |
 | Tools | ApolloControl | **2.21** | 2.23-beta | ✓ | ✓ | ✓ |  | Apollo V4 Settings |
-| Tools | ApolloExpROM | **1.1** | - |  | ✓ | ✓ |  | Flash/Dump Expansion ROM ($F0) |
+| Tools | ApolloExpROM | **1.1** | - | ✓ | ✓ | ✓ |  | Flash/Dump Expansion ROM ($F0) |
 | Tools | ApolloFlash | **2.31** | - | ✓ | ✓ | ✓ |  | Flash Core or ROM |
 | Tools | ApolloFloppy | **1.3** | - | ✓ | ✓ | ✓ |  | Apollo Virtual Floppy Loader |
 | Tools | ApolloMap | **2.31** | - | ✓ | ✓ | ✓ |  | Map ROM (SoftKick) |
@@ -279,5 +279,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-50 items: 36 for ApolloOS, 49 for AmigaOS, 47 for OtherOS.
+50 items: 37 for ApolloOS, 49 for AmigaOS, 47 for OtherOS.
 <!-- releases:end -->
