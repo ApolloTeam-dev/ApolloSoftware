@@ -1,0 +1,3 @@
+; Libraries/AmiSSL - read by ApolloUpdate, see README.md
+MINCORE=
+DESCRIPTION=AmiSSL 5.27 - OpenSSL 3.6 as a shared library: TLS/HTTPS for ApolloUpdate and network programs
