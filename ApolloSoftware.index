@@ -20,6 +20,7 @@ FileSystems/ODFileSystem	OS=AmigaOS,OtherOS	DESCRIPTION=CD (ISO9660) Filesystem
 Icons/def_SDROM	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Default SD-Card Icon
 Libraries/68040.library	OS=AmigaOS,OtherOS	DESCRIPTION=68040.library for the AC68080
 Libraries/680x0.library	OS=AmigaOS,OtherOS	DESCRIPTION=680x0.library, Apollo AC68080 support
+Libraries/AmiSSL	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=AmiSSL 5.27 - OpenSSL 3.6 as a shared library:\nTLS/HTTPS for ApolloUpdate and network programs
 Libraries/i2c.library	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=I2C Chip Library
 Libraries/icon.library	OS=ApolloOS,AmigaOS
 Libraries/maggie.library	OS=ApolloOS,AmigaOS,OtherOS	DESCRIPTION=Maggie 3DFX API library

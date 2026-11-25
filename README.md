@@ -248,6 +248,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Drivers | vampiregfx.card | **1.61** | 2.0-beta |  | ✓ | ✓ |  | Picasso 96 RTG Driver |
 | Libraries | 68040.library | **40.2** | 40.6-beta |  | ✓ | ✓ |  | 68040.library for the AC68080 |
 | Libraries | 680x0.library | **40.1** | - |  | ✓ | ✓ |  | 680x0.library, Apollo AC68080 support |
+| Libraries | AmiSSL | **5.27** | - | ✓ | ✓ | ✓ |  | AmiSSL 5.27 - OpenSSL 3.6 as a shared library: TLS/HTTPS for ApolloUpdate and network programs |
 | Libraries | i2c.library | **40.0** | - | ✓ | ✓ | ✓ |  | I2C Chip Library |
 | Libraries | icon.library | **46.4** | - | ✓ | ✓ |  |  |  |
 | Libraries | maggie.library | **4.0** | - | ✓ | ✓ | ✓ |  | Maggie 3DFX API library |
@@ -279,5 +280,5 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Tools | WHDLoadWrapper | **0.20** | - | ✓ | ✓ | ✓ |  | WHDLoadWrapper keeps WHDLoad Up-To-Date |
 | Icons | def_SDROM | **1.0** | - | ✓ | ✓ | ✓ |  | Default SD-Card Icon |
 
-50 items: 39 for ApolloOS, 49 for AmigaOS, 47 for OtherOS.
+51 items: 40 for ApolloOS, 50 for AmigaOS, 48 for OtherOS.
 <!-- releases:end -->
