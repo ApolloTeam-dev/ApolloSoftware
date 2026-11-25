@@ -234,7 +234,7 @@ it starts the flash tool (for now, a requester shows what would be flashed).
 | Cores | StandAlone-Core | **11350** | 12870-beta | ✓ | ✓ | ✓ |  | StandAlone Core |
 | Cores | UniCorn-Core | **12001** | 12870-beta | ✓ | ✓ | ✓ |  | UniCorn Core |
 | ROM | EXP | **48.02** | 48.13-beta | ✓ | ✓ | ✓ | 12500 | AmigaOS Expansion ROM ($F0): the Apollo drivers, filesystems and resources for all AmigaOS releases |
-| ROM | ROM | **R9.6-RC06** | - | ✓ | ✓ | ✓ |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
+| ROM | ROM | **R9.6-RC06** | R9.9-RC03-beta | ✓ | ✓ | ✓ |  | ApolloOS Kickstart ROM, 1MB: main ($F8) and extended ($E0) ROM |
 | Resources | processor.resource | **44.4** | 44.7-beta |  | ✓ | ✓ |  | processor.resource |
 | Resources | vampire.resource | **45.3** | 45.4-beta |  | ✓ | ✓ |  | vampire.resource |
 | Drivers | AmiTCP | **4.1.8** | - |  | ✓ | ✓ |  | TCP/IP Stack |
